@@ -1,0 +1,1176 @@
+1
+00:00:00,000 --> 00:00:01,740
+when I first tried flutter a few years
+
+2
+00:00:01,740 --> 00:00:03,480
+ago when it was in beta I instantly
+
+3
+00:00:03,480 --> 00:00:04,920
+loved it because it made mobile app
+
+4
+00:00:04,920 --> 00:00:06,960
+development so much faster but nowadays
+
+5
+00:00:06,960 --> 00:00:09,179
+in 2023 flutter development is like 10
+
+6
+00:00:09,179 --> 00:00:10,920
+times faster than it was thanks to
+
+7
+00:00:10,920 --> 00:00:12,780
+visual editing magic would you like to
+
+8
+00:00:12,780 --> 00:00:14,400
+see a magic trick in today's video I'll
+
+9
+00:00:14,400 --> 00:00:16,260
+show you exactly how I'm building my own
+
+10
+00:00:16,260 --> 00:00:18,240
+native IOS and Android apps but instead
+
+11
+00:00:18,240 --> 00:00:19,500
+of writing all The Code by hand like
+
+12
+00:00:19,500 --> 00:00:21,240
+I've always done in the past I fully
+
+13
+00:00:21,240 --> 00:00:22,920
+embraced the productivity boost of a
+
+14
+00:00:22,920 --> 00:00:25,199
+visual editor called flutter flow the
+
+15
+00:00:25,199 --> 00:00:26,880
+sponsor of today's video but please
+
+16
+00:00:26,880 --> 00:00:28,019
+don't tell them I would have made this
+
+17
+00:00:28,019 --> 00:00:29,880
+video for free because the product is
+
+18
+00:00:29,880 --> 00:00:31,679
+really that good and as you may know I'm
+
+19
+00:00:31,679 --> 00:00:33,840
+always highly skeptical of Loco tools
+
+20
+00:00:33,840 --> 00:00:35,520
+because they often produce garbage code
+
+21
+00:00:35,520 --> 00:00:37,079
+then you hit a brick wall when you need
+
+22
+00:00:37,079 --> 00:00:38,760
+something custom but that's not the case
+
+23
+00:00:38,760 --> 00:00:40,200
+with flutter flow in the next five
+
+24
+00:00:40,200 --> 00:00:41,760
+minutes we'll build a full Stack mobile
+
+25
+00:00:41,760 --> 00:00:43,440
+app that handles user authentication
+
+26
+00:00:43,440 --> 00:00:45,540
+along with real-time data and firestore
+
+27
+00:00:45,540 --> 00:00:47,280
+when you first sign up it has a demo app
+
+28
+00:00:47,280 --> 00:00:48,960
+so let's first do a quick tour of the
+
+29
+00:00:48,960 --> 00:00:50,820
+most important features a flutter app is
+
+30
+00:00:50,820 --> 00:00:52,559
+structured as a tree of widgets in the
+
+31
+00:00:52,559 --> 00:00:53,940
+middle we have our canvas where we can
+
+32
+00:00:53,940 --> 00:00:55,680
+Traverse these widgets flutter provides
+
+33
+00:00:55,680 --> 00:00:57,360
+a bunch of built-in widgets that we can
+
+34
+00:00:57,360 --> 00:00:58,920
+actually just grab here from the sidebar
+
+35
+00:00:58,920 --> 00:01:00,899
+then drag and drop them into the UI
+
+36
+00:01:00,899 --> 00:01:02,399
+visually then once you have a widget
+
+37
+00:01:02,399 --> 00:01:04,080
+selected you can go to the right side
+
+38
+00:01:04,080 --> 00:01:06,299
+and update its properties like alignment
+
+39
+00:01:06,299 --> 00:01:08,880
+padding colors Shadows background images
+
+40
+00:01:08,880 --> 00:01:10,799
+and all kinds of other stuff that's a
+
+41
+00:01:10,799 --> 00:01:12,420
+huge productivity boost right there but
+
+42
+00:01:12,420 --> 00:01:14,220
+many widgets need to be interactive for
+
+43
+00:01:14,220 --> 00:01:16,020
+that we can go to the actions tab and
+
+44
+00:01:16,020 --> 00:01:18,000
+then choose an event like on double tap
+
+45
+00:01:18,000 --> 00:01:19,380
+that will run some code when this event
+
+46
+00:01:19,380 --> 00:01:20,880
+is fired we might navigate to another
+
+47
+00:01:20,880 --> 00:01:23,400
+page close a dialog or even make a call
+
+48
+00:01:23,400 --> 00:01:26,100
+to firestore or some other API we can
+
+49
+00:01:26,100 --> 00:01:28,439
+also easily add animations when actions
+
+50
+00:01:28,439 --> 00:01:30,060
+are triggered on top of that we can
+
+51
+00:01:30,060 --> 00:01:31,979
+document each widget which will insert a
+
+52
+00:01:31,979 --> 00:01:33,540
+comment into the code and speaking of
+
+53
+00:01:33,540 --> 00:01:35,520
+the code we can view it by clicking this
+
+54
+00:01:35,520 --> 00:01:37,259
+code button up here that'll take us to
+
+55
+00:01:37,259 --> 00:01:38,640
+the code view where we can view the
+
+56
+00:01:38,640 --> 00:01:40,680
+source code for an entire page or we can
+
+57
+00:01:40,680 --> 00:01:42,180
+click on an individual widget to
+
+58
+00:01:42,180 --> 00:01:43,860
+highlight just that code and as an
+
+59
+00:01:43,860 --> 00:01:45,540
+experienced letter developer I feel like
+
+60
+00:01:45,540 --> 00:01:47,280
+I understand what this code does but one
+
+61
+00:01:47,280 --> 00:01:48,659
+of the more complicated aspects of
+
+62
+00:01:48,659 --> 00:01:50,640
+development is State Management on the
+
+63
+00:01:50,640 --> 00:01:52,500
+sidebar here we have our app state which
+
+64
+00:01:52,500 --> 00:01:54,479
+allows you to organize Global state that
+
+65
+00:01:54,479 --> 00:01:55,920
+can be used anywhere in the application
+
+66
+00:01:55,920 --> 00:01:57,299
+in addition we can make this state
+
+67
+00:01:57,299 --> 00:01:59,040
+persisted which will store it on device
+
+68
+00:01:59,040 --> 00:02:01,020
+between sessions we can use it in the
+
+69
+00:02:01,020 --> 00:02:03,000
+application like by setting it as the
+
+70
+00:02:03,000 --> 00:02:04,860
+text field on the button then from there
+
+71
+00:02:04,860 --> 00:02:06,899
+we can create an action to update the
+
+72
+00:02:06,899 --> 00:02:08,399
+state and have the entire application
+
+73
+00:02:08,399 --> 00:02:10,619
+react to it but you don't want all data
+
+74
+00:02:10,619 --> 00:02:12,120
+to be Global if we click on the widget
+
+75
+00:02:12,120 --> 00:02:13,620
+tree here in the sidebar you'll notice
+
+76
+00:02:13,620 --> 00:02:15,120
+that we can select every page in the
+
+77
+00:02:15,120 --> 00:02:16,920
+application pages are special because
+
+78
+00:02:16,920 --> 00:02:18,780
+they can be navigated to with the router
+
+79
+00:02:18,780 --> 00:02:20,400
+but they also have the option to have
+
+80
+00:02:20,400 --> 00:02:21,900
+their own State you'll notice a state
+
+81
+00:02:21,900 --> 00:02:23,160
+management button here on the right
+
+82
+00:02:23,160 --> 00:02:25,200
+where we can add stateful variables to
+
+83
+00:02:25,200 --> 00:02:26,940
+it that's cool but you might also have
+
+84
+00:02:26,940 --> 00:02:28,680
+individual widgets that have their own
+
+85
+00:02:28,680 --> 00:02:30,420
+local state as the widget tree grows
+
+86
+00:02:30,420 --> 00:02:32,099
+more complex you'll want to break it
+
+87
+00:02:32,099 --> 00:02:33,900
+down into your own custom components
+
+88
+00:02:33,900 --> 00:02:35,640
+that can be reused you can do that by
+
+89
+00:02:35,640 --> 00:02:37,020
+selecting a point in the widget tree
+
+90
+00:02:37,020 --> 00:02:38,819
+then right click and convert to
+
+91
+00:02:38,819 --> 00:02:40,319
+component or just click on the diamond
+
+92
+00:02:40,319 --> 00:02:42,360
+icon what's awesome is that you can now
+
+93
+00:02:42,360 --> 00:02:44,519
+edit this component in isolation and it
+
+94
+00:02:44,519 --> 00:02:46,379
+can Define its own local state it's all
+
+95
+00:02:46,379 --> 00:02:47,940
+very logical and you don't need to think
+
+96
+00:02:47,940 --> 00:02:49,800
+about implementing some complex State
+
+97
+00:02:49,800 --> 00:02:51,540
+management system if we look at the code
+
+98
+00:02:51,540 --> 00:02:53,640
+it generates a model file for the data
+
+99
+00:02:53,640 --> 00:02:55,500
+itself then uses built-in flutter
+
+100
+00:02:55,500 --> 00:02:57,420
+Primitives like setstate to update this
+
+101
+00:02:57,420 --> 00:02:58,980
+data in the application now the next
+
+102
+00:02:58,980 --> 00:03:00,300
+thing I want to show you is the theme
+
+103
+00:03:00,300 --> 00:03:02,099
+editor from this panel we can customize
+
+104
+00:03:02,099 --> 00:03:03,959
+the design system like responsive
+
+105
+00:03:03,959 --> 00:03:06,300
+breakpoints colors and typography and
+
+106
+00:03:06,300 --> 00:03:07,920
+you can also manage custom fonts and
+
+107
+00:03:07,920 --> 00:03:09,599
+icons here as well all the features I've
+
+108
+00:03:09,599 --> 00:03:10,980
+showed you up until this point will
+
+109
+00:03:10,980 --> 00:03:12,900
+likely take care of 90 percent of your
+
+110
+00:03:12,900 --> 00:03:15,239
+UI and state management needs however at
+
+111
+00:03:15,239 --> 00:03:16,739
+some point you'll likely need to write
+
+112
+00:03:16,739 --> 00:03:18,420
+custom code like maybe you have a widget
+
+113
+00:03:18,420 --> 00:03:19,680
+you want to reuse from a different
+
+114
+00:03:19,680 --> 00:03:21,420
+project or maybe you just have some
+
+115
+00:03:21,420 --> 00:03:22,920
+custom dark function that does some
+
+116
+00:03:22,920 --> 00:03:25,140
+fancy math the custom code panel allows
+
+117
+00:03:25,140 --> 00:03:26,819
+you to write that code and then apply it
+
+118
+00:03:26,819 --> 00:03:28,500
+in the application visually oh and what
+
+119
+00:03:28,500 --> 00:03:30,300
+do we have here an open AI panel that
+
+120
+00:03:30,300 --> 00:03:31,860
+can write this code for you this thing
+
+121
+00:03:31,860 --> 00:03:33,659
+is ridiculously overpowered and if that
+
+122
+00:03:33,659 --> 00:03:35,159
+weren't enough we can also write unit
+
+123
+00:03:35,159 --> 00:03:36,900
+tests for this code visually to make
+
+124
+00:03:36,900 --> 00:03:38,340
+sure that we're actually getting valid
+
+125
+00:03:38,340 --> 00:03:39,900
+code there's a ton of other features we
+
+126
+00:03:39,900 --> 00:03:41,400
+could talk about here but now I want to
+
+127
+00:03:41,400 --> 00:03:42,780
+take you behind the scenes and show you
+
+128
+00:03:42,780 --> 00:03:44,340
+how I'm using it to build a native
+
+129
+00:03:44,340 --> 00:03:46,560
+mobile app for fireship pro members the
+
+130
+00:03:46,560 --> 00:03:48,780
+fireship website uses Firebase as the
+
+131
+00:03:48,780 --> 00:03:50,280
+back end and one thing that's especially
+
+132
+00:03:50,280 --> 00:03:51,959
+awesome about flutter flow is that it
+
+133
+00:03:51,959 --> 00:03:53,459
+integrates with Firebase as well as
+
+134
+00:03:53,459 --> 00:03:54,959
+super bass out of the box when you
+
+135
+00:03:54,959 --> 00:03:56,340
+create a new project you can actually
+
+136
+00:03:56,340 --> 00:03:58,319
+just give it your Firebase project ID
+
+137
+00:03:58,319 --> 00:03:59,760
+and add flutter flow as an Editor to
+
+138
+00:03:59,760 --> 00:04:01,560
+your project and it will automatically
+
+139
+00:04:01,560 --> 00:04:03,360
+generate all of your config files as
+
+140
+00:04:03,360 --> 00:04:05,159
+well as Firebase rules and things like
+
+141
+00:04:05,159 --> 00:04:06,840
+that it eliminates a lot of tedious
+
+142
+00:04:06,840 --> 00:04:08,400
+configuration work now once you have the
+
+143
+00:04:08,400 --> 00:04:10,260
+project set up you can actually create a
+
+144
+00:04:10,260 --> 00:04:12,299
+schema for your data and firestore and
+
+145
+00:04:12,299 --> 00:04:13,739
+this allows you to use that data model
+
+146
+00:04:13,739 --> 00:04:15,659
+anywhere in the flutter app on top of
+
+147
+00:04:15,659 --> 00:04:17,339
+that it even has a schema validation
+
+148
+00:04:17,339 --> 00:04:18,959
+tool to make sure that the schema
+
+149
+00:04:18,959 --> 00:04:20,519
+actually matches up with the data in the
+
+150
+00:04:20,519 --> 00:04:21,899
+database now if you're not using
+
+151
+00:04:21,899 --> 00:04:24,240
+Firebase you can also make API calls and
+
+152
+00:04:24,240 --> 00:04:26,040
+then use Json path as a query language
+
+153
+00:04:26,040 --> 00:04:28,020
+for example if you have an existing next
+
+154
+00:04:28,020 --> 00:04:30,240
+JS app with API routes you could call
+
+155
+00:04:30,240 --> 00:04:31,979
+those API routes to bring in data to
+
+156
+00:04:31,979 --> 00:04:33,840
+your flutter app or any other API for
+
+157
+00:04:33,840 --> 00:04:35,160
+that matter but here's where things
+
+158
+00:04:35,160 --> 00:04:36,660
+start to get really cool as you can see
+
+159
+00:04:36,660 --> 00:04:38,520
+here I have a login page to use the
+
+160
+00:04:38,520 --> 00:04:40,199
+application we've got multiple sign-in
+
+161
+00:04:40,199 --> 00:04:42,000
+methods and usually that's a lot of work
+
+162
+00:04:42,000 --> 00:04:43,740
+to get all coded up because normally you
+
+163
+00:04:43,740 --> 00:04:45,660
+would log in create a document in
+
+164
+00:04:45,660 --> 00:04:47,400
+firestore for that user and then
+
+165
+00:04:47,400 --> 00:04:49,139
+navigate to the appropriate screen well
+
+166
+00:04:49,139 --> 00:04:50,460
+we can actually handle that entire
+
+167
+00:04:50,460 --> 00:04:52,380
+process without writing any code if we
+
+168
+00:04:52,380 --> 00:04:54,060
+click on a button and then go to the
+
+169
+00:04:54,060 --> 00:04:56,280
+actions it'll take us to the action flow
+
+170
+00:04:56,280 --> 00:04:58,320
+editor in this case we want to implement
+
+171
+00:04:58,320 --> 00:05:00,419
+Google sign in so we just choose their
+
+172
+00:05:00,419 --> 00:05:02,400
+Google auth provider and we're done in
+
+173
+00:05:02,400 --> 00:05:04,139
+many cases though you may also want to
+
+174
+00:05:04,139 --> 00:05:06,120
+create a document and firestore when the
+
+175
+00:05:06,120 --> 00:05:07,620
+user signs up we can do that
+
+176
+00:05:07,620 --> 00:05:09,419
+automatically by checking the box for
+
+177
+00:05:09,419 --> 00:05:11,100
+create collection but once the user is
+
+178
+00:05:11,100 --> 00:05:12,660
+authenticated we then need to navigate
+
+179
+00:05:12,660 --> 00:05:15,060
+to a page we can handle that by adding a
+
+180
+00:05:15,060 --> 00:05:17,100
+second action to this flow we'll tell it
+
+181
+00:05:17,100 --> 00:05:18,840
+to navigate to our profile page and we
+
+182
+00:05:18,840 --> 00:05:20,520
+can even throw in a sliding animation
+
+183
+00:05:20,520 --> 00:05:22,199
+here if we want but what if the logic
+
+184
+00:05:22,199 --> 00:05:24,539
+here is even more complex like maybe we
+
+185
+00:05:24,539 --> 00:05:26,580
+want to do one thing for pro members and
+
+186
+00:05:26,580 --> 00:05:28,139
+do something entirely different for
+
+187
+00:05:28,139 --> 00:05:30,240
+non-pro members we can handle that by
+
+188
+00:05:30,240 --> 00:05:32,039
+adding a condition now that the user is
+
+189
+00:05:32,039 --> 00:05:33,960
+authenticated we have access to the
+
+190
+00:05:33,960 --> 00:05:35,940
+state of the user and we can Branch off
+
+191
+00:05:35,940 --> 00:05:37,440
+our workflow based on whether or not
+
+192
+00:05:37,440 --> 00:05:39,419
+that user is a pro member from there
+
+193
+00:05:39,419 --> 00:05:41,220
+each user could be navigated to a
+
+194
+00:05:41,220 --> 00:05:42,660
+different screen or we could even add
+
+195
+00:05:42,660 --> 00:05:44,400
+additional backend calls here to one of
+
+196
+00:05:44,400 --> 00:05:46,860
+the API routes or to firestore to create
+
+197
+00:05:46,860 --> 00:05:48,300
+a new document and that's all it takes
+
+198
+00:05:48,300 --> 00:05:50,340
+to log in a user with complex backend
+
+199
+00:05:50,340 --> 00:05:52,020
+logic oh and one other thing I want to
+
+200
+00:05:52,020 --> 00:05:53,820
+point out here is that the actual UI for
+
+201
+00:05:53,820 --> 00:05:55,500
+the sign in buttons was not designed by
+
+202
+00:05:55,500 --> 00:05:56,940
+me personally but came from one of
+
+203
+00:05:56,940 --> 00:05:58,740
+flutterflow's built-in templates you can
+
+204
+00:05:58,740 --> 00:05:59,639
+just drag these right into the camera
+
+205
+00:05:59,639 --> 00:06:01,560
+canvas and tweak their settings and if
+
+206
+00:06:01,560 --> 00:06:02,820
+you're building multiple flutter apps
+
+207
+00:06:02,820 --> 00:06:03,960
+you can create what are called theme
+
+208
+00:06:03,960 --> 00:06:05,699
+widgets you reuse your own widgets
+
+209
+00:06:05,699 --> 00:06:07,440
+across multiple projects and that's a
+
+210
+00:06:07,440 --> 00:06:09,060
+huge feature if you run an agency that
+
+211
+00:06:09,060 --> 00:06:10,680
+creates apps for other people in any
+
+212
+00:06:10,680 --> 00:06:12,720
+case when a user logs in as a pro member
+
+213
+00:06:12,720 --> 00:06:14,580
+I want to take them to a profile page
+
+214
+00:06:14,580 --> 00:06:16,860
+that shows their Pro status as well as
+
+215
+00:06:16,860 --> 00:06:18,660
+their total experience points you might
+
+216
+00:06:18,660 --> 00:06:20,340
+be wondering though how and where do we
+
+217
+00:06:20,340 --> 00:06:22,259
+fetch this data well you can handle data
+
+218
+00:06:22,259 --> 00:06:23,940
+fetching at any point in the widget tree
+
+219
+00:06:23,940 --> 00:06:25,800
+but in this case we'll do it at the page
+
+220
+00:06:25,800 --> 00:06:27,419
+level when we click on the page widget
+
+221
+00:06:27,419 --> 00:06:29,160
+we can then find the button for backend
+
+222
+00:06:29,160 --> 00:06:31,139
+query which allows us to create a query
+
+223
+00:06:31,139 --> 00:06:33,060
+that could either grab a single document
+
+224
+00:06:33,060 --> 00:06:34,860
+from firestore a collection from
+
+225
+00:06:34,860 --> 00:06:37,020
+firestore or make an API call to some
+
+226
+00:06:37,020 --> 00:06:38,639
+other service in this case we just want
+
+227
+00:06:38,639 --> 00:06:40,259
+to fetch a single document from the
+
+228
+00:06:40,259 --> 00:06:42,000
+user's collection that's linked to the
+
+229
+00:06:42,000 --> 00:06:43,979
+currently logged in user by default it
+
+230
+00:06:43,979 --> 00:06:45,840
+will use Firebase real-time features to
+
+231
+00:06:45,840 --> 00:06:47,580
+update the document whenever A Change Is
+
+232
+00:06:47,580 --> 00:06:48,840
+Made although you can change that
+
+233
+00:06:48,840 --> 00:06:50,759
+behavior by making it a one-time query
+
+234
+00:06:50,759 --> 00:06:52,380
+and now that we have that data we can
+
+235
+00:06:52,380 --> 00:06:53,400
+start using it throughout the
+
+236
+00:06:53,400 --> 00:06:55,080
+application all the values in Brackets
+
+237
+00:06:55,080 --> 00:06:57,479
+like Pro status display name and total
+
+238
+00:06:57,479 --> 00:06:59,460
+XP are based on the firestore schema
+
+239
+00:06:59,460 --> 00:07:00,840
+that we we set up earlier if you're
+
+240
+00:07:00,840 --> 00:07:02,340
+wondering how that works we can look at
+
+241
+00:07:02,340 --> 00:07:04,139
+the code and see here that it has a
+
+242
+00:07:04,139 --> 00:07:05,759
+stream Builder wrapped around the entire
+
+243
+00:07:05,759 --> 00:07:07,440
+page and that's the exact way I would
+
+244
+00:07:07,440 --> 00:07:09,060
+set it up if I were doing it myself in
+
+245
+00:07:09,060 --> 00:07:10,500
+the code but now let's go to the
+
+246
+00:07:10,500 --> 00:07:12,360
+achievements page which makes a query to
+
+247
+00:07:12,360 --> 00:07:14,039
+a firestore collection it's the same
+
+248
+00:07:14,039 --> 00:07:15,720
+basic process but we can do additional
+
+249
+00:07:15,720 --> 00:07:17,520
+things here like filtering and ordering
+
+250
+00:07:17,520 --> 00:07:19,440
+on the firestore query one thing I find
+
+251
+00:07:19,440 --> 00:07:21,300
+extra cool here is that you'll notice we
+
+252
+00:07:21,300 --> 00:07:22,919
+have four different elements in the list
+
+253
+00:07:22,919 --> 00:07:24,419
+and that's because it auto populates
+
+254
+00:07:24,419 --> 00:07:25,979
+those to give you a preview of what it
+
+255
+00:07:25,979 --> 00:07:27,300
+should look like when you fetch your
+
+256
+00:07:27,300 --> 00:07:28,860
+data but now let's assume we're ready to
+
+257
+00:07:28,860 --> 00:07:30,720
+run our application and then deploy it
+
+258
+00:07:30,720 --> 00:07:32,280
+to the App Stores the first thing we can
+
+259
+00:07:32,280 --> 00:07:33,720
+do is click on the eyeball to go into
+
+260
+00:07:33,720 --> 00:07:35,460
+preview mode in preview mode it won't
+
+261
+00:07:35,460 --> 00:07:37,199
+actually fetch your data but things like
+
+262
+00:07:37,199 --> 00:07:38,880
+navigation will work so you can get the
+
+263
+00:07:38,880 --> 00:07:40,440
+general idea of how things are looking
+
+264
+00:07:40,440 --> 00:07:42,599
+on a variety of different devices now to
+
+265
+00:07:42,599 --> 00:07:44,220
+actually run the app we can click on the
+
+266
+00:07:44,220 --> 00:07:46,020
+lightning bolt to test it in the browser
+
+267
+00:07:46,020 --> 00:07:47,639
+this works pretty well but not all
+
+268
+00:07:47,639 --> 00:07:49,139
+features are supported in the browser
+
+269
+00:07:49,139 --> 00:07:51,240
+like the device camera vibration and
+
+270
+00:07:51,240 --> 00:07:52,979
+stuff like that another option is to
+
+271
+00:07:52,979 --> 00:07:54,660
+download the actual code and run it
+
+272
+00:07:54,660 --> 00:07:57,120
+locally in Android Studio or xcode and
+
+273
+00:07:57,120 --> 00:07:58,500
+when it comes to Android you can
+
+274
+00:07:58,500 --> 00:08:00,360
+actually build and download the APK
+
+275
+00:08:00,360 --> 00:08:02,460
+directly this is a paid feature but if
+
+276
+00:08:02,460 --> 00:08:03,780
+you're serious about deploying a native
+
+277
+00:08:03,780 --> 00:08:05,580
+app it's money well spent and if you go
+
+278
+00:08:05,580 --> 00:08:07,199
+to the settings tab it integrates with
+
+279
+00:08:07,199 --> 00:08:08,880
+codemagic for one-click deployment to
+
+280
+00:08:08,880 --> 00:08:10,560
+the App Stores but even if you're not
+
+281
+00:08:10,560 --> 00:08:12,479
+serious the free tier is a great way to
+
+282
+00:08:12,479 --> 00:08:14,160
+get things built quickly and also just a
+
+283
+00:08:14,160 --> 00:08:15,720
+great way to learn flutter to see how
+
+284
+00:08:15,720 --> 00:08:17,099
+different patterns can be implemented
+
+285
+00:08:17,099 --> 00:08:18,780
+the reason I'm using it to build my app
+
+286
+00:08:18,780 --> 00:08:20,400
+though is because it writes code that I
+
+287
+00:08:20,400 --> 00:08:22,080
+understand and like and just eliminates
+
+288
+00:08:22,080 --> 00:08:23,879
+a ridiculous amount of friction like I
+
+289
+00:08:23,879 --> 00:08:24,840
+didn't even talk about push
+
+290
+00:08:24,840 --> 00:08:26,699
+notifications app permissions or
+
+291
+00:08:26,699 --> 00:08:28,379
+multilingual support all of which can
+
+292
+00:08:28,379 --> 00:08:30,120
+also be handled by flutter flow thanks
+
+293
+00:08:30,120 --> 00:08:31,800
+for watching and I will see you in the
+
+294
+00:08:31,800 --> 00:08:34,039
+next one
+
