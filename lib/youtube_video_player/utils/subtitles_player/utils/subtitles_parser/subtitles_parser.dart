@@ -15,12 +15,13 @@ class SubtitlesParser {
           .replaceFirst('</transcript>', '')
           .split('</text>')
           .where((line) => line.trim().isNotEmpty)
-          .map(_SubtitleParsingHelper().convertRawLineToSubtitle)
+          .map(const _SubtitleParsingHelper().convertRawLineToSubtitle)
           .toList(),
     );
   }
 
-  Subtitle? searchDuration(Duration duration) {
+  // return subtitle index
+  int? searchDuration(Duration duration) {
     int low = 0;
     int high = subtitles.length - 1;
 
@@ -29,7 +30,7 @@ class SubtitlesParser {
 
       Subtitle currentSubtitle = subtitles[mid];
       if (currentSubtitle.end >= duration && currentSubtitle.start < duration) {
-        return currentSubtitle;
+        return mid;
       } else if (currentSubtitle.end < duration) {
         low = mid + 1;
       } else {

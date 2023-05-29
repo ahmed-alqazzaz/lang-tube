@@ -11,6 +11,7 @@ class Subtitle {
   final Duration end;
   final String text;
   final List<String> words;
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;

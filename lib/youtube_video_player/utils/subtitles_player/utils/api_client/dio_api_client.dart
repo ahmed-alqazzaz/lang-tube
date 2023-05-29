@@ -27,12 +27,9 @@ class DioApiClient {
         userAgent: userAgent,
         cacheStore: await _hiveCacheStore,
       );
+
   Future<Response<T>> fetchUri<T>(Uri uri) async {
-    return await _dio.getUri<T>(uri).then((value) {
-      log('hhh ${uri}');
-      log('cache source ${value.requestOptions.extra['cacheSource']}');
-      return value;
-    });
+    return await _dio.getUri<T>(uri);
   }
 
   static Future<HiveCacheStore> get _hiveCacheStore async => HiveCacheStore(
