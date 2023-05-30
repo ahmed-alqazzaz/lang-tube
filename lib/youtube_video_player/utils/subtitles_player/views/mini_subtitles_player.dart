@@ -1,10 +1,8 @@
 import 'dart:developer';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/utils/subtitles_player/utils/subtitle_player_model.dart';
-import 'package:lang_tube/youtube_video_player/utils/subtitles_player/utils/word_selectability_provider.dart';
 import 'package:lang_tube/youtube_video_player/utils/subtitles_player/views/subtitle_box.dart';
 
 class MiniSubtitlesPlayer extends ConsumerWidget {
@@ -23,9 +21,12 @@ class MiniSubtitlesPlayer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final words =
-        ref.watch(subtitlePlayerProvider).currentSubtitle?.words ?? [];
-    log('exe $words');
+    final words = ref
+            .watch(subtitlePlayerProvider)
+            .mainSubtitlesController
+            .currentSubtitle
+            ?.words ??
+        [];
     return SubtitleBox(
       words: words,
       backgroundColor: backgroundColor,

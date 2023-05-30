@@ -1,0 +1,4 @@
+enum SubtitlesType {
+  main,
+  translated,
+}

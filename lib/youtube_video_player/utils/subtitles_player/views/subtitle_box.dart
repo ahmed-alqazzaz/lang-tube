@@ -12,15 +12,14 @@ class SubtitleBox extends ConsumerWidget {
     required this.defaultTextColor,
     required this.onWordTapped,
     required this.textFontSize,
+    this.fontWeight = FontWeight.normal,
   });
-
   static const Color selectedTextColor = Colors.deepPurple;
-
   static const int maxLines = 3;
-
   final Color backgroundColor;
   final Color defaultTextColor;
   final double textFontSize;
+  final FontWeight fontWeight;
 
   final void Function(String word) onWordTapped;
   final List<String> words;
@@ -39,13 +38,19 @@ class SubtitleBox extends ConsumerWidget {
             TextSpan(
               text: '${words[index]} ',
               recognizer: TapGestureRecognizer()
-                ..onTap = () => onWordTapped(words[index]),
+                ..onTap = () {
+                  ref
+                      .read(wordSelectabilityProvider)
+                      .updateSelectedWordIndex(index);
+                  onWordTapped(words[index]);
+                },
               style: TextStyle(
                 color: selectedWordIndex == index
                     ? selectedTextColor
                     : defaultTextColor,
                 fontSize: textFontSize,
                 backgroundColor: backgroundColor,
+                fontWeight: fontWeight,
               ),
             )
           ]

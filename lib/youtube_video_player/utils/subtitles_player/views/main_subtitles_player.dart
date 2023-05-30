@@ -14,7 +14,7 @@ class MainSubtitlesPlayer extends ConsumerStatefulWidget {
     required this.onWordTapped,
   });
   static const double minWidth = 200;
-  static const double textFontSize = 17;
+  static const double textFontSize = 16;
   static final Color defaultTextColor = Colors.white.withOpacity(0.5);
 
   final ChangeNotifierProvider<SubtitlePlayerModel> subtitlePlayerProvider;
@@ -34,13 +34,14 @@ class _DrawerSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer> {
     _scrollController = ItemScrollController();
     _subtitlePlayerSubscription =
         ref.listenManual(widget.subtitlePlayerProvider, (_, model) {
-      final index = model.currentSubtitleIndex;
-
+      final index = model.mainSubtitlesController.currentSubtitleIndex;
       if (index != null) {
-        _scrollController.scrollTo(
-          index: index,
-          duration: const Duration(milliseconds: 330),
-        );
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          _scrollController.scrollTo(
+            index: model.mainSubtitlesController.subtitles.length - 1 - index,
+            duration: const Duration(milliseconds: 330),
+          );
+        });
       }
     });
     super.initState();
@@ -55,23 +56,43 @@ class _DrawerSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer> {
   Widget _headerBuilder() {
     return Consumer(
       builder: (context, ref, _) {
-        final words =
-            ref.watch(widget.subtitlePlayerProvider).currentSubtitle?.words;
+        final currentSubtitleBundle = ref.watch(
+          widget.subtitlePlayerProvider.select((model) {
+            return (
+              main: model.mainSubtitlesController.currentSubtitle,
+              translated: model.translatedSubtitlesController.currentSubtitle
+            );
+          }),
+        );
+        for (final subtitle in [
+          currentSubtitleBundle.main,
+          currentSubtitleBundle.translated
+        ]) {}
         return Container(
-          color: Colors.black38,
+          color: Colors.black26,
           padding: EdgeInsets.symmetric(
             vertical: 20,
-            horizontal: MediaQuery.of(context).size.width * 0.15,
+            horizontal: MediaQuery.of(context).size.width * 0.03,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               SubtitleBox(
-                words: words ?? [],
+                words: currentSubtitleBundle.main?.words ?? [],
                 backgroundColor: Colors.transparent,
-                textFontSize: 20,
+                textFontSize: 18,
                 onWordTapped: (word) {},
                 defaultTextColor: Colors.white,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              SubtitleBox(
+                words: currentSubtitleBundle.translated?.words ?? [],
+                backgroundColor: Colors.transparent,
+                textFontSize: 18,
+                onWordTapped: (word) {},
+                defaultTextColor: Colors.amber,
               ),
             ],
           ),
@@ -82,8 +103,8 @@ class _DrawerSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    final subtitles = ref.watch(
-        widget.subtitlePlayerProvider.select((model) => model.subtitles));
+    final subtitles = ref.read(widget.subtitlePlayerProvider
+        .select((model) => model.mainSubtitlesController.subtitles));
 
     return Container(
       color: Colors.grey.shade900,
@@ -96,25 +117,29 @@ class _DrawerSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer> {
             child: _headerBuilder(),
           ),
           SliverFillRemaining(
-            child: ScrollablePositionedList.builder(
-              itemScrollController: _scrollController,
-              itemCount: subtitles.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: MediaQuery.of(context).size.width * 0.15,
-                  ),
-                  child: SubtitleBox(
-                    words: subtitles[index].words,
-                    backgroundColor: Colors.transparent,
-                    textFontSize: MainSubtitlesPlayer.textFontSize,
-                    onWordTapped: (word) {},
-                    defaultTextColor: MainSubtitlesPlayer.defaultTextColor,
-                  ),
-                );
-              },
-            ),
+            child: LayoutBuilder(builder: (context, constraints) {
+              return ScrollablePositionedList.builder(
+                padding: EdgeInsets.only(bottom: constraints.maxHeight),
+                itemScrollController: _scrollController,
+                itemCount: subtitles.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 20,
+                      horizontal: MediaQuery.of(context).size.width * 0.15,
+                    ),
+                    child: SubtitleBox(
+                      words: subtitles[subtitles.length - 1 - index].words,
+                      backgroundColor: Colors.transparent,
+                      textFontSize: MainSubtitlesPlayer.textFontSize,
+                      onWordTapped: (word) {},
+                      defaultTextColor: MainSubtitlesPlayer.defaultTextColor,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  );
+                },
+              );
+            }),
           )
         ],
       ),
