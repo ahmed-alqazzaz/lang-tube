@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/foundation.dart';
-import 'package:lang_tube/youtube_video_player/utils/subtitles_player/utils/subtitles_scraper/data/types.dart';
+import 'package:lang_tube/subtitles_player/utils/subtitles_scraper/data/types.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import 'package:lang_tube/youtube_video_player/utils/subtitles_player/utils/subtitles_parser/subtitles_parser.dart';
+import 'package:lang_tube/subtitles_player/utils/subtitles_parser/subtitles_parser.dart';
 
 class SubtitlePlayerModel extends ChangeNotifier {
   SubtitlePlayerModel({

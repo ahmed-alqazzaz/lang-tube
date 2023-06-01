@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ActionsModel extends ChangeNotifier {
-  bool _isClosedCaptionEnabled = false;
+  bool _isClosedCaptionEnabled = true;
   bool get isClosedCaptionEnabled => _isClosedCaptionEnabled;
 
   bool _isFullScreen = false;

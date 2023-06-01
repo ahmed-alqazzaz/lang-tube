@@ -39,9 +39,9 @@ class SubtitleBox extends ConsumerWidget {
               text: '${words[index]} ',
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  ref
-                      .read(wordSelectabilityProvider)
-                      .updateSelectedWordIndex(index);
+                  // ref
+                  //     .read(wordSelectabilityProvider)
+                  //     .updateSelectedWordIndex(index);
                   onWordTapped(words[index]);
                 },
               style: TextStyle(

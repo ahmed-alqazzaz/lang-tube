@@ -2,11 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/utils/subtitles_player/views/main_subtitles_player.dart';
+import 'package:lang_tube/subtitles_player/views/main_subtitles_player.dart';
+import 'package:lang_tube/youtube_video_player/generic_actions/actions.dart';
+import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/portrait_player/portrait_player_actions.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../utils/subtitles_player/utils/subtitle_player_model.dart';
+import '../../../subtitles_player/utils/subtitle_player_model.dart';
 
 class PortraitYoutubePlayer extends StatelessWidget {
   const PortraitYoutubePlayer({
@@ -23,9 +25,11 @@ class PortraitYoutubePlayer extends StatelessWidget {
         return ref.watch(subtitlesPlayerProvider).when(
           data: (data) {
             log('finished');
-            return MainSubtitlesPlayer(
-              subtitlePlayerProvider: data,
-              onWordTapped: (x) {},
+            return ProviderScope(
+              child: MainSubtitlesPlayer(
+                subtitlePlayerProvider: data,
+                onWordTapped: (x) {},
+              ),
             );
           },
           error: (error, stackTrace) {
@@ -44,39 +48,27 @@ class PortraitYoutubePlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final playerHeight = MediaQuery.of(context).size.width * 9 / 16;
     return SafeArea(
-      child: Column(
+      child: Stack(
         children: [
-          Stack(
+          Column(
             children: [
               YoutubePlayer(
                 controller: controller,
                 bottomActions: const [],
                 topActions: const [],
               ),
-              Container(
-                height: YoutubeVideoPlayerView.progressBarHandleRadius,
-                color: Colors.transparent,
+              Expanded(
+                child: subtitlePlayer(),
               ),
-              // Positioned(
-              //   bottom: 0.1 * height,
-              //   left: 0.036 * width,
-              //   child: positionIndicator(),
-              // ),
-              // Positioned(
-              //   bottom: 0.1 * height,
-              //   right: 0.036 * width,
-              //   child: const Icon(Icons.fullscreen),
-              // ),
-              // Positioned(
-              //   bottom: 0,
-              //   left: -progressBarHandleRadius,
-              //   right: -progressBarHandleRadius,
-              //   child: progressBar(),
-              // ),
             ],
           ),
-          Expanded(child: subtitlePlayer()),
+          SizedBox(
+            height:
+                playerHeight + YoutubeVideoPlayerView.progressBarHandleRadius,
+            child: PortraitYoutubePlayerActions(controller: controller),
+          ),
         ],
       ),
     );

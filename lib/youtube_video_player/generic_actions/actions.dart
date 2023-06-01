@@ -1,17 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../../../custom/custom_current_position.dart';
-import '../../../custom/custom_progress_bar.dart';
-import '../../../custom/icons/custom_icons.dart';
-import '../../yotube_video_player_modes/buttons/closed_caption_button.dart';
-import '../../yotube_video_player_modes/buttons/full_screen_button.dart';
-import '../../youtube_video_player_view.dart';
+import '../../custom/custom_current_position.dart';
+import '../../custom/custom_progress_bar.dart';
+import '../../custom/icons/custom_icons.dart';
+import 'buttons/closed_caption_button.dart';
+import 'buttons/full_screen_button.dart';
 
 @immutable
-class Controls {
-  const Controls({required this.controller});
+class GenericActions {
+  const GenericActions({required this.controller});
 
   final YoutubePlayerController controller;
   static const Color progressBarBufferColor = Color(0xFFCCCCCC);

@@ -1,19 +1,18 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/utils/subtitles_player/views/main_subtitles_player.dart';
+import 'package:lang_tube/subtitles_player/views/main_subtitles_player.dart';
 
-import 'package:lang_tube/youtube_video_player/utils/subtitles_player/views/mini_subtitles_player.dart';
-import 'package:lang_tube/youtube_video_player/actions/actions_provider.dart';
+import 'package:lang_tube/subtitles_player/views/mini_subtitles_player.dart';
+import 'package:lang_tube/youtube_video_player/generic_actions/actions_provider.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../utils/subtitles_player/utils/subtitle_player_model.dart';
-import '../utils/subtitles_player/utils/word_selectability_provider.dart';
-import '../actions/youtube_video_player_controls.dart';
+import '../../../subtitles_player/utils/subtitle_player_model.dart';
+import '../../../subtitles_player/utils/word_selectability_provider.dart';
+import 'full_screen_player_action.dart';
 
 class FullScreenYoutubeVideoPlayer extends StatelessWidget {
   const FullScreenYoutubeVideoPlayer({
@@ -103,7 +102,7 @@ class FullScreenYoutubeVideoPlayer extends StatelessWidget {
           left: YoutubeVideoPlayerView.progressBarHandleRadius,
           top: 0,
           bottom: 0,
-          child: YoutubeVideoPlayerActions(
+          child: FullScreenYoutubePlayerActions(
             controller: controller,
           ),
         ),

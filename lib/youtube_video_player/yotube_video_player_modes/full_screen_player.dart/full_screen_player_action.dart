@@ -1,27 +1,27 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:lang_tube/custom/icons/custom_icons.dart';
-import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/buttons/closed_caption_button.dart';
-import 'package:lang_tube/youtube_video_player/youtube_video_player_view.dart';
+import 'package:lang_tube/youtube_video_player/generic_actions/buttons/closed_caption_button.dart';
+import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import 'controls.dart';
+import '../../generic_actions/actions.dart';
 
-class YoutubeVideoPlayerActions extends StatefulWidget {
-  YoutubeVideoPlayerActions({
+class FullScreenYoutubePlayerActions extends StatefulWidget {
+  FullScreenYoutubePlayerActions({
     super.key,
     required this.controller,
-  }) : controls = Controls(controller: controller);
+  }) : actions = GenericActions(controller: controller);
 
   final YoutubePlayerController controller;
-  final Controls controls;
+  final GenericActions actions;
   @override
-  State<YoutubeVideoPlayerActions> createState() =>
-      _YoutubeVideoPlayerActionsState();
+  State<FullScreenYoutubePlayerActions> createState() =>
+      _FullScreenYoutubePlayerActionsState();
 }
 
-class _YoutubeVideoPlayerActionsState extends State<YoutubeVideoPlayerActions> {
+class _FullScreenYoutubePlayerActionsState
+    extends State<FullScreenYoutubePlayerActions> {
   @override
   void initState() {
     widget.controller.addListener(visibilityListener);
@@ -64,12 +64,12 @@ class _YoutubeVideoPlayerActionsState extends State<YoutubeVideoPlayerActions> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              widget.controls.positionIndicator(),
-              widget.controls.fullScreenButton(),
+              widget.actions.positionIndicator(),
+              widget.actions.fullScreenButton(),
             ],
           ),
         ),
-        widget.controls.progressBar(),
+        widget.actions.progressBar(),
       ],
     );
   }
@@ -77,11 +77,11 @@ class _YoutubeVideoPlayerActionsState extends State<YoutubeVideoPlayerActions> {
   Widget bottomActions() {
     return Row(
       children: [
-        widget.controls.saveClipButton(),
-        widget.controls.loopButton(),
-        widget.controls.playBackSpeedButton(),
+        widget.actions.saveClipButton(),
+        widget.actions.loopButton(),
+        widget.actions.playBackSpeedButton(),
         Expanded(child: Container()),
-        widget.controls.youtubeButton(),
+        widget.actions.youtubeButton(),
       ],
     );
   }
@@ -91,8 +91,8 @@ class _YoutubeVideoPlayerActionsState extends State<YoutubeVideoPlayerActions> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Switch(value: true, onChanged: (h) {}),
-        widget.controls.captionButton(),
-        widget.controls.settingsButton(),
+        widget.actions.captionButton(),
+        widget.actions.settingsButton(),
       ],
     );
   }

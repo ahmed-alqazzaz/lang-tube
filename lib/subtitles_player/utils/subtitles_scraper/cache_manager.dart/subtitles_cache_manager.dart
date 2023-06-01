@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:lang_tube/youtube_video_player/utils/subtitles_player/utils/subtitles_scraper/cache_manager.dart/subtitles_type.dart';
-import 'package:lang_tube/youtube_video_player/utils/subtitles_player/utils/subtitles_scraper/data/exceptions.dart';
+import 'package:lang_tube/subtitles_player/utils/subtitles_scraper/cache_manager.dart/subtitles_type.dart';
+import 'package:lang_tube/subtitles_player/utils/subtitles_scraper/data/exceptions.dart';
 import 'package:path_provider/path_provider.dart';
 
 @immutable
@@ -14,7 +14,7 @@ class SubtitlesCacheManager {
   static Future<SubtitlesCacheManager> open() async =>
       SubtitlesCacheManager._(await getTemporaryDirectory());
 
-  static fileNameGenerator({
+  static String fileNameGenerator({
     required SubtitlesType type,
     required String youtubeVideoId,
   }) =>

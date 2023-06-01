@@ -1,8 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/utils/subtitles_player/views/subtitle_box.dart';
+import 'package:lang_tube/main.dart';
+import 'package:lang_tube/subtitles_player/utils/subtitles_parser/data/subtitle.dart';
+import 'package:lang_tube/subtitles_player/views/subtitle_box.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../utils/subtitle_player_model.dart';
@@ -15,6 +15,9 @@ class MainSubtitlesPlayer extends ConsumerStatefulWidget {
   });
   static const double minWidth = 200;
   static const double textFontSize = 16;
+  static const double headerTextFontSize = 18;
+  static const double subtitleBoxVerticalPadding = 20;
+  static const Color headerBackgroundColor = Colors.black26;
   static final Color defaultTextColor = Colors.white.withOpacity(0.5);
 
   final ChangeNotifierProvider<SubtitlePlayerModel> subtitlePlayerProvider;
@@ -64,15 +67,11 @@ class _DrawerSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer> {
             );
           }),
         );
-        for (final subtitle in [
-          currentSubtitleBundle.main,
-          currentSubtitleBundle.translated
-        ]) {}
         return Container(
-          color: Colors.black26,
+          color: MainSubtitlesPlayer.headerBackgroundColor,
           padding: EdgeInsets.symmetric(
-            vertical: 20,
-            horizontal: MediaQuery.of(context).size.width * 0.03,
+            vertical: MainSubtitlesPlayer.subtitleBoxVerticalPadding,
+            horizontal: MediaQuery.of(context).size.width * 0.05,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -80,8 +79,20 @@ class _DrawerSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer> {
               SubtitleBox(
                 words: currentSubtitleBundle.main?.words ?? [],
                 backgroundColor: Colors.transparent,
-                textFontSize: 18,
-                onWordTapped: (word) {},
+                textFontSize: MainSubtitlesPlayer.headerTextFontSize,
+                onWordTapped: (word) {
+                  Scaffold.of(context).showBottomSheet(
+                    (context) {
+                      return WordExplanationModal(
+                          word: word.replaceAll(RegExp(r'[^a-zA-Z]'), ''));
+                    },
+                    constraints: BoxConstraints(
+                      minWidth: double.infinity,
+                      maxHeight: MediaQuery.of(context).size.height -
+                          MediaQuery.of(context).size.width * 9 / 16,
+                    ),
+                  );
+                },
                 defaultTextColor: Colors.white,
               ),
               const SizedBox(
@@ -90,7 +101,7 @@ class _DrawerSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer> {
               SubtitleBox(
                 words: currentSubtitleBundle.translated?.words ?? [],
                 backgroundColor: Colors.transparent,
-                textFontSize: 18,
+                textFontSize: MainSubtitlesPlayer.headerTextFontSize,
                 onWordTapped: (word) {},
                 defaultTextColor: Colors.amber,
               ),
@@ -101,46 +112,48 @@ class _DrawerSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer> {
     );
   }
 
+  Widget _body(List<Subtitle> subtitles) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return ScrollablePositionedList.builder(
+          padding: EdgeInsets.only(bottom: constraints.maxHeight),
+          itemScrollController: _scrollController,
+          itemCount: subtitles.length,
+          itemBuilder: (context, index) {
+            return Container(
+              padding: EdgeInsets.symmetric(
+                vertical: MainSubtitlesPlayer.subtitleBoxVerticalPadding,
+                horizontal: MediaQuery.of(context).size.width * 0.15,
+              ),
+              child: SubtitleBox(
+                words: subtitles[subtitles.length - 1 - index].words,
+                backgroundColor: Colors.transparent,
+                textFontSize: MainSubtitlesPlayer.textFontSize,
+                onWordTapped: (word) {},
+                defaultTextColor: MainSubtitlesPlayer.defaultTextColor,
+                fontWeight: FontWeight.w300,
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final subtitles = ref.read(widget.subtitlePlayerProvider
         .select((model) => model.mainSubtitlesController.subtitles));
-
     return Container(
       color: Colors.grey.shade900,
       constraints: const BoxConstraints(
         minWidth: MainSubtitlesPlayer.minWidth,
       ),
-      child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: _headerBuilder(),
-          ),
-          SliverFillRemaining(
-            child: LayoutBuilder(builder: (context, constraints) {
-              return ScrollablePositionedList.builder(
-                padding: EdgeInsets.only(bottom: constraints.maxHeight),
-                itemScrollController: _scrollController,
-                itemCount: subtitles.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: MediaQuery.of(context).size.width * 0.15,
-                    ),
-                    child: SubtitleBox(
-                      words: subtitles[subtitles.length - 1 - index].words,
-                      backgroundColor: Colors.transparent,
-                      textFontSize: MainSubtitlesPlayer.textFontSize,
-                      onWordTapped: (word) {},
-                      defaultTextColor: MainSubtitlesPlayer.defaultTextColor,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  );
-                },
-              );
-            }),
-          )
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _headerBuilder(),
+          Expanded(child: _body(subtitles)),
         ],
       ),
     );
