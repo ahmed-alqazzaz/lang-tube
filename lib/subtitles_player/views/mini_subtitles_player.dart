@@ -9,7 +9,7 @@ class MiniSubtitlesPlayer extends ConsumerWidget {
   const MiniSubtitlesPlayer({
     super.key,
     required this.subtitlePlayerProvider,
-    required this.onWordTapped,
+    required this.onTap,
   });
 
   static const Color backgroundColor = Colors.black;
@@ -17,7 +17,7 @@ class MiniSubtitlesPlayer extends ConsumerWidget {
   static const double textFontSize = 22;
 
   final ChangeNotifierProvider<SubtitlePlayerModel> subtitlePlayerProvider;
-  final Function(String word) onWordTapped;
+  final OnSubtitleTapped onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,7 +30,7 @@ class MiniSubtitlesPlayer extends ConsumerWidget {
     return SubtitleBox(
       words: words,
       backgroundColor: backgroundColor,
-      onWordTapped: onWordTapped,
+      onTap: onTap,
       textFontSize: textFontSize,
       defaultTextColor: defaultTextColor,
     );

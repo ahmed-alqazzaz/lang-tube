@@ -1,89 +1,37 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/subtitles_player/views/main_subtitles_player.dart';
-
-import 'package:lang_tube/subtitles_player/views/mini_subtitles_player.dart';
-import 'package:lang_tube/youtube_video_player/generic_actions/actions_provider.dart';
+import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/portrait_player/portrait_youtube_player.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../../../subtitles_player/utils/subtitle_player_model.dart';
-import '../../../subtitles_player/utils/word_selectability_provider.dart';
+import '../../../subtitles_player/views/subtitles_player_builders.dart';
 import 'full_screen_player_action.dart';
 
-class FullScreenYoutubeVideoPlayer extends StatelessWidget {
+class FullScreenYoutubeVideoPlayer extends StatefulWidget {
   const FullScreenYoutubeVideoPlayer({
     super.key,
     required this.controller,
-    required this.subtitlesPlayerProvider,
+    required this.subtitlesPlayerBuilder,
   });
   final YoutubePlayerController controller;
-  final FutureProvider<ChangeNotifierProvider<SubtitlePlayerModel>>
-      subtitlesPlayerProvider;
-  Widget subtitlePlayer() {
-    return Consumer(
-      builder: (context, ref, child) {
-        final isEnabled = ref.watch(actionsProvider
-            .select((notifier) => notifier.isClosedCaptionEnabled));
-        if (isEnabled) {
-          return ref.watch(subtitlesPlayerProvider).when(
-            data: (data) {
-              log('finished');
-              return MiniSubtitlesPlayer(
-                subtitlePlayerProvider: data,
-                onWordTapped: (String word) {
-                  controller.pause();
-                  showModalBottomSheet(
-                    constraints: BoxConstraints(
-                      minHeight: 300,
-                      maxHeight: 300,
-                      minWidth: 400,
-                      maxWidth: 400,
-                    ),
-                    context: context,
-                    builder: (context) {
-                      return MainSubtitlesPlayer(
-                          subtitlePlayerProvider: data,
-                          onWordTapped: (String v) {});
-                    },
-                  ).then(
-                    (value) {
-                      controller.play();
-                      ref.read(wordSelectabilityProvider).reset();
-                    },
-                  );
-                },
-              );
-            },
-            error: (error, stackTrace) {
-              log(error.toString());
-              print(stackTrace);
-              return Container();
-            },
-            loading: () {
-              log('loading');
-              return Container();
-            },
-          );
-        }
-        return Container();
-      },
-    );
-  }
+  final Widget Function({required SubtitlesBuilder builder})
+      subtitlesPlayerBuilder;
 
   @override
-  Widget build(BuildContext context) {
+  State<FullScreenYoutubeVideoPlayer> createState() =>
+      _FullScreenYoutubeVideoPlayerState();
+}
+
+class _FullScreenYoutubeVideoPlayerState
+    extends State<FullScreenYoutubeVideoPlayer> with SubtitlesPlayerBuilders {
+  Widget _youtubePlayerBuilder() {
     return Stack(
       alignment: Alignment.center,
       children: [
-        SizedBox.fromSize(
-          size: MediaQuery.of(context).size,
-        ),
         YoutubePlayer(
-          controller: controller,
+          controller: widget.controller,
           bottomActions: const [],
           topActions: const [],
           controlsTimeOut: const Duration(days: 1),
@@ -95,7 +43,10 @@ class FullScreenYoutubeVideoPlayer extends StatelessWidget {
           bottom: 30,
           right: 150,
           left: 150,
-          child: subtitlePlayer(),
+          child: miniSubtitlesPlayer(
+            controller: widget.controller,
+            subtitlesPlayerBuilder: widget.subtitlesPlayerBuilder,
+          ),
         ),
         Positioned(
           right: YoutubeVideoPlayerView.progressBarHandleRadius,
@@ -103,10 +54,15 @@ class FullScreenYoutubeVideoPlayer extends StatelessWidget {
           top: 0,
           bottom: 0,
           child: FullScreenYoutubePlayerActions(
-            controller: controller,
+            controller: widget.controller,
           ),
         ),
       ],
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _youtubePlayerBuilder();
   }
 }

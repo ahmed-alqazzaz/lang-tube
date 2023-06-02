@@ -1,27 +1,34 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/explanation_modal/explanation_modal_constraints_provider.dart';
 import 'package:lang_tube/main.dart';
 import 'package:lang_tube/subtitles_player/utils/subtitles_parser/data/subtitle.dart';
+import 'package:lang_tube/subtitles_player/utils/subtitles_scraper/subtitles_scraper.dart';
 import 'package:lang_tube/subtitles_player/views/subtitle_box.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import '../../explanation_modal/explanation_modal.dart';
 import '../utils/subtitle_player_model.dart';
 
 class MainSubtitlesPlayer extends ConsumerStatefulWidget {
   const MainSubtitlesPlayer({
     super.key,
     required this.subtitlePlayerProvider,
-    required this.onWordTapped,
+    required this.onTap,
   });
   static const double minWidth = 200;
   static const double textFontSize = 16;
   static const double headerTextFontSize = 18;
   static const double subtitleBoxVerticalPadding = 20;
   static const Color headerBackgroundColor = Colors.black26;
+  static const double headerlinesDividerHeight = 5;
   static final Color defaultTextColor = Colors.white.withOpacity(0.5);
 
   final ChangeNotifierProvider<SubtitlePlayerModel> subtitlePlayerProvider;
-  final Function(String word) onWordTapped;
+  final OnSubtitleTapped onTap;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _DrawerSubtitlesPlayerState();
@@ -41,7 +48,7 @@ class _DrawerSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer> {
       if (index != null) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           _scrollController.scrollTo(
-            index: model.mainSubtitlesController.subtitles.length - 1 - index,
+            index: model.mainSubtitlesController.subtitles.length - index,
             duration: const Duration(milliseconds: 330),
           );
         });
@@ -53,17 +60,40 @@ class _DrawerSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer> {
   @override
   void dispose() {
     _subtitlePlayerSubscription.close();
+
     super.dispose();
   }
 
   Widget _headerBuilder() {
     return Consumer(
       builder: (context, ref, _) {
-        final currentSubtitleBundle = ref.watch(
+        final (mainLine: mainLine, translatedLine: translatedLine) = ref.watch(
           widget.subtitlePlayerProvider.select((model) {
+            SubtitleBox mainLine() {
+              return SubtitleBox(
+                words:
+                    model.mainSubtitlesController.currentSubtitle?.words ?? [],
+                backgroundColor: Colors.transparent,
+                textFontSize: MainSubtitlesPlayer.headerTextFontSize,
+                onTap: widget.onTap,
+                defaultTextColor: Colors.white,
+              );
+            }
+
+            SubtitleBox translatedLine() {
+              return SubtitleBox(
+                words: model
+                        .translatedSubtitlesController.currentSubtitle?.words ??
+                    [],
+                backgroundColor: Colors.transparent,
+                textFontSize: MainSubtitlesPlayer.headerTextFontSize,
+                defaultTextColor: Colors.amber,
+              );
+            }
+
             return (
-              main: model.mainSubtitlesController.currentSubtitle,
-              translated: model.translatedSubtitlesController.currentSubtitle
+              mainLine: mainLine,
+              translatedLine: translatedLine,
             );
           }),
         );
@@ -76,35 +106,11 @@ class _DrawerSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SubtitleBox(
-                words: currentSubtitleBundle.main?.words ?? [],
-                backgroundColor: Colors.transparent,
-                textFontSize: MainSubtitlesPlayer.headerTextFontSize,
-                onWordTapped: (word) {
-                  Scaffold.of(context).showBottomSheet(
-                    (context) {
-                      return WordExplanationModal(
-                          word: word.replaceAll(RegExp(r'[^a-zA-Z]'), ''));
-                    },
-                    constraints: BoxConstraints(
-                      minWidth: double.infinity,
-                      maxHeight: MediaQuery.of(context).size.height -
-                          MediaQuery.of(context).size.width * 9 / 16,
-                    ),
-                  );
-                },
-                defaultTextColor: Colors.white,
-              ),
+              mainLine(),
               const SizedBox(
-                height: 5,
+                height: MainSubtitlesPlayer.headerlinesDividerHeight,
               ),
-              SubtitleBox(
-                words: currentSubtitleBundle.translated?.words ?? [],
-                backgroundColor: Colors.transparent,
-                textFontSize: MainSubtitlesPlayer.headerTextFontSize,
-                onWordTapped: (word) {},
-                defaultTextColor: Colors.amber,
-              ),
+              translatedLine(),
             ],
           ),
         );
@@ -113,8 +119,13 @@ class _DrawerSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer> {
   }
 
   Widget _body(List<Subtitle> subtitles) {
+    final explanationModalConstraintsNotifier =
+        ref.read(explanationModalConstraintsProvider);
     return LayoutBuilder(
       builder: (context, constraints) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          explanationModalConstraintsNotifier.updateConstraints(constraints);
+        });
         return ScrollablePositionedList.builder(
           padding: EdgeInsets.only(bottom: constraints.maxHeight),
           itemScrollController: _scrollController,
@@ -129,7 +140,6 @@ class _DrawerSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer> {
                 words: subtitles[subtitles.length - 1 - index].words,
                 backgroundColor: Colors.transparent,
                 textFontSize: MainSubtitlesPlayer.textFontSize,
-                onWordTapped: (word) {},
                 defaultTextColor: MainSubtitlesPlayer.defaultTextColor,
                 fontWeight: FontWeight.w300,
               ),
