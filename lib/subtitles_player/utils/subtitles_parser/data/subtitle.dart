@@ -4,7 +4,7 @@ class Subtitle {
     required this.duration,
     required this.text,
   })  : end = start + duration,
-        words = text.split(' ');
+        words = text.split(RegExp(r'[ \n]'));
 
   final Duration start;
   final Duration duration;

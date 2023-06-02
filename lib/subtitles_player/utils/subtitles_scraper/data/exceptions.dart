@@ -4,4 +4,4 @@ class SubtitlesScraperUnknownException implements Exception {}
 
 class SubtitlesScraperNetworkException implements Exception {}
 
-class SubtitlesFileIsAlreadyCache implements Exception {}
+class SubtitlesScraperNoCaptionsFoundExceptions implements Exception {}
