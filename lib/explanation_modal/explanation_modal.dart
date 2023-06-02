@@ -1,0 +1,39 @@
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/explanation_modal/explanation_modal_constraints_provider.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+class ExplanationModal extends ConsumerWidget {
+  ExplanationModal({super.key, required String word})
+      : _controller = WebViewController()
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..loadRequest(
+            Uri.parse(
+                'https://www.linguee.de/deutsch-englisch/uebersetzung/$word.html'),
+          ) {
+    log('reinstantiated');
+  }
+  final WebViewController _controller;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      constraints:
+          ref.watch(explanationModalConstraintsProvider).currentConstraints,
+      child: OrientationBuilder(
+        builder: (context, orientation) {
+          return WebViewWidget(
+            controller: _controller,
+            gestureRecognizers: {
+              Factory(() => EagerGestureRecognizer()),
+            },
+          );
+        },
+      ),
+    );
+  }
+}
