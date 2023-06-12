@@ -7,16 +7,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/explanation_modal/explanation_modal_constraints_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class ExplanationModal extends ConsumerWidget {
-  ExplanationModal({super.key, required String word})
+class ExplanationModalSheet extends ConsumerWidget {
+  static const theme = BottomSheetThemeData(dragHandleSize: Size(20, 4));
+  ExplanationModalSheet({super.key, required String word})
       : _controller = WebViewController()
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
           ..loadRequest(
             Uri.parse(
                 'https://www.linguee.de/deutsch-englisch/uebersetzung/$word.html'),
-          ) {
-    log('reinstantiated');
-  }
+          ) {}
   final WebViewController _controller;
   @override
   Widget build(BuildContext context, WidgetRef ref) {

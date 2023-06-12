@@ -1,22 +1,22 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:flutter/foundation.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ActionsModel extends ChangeNotifier {
-  bool _isClosedCaptionEnabled = true;
-  bool get isClosedCaptionEnabled => _isClosedCaptionEnabled;
+// class ActionsModel extends ChangeNotifier {
+//   bool _isClosedCaptionEnabled = true;
+//   bool get isClosedCaptionEnabled => _isClosedCaptionEnabled;
 
-  bool _isFullScreen = false;
-  bool get isFullScreen => _isFullScreen;
+//   bool _isFullScreen = false;
+//   bool get isFullScreen => _isFullScreen;
 
-  void toggleClosedCaptionsButton() {
-    _isClosedCaptionEnabled = !_isClosedCaptionEnabled;
-    notifyListeners();
-  }
+//   void toggleClosedCaptionsButton() {
+//     _isClosedCaptionEnabled = !_isClosedCaptionEnabled;
+//     notifyListeners();
+//   }
 
-  void toggleFullScreen() {
-    _isFullScreen = !_isFullScreen;
-    notifyListeners();
-  }
-}
+//   void toggleFullScreen() {
+//     _isFullScreen = !_isFullScreen;
+//     notifyListeners();
+//   }
+// }
 
-final actionsProvider = ChangeNotifierProvider((ref) => ActionsModel());
+// final actionsProvider = ChangeNotifierProvider((ref) => ActionsModel());

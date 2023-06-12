@@ -1,58 +1,21 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/generic_actions/buttons/closed_caption_button.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import '../../actions/views/actions.dart';
 import '../../generic_actions/actions.dart';
 
-class FullScreenYoutubePlayerActions extends StatefulWidget {
-  FullScreenYoutubePlayerActions({
+class FullScreenYoutubePlayerActions extends ConsumerWidget {
+  const FullScreenYoutubePlayerActions({
     super.key,
-    required this.controller,
-  }) : actions = GenericActions(controller: controller);
+    required this.actions,
+  });
 
-  final YoutubePlayerController controller;
-  final GenericActions actions;
-  @override
-  State<FullScreenYoutubePlayerActions> createState() =>
-      _FullScreenYoutubePlayerActionsState();
-}
+  final YoutubePlayerActions actions;
 
-class _FullScreenYoutubePlayerActionsState
-    extends State<FullScreenYoutubePlayerActions> {
-  @override
-  void initState() {
-    widget.controller.addListener(visibilityListener);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    widget.controller.removeListener(visibilityListener);
-    super.dispose();
-  }
-
-  void visibilityListener() {
-    final areControlsVisible = widget.controller.value.isControlsVisible;
-    if (_areControlsVisible != areControlsVisible) {
-      setState(() {
-        _areControlsVisible = areControlsVisible;
-      });
-    }
-  }
-
-  Widget topControls() {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        ClosedCaptionsButton(),
-      ],
-    );
-  }
-
-  Widget midControls() {
+  Widget midActions() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,12 +27,12 @@ class _FullScreenYoutubePlayerActionsState
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              widget.actions.positionIndicator(),
-              widget.actions.fullScreenButton(),
+              actions.positionIndicator(),
+              actions.toggleFullScreenButton(isFullScreen: true),
             ],
           ),
         ),
-        widget.actions.progressBar(),
+        actions.progressBar(),
       ],
     );
   }
@@ -77,11 +40,11 @@ class _FullScreenYoutubePlayerActionsState
   Widget bottomActions() {
     return Row(
       children: [
-        widget.actions.saveClipButton(),
-        widget.actions.loopButton(),
-        widget.actions.playBackSpeedButton(),
+        actions.saveClipButton(),
+        actions.loopButton(),
+        actions.playBackSpeedButton(),
         Expanded(child: Container()),
-        widget.actions.youtubeButton(),
+        actions.youtubeButton(),
       ],
     );
   }
@@ -91,18 +54,20 @@ class _FullScreenYoutubePlayerActionsState
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Switch(value: true, onChanged: (h) {}),
-        widget.actions.captionButton(),
-        widget.actions.settingsButton(),
+        actions.subtitlesButton(),
+        actions.settingsButton(),
       ],
     );
   }
 
-  bool _areControlsVisible = false;
   @override
-  Widget build(BuildContext context) {
-    log(MediaQuery.of(context).size.toString());
+  Widget build(BuildContext context, WidgetRef ref) {
+    final areActionsVisible = ref.watch(
+      actions.actionsProvider
+          .select((actionsModel) => actionsModel.areFullScreenActionsVisible),
+    );
     return AnimatedOpacity(
-      opacity: _areControlsVisible ? 1.0 : 0,
+      opacity: areActionsVisible ? 1.0 : 0,
       duration: const Duration(milliseconds: 300),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -116,7 +81,7 @@ class _FullScreenYoutubePlayerActionsState
             flex: 1,
             child: Container(),
           ),
-          midControls(),
+          midActions(),
           const SizedBox(height: 4),
           bottomActions(),
           const SizedBox(height: 5),

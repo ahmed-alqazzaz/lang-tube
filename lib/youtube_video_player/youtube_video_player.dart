@@ -1,118 +1,184 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/subtitles_player/utils/subtitle_player_model.dart';
-import 'package:lang_tube/subtitles_player/utils/subtitles_parser/subtitles_parser.dart';
-import 'package:lang_tube/subtitles_player/utils/subtitles_scraper/subtitles_scraper.dart';
-import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/portrait_player/portrait_youtube_player.dart';
 import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/full_screen_player.dart/full_screen_youtube_player.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/portrait_player/portrait_youtube_player.dart';
+import 'package:lang_tube/youtube_video_player/youtube_player_model/youtube_player_provider.dart';
+import 'package:rx_shared_preferences/rx_shared_preferences.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class YoutubeVideoPlayerView extends ConsumerStatefulWidget {
-  const YoutubeVideoPlayerView({super.key, required this.videoId});
+import '../custom/widgets/youtube_player_widgets/custom_progress_bar.dart';
+import '../custom/widgets/youtube_player_widgets/custom_youtube_player_builder.dart';
 
+class YoutubeVideoPlayerView extends ConsumerStatefulWidget {
+  const YoutubeVideoPlayerView({
+    super.key,
+    required this.videoId,
+  });
   final String videoId;
+
   static const double progressBarHandleRadius = 7;
+  static const String sharedPreferencesForceHdKey = 'yt_player_force_hd';
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _YoutubeVideoPlayerViewwState();
+      _YoutubeVideoPlayerViewState();
 }
 
-class _YoutubeVideoPlayerViewwState
-    extends ConsumerState<YoutubeVideoPlayerView> with WidgetsBindingObserver {
-  late final YoutubePlayerController _controller;
-  late final FutureProvider<ChangeNotifierProvider<SubtitlePlayerModel>>
-      _subtitlesPlayerProvider;
-
+class _YoutubeVideoPlayerViewState
+    extends ConsumerState<YoutubeVideoPlayerView> {
+  late final rxSharedPreferences = RxSharedPreferences.getInstance();
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await FkUserAgent.init();
     });
+    SystemChrome.setPreferredOrientations([]);
 
-    WidgetsBinding.instance.addObserver(this);
-    _controller = YoutubePlayerController(initialVideoId: widget.videoId);
-    _subtitlesPlayerProvider = FutureProvider(
-      (ref) async {
-        final userAgent = await FkUserAgent.getPropertyAsync("userAgent");
-        final subtitlesScraper = userAgent != null
-            ? await SubtitlesScraper.withUserAgent(userAgent)
-            : await SubtitlesScraper.withRandomUserAgent();
-        return subtitlesScraper
-            .getSubtitle(
-              youtubeVideoId: widget.videoId,
-              languages: (
-                mainLanguage: 'german',
-                translatedLanguage: 'English'
-              ),
-            )
-            .first
-            .then(
-              (value) {
-                return ChangeNotifierProvider(
-                  (ref) => SubtitlePlayerModel(
-                    youtubePlayerController: _controller,
-                    mainSubtitlesController:
-                        SubtitlesController.fromSubtitlesEntry(
-                      value.mainLanguageSubtitles,
-                    ),
-                    translatedSubtitlesController:
-                        SubtitlesController.fromSubtitlesEntry(
-                      value.translatedSubtitles,
-                    ),
-                  ),
-                );
-              },
-            );
-      },
-    );
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _controller.dispose();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     FkUserAgent.release();
     super.dispose();
   }
 
-  @override
-  void didChangeMetrics() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _controller.pause();
-      Timer(const Duration(milliseconds: 1500), () {
-        _controller.play();
-      });
-      MediaQuery.of(context).orientation == Orientation.portrait
-          ? SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge)
-          : SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    });
-    super.didChangeMetrics();
-  }
+  late final _controller =
+      YoutubePlayerController(initialVideoId: widget.videoId);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          if (orientation == Orientation.portrait) {
-            return PortraitYoutubePlayer(
-              controller: _controller,
-              subtitlesPlayerProvider: _subtitlesPlayerProvider,
+    // return Scaffold(
+    //   body: OrientationBuilder(
+    //     builder: (context, orientation) {
+    //       return CustomYoutubePlayerBuilder(
+    //         player: YoutubePlayer(
+    //           controller: _controller,
+    //         ),
+    //         builder: (context, child) {
+    //           if (orientation == Orientation.portrait) {
+    //             return Column(
+    //               children: [
+    //                 child,
+    //               ],
+    //             );
+    //           }
+    //           return child;
+    //         },
+    //       );
+    //     },
+    //   ),
+    // );
+    return Material(
+      child: FutureBuilder(
+        future: RxSharedPreferences.getInstance()
+            .getBool(YoutubePlayerModel.sharedPreferencesForceHdKey),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final sharedPreferencesForceHd = snapshot.data!;
+            return Consumer(
+              builder: (context, ref, _) => adaptiveYoutubePlayer(
+                youtubePlayerModel: ref.watch(
+                  youtubePlayerProviderFamily(
+                    (
+                      shouldForceHd: sharedPreferencesForceHd,
+                      videoId: widget.videoId
+                    ),
+                  ),
+                ),
+                key: UniqueKey(),
+              ),
             );
           }
-          return FullScreenYoutubeVideoPlayer(
-            controller: _controller,
-            subtitlesPlayerProvider: _subtitlesPlayerProvider,
+          return Container();
+        },
+      ),
+    );
+  }
+
+  Widget adaptiveYoutubePlayer({
+    required YoutubePlayerModel youtubePlayerModel,
+    required Key key,
+  }) {
+    return Scaffold(
+      key: key,
+      body: CustomYoutubePlayerBuilder(
+        player: YoutubePlayer(
+          controller: youtubePlayerModel.youtubePlayerController,
+          bottomActions: const [],
+          topActions: const [],
+        ),
+        builder: (context, player) {
+          return OrientationBuilder(
+            builder: (context, orientation) {
+              if (orientation == Orientation.portrait) {
+                return PortraitYoutubePlayer(
+                    youtubePlayerModel: youtubePlayerModel, player: player);
+              }
+              return FullScreenYoutubeVideoPlayer(
+                  player: player, youtubePlayerModel: youtubePlayerModel);
+            },
           );
         },
       ),
     );
   }
+}
+
+class Player2 extends StatefulWidget {
+  const Player2({
+    super.key,
+    required YoutubePlayerController controller,
+  }) : _controller = controller;
+
+  final YoutubePlayerController _controller;
+
+  @override
+  State<Player2> createState() => _Player2State();
+}
+
+class _Player2State extends State<Player2> with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return YoutubePlayer(controller: widget._controller, key: Key('1'));
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class Player1 extends StatefulWidget {
+  const Player1({
+    super.key,
+    required YoutubePlayerController controller,
+  }) : _controller = controller;
+
+  final YoutubePlayerController _controller;
+
+  @override
+  State<Player1> createState() => _Player1State();
+}
+
+class _Player1State extends State<Player1> with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Column(
+      children: [
+        YoutubePlayer(
+          controller: widget._controller,
+          key: const Key('1'),
+        ),
+        const Text('hhh'),
+      ],
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }

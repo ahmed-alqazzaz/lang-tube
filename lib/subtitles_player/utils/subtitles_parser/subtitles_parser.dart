@@ -29,9 +29,9 @@ class SubtitlesParser {
       int mid = low + ((high - low) ~/ 2);
 
       Subtitle currentSubtitle = subtitles[mid];
-      if (currentSubtitle.end >= duration && currentSubtitle.start < duration) {
+      if (currentSubtitle.end > duration && currentSubtitle.start <= duration) {
         return mid;
-      } else if (currentSubtitle.end < duration) {
+      } else if (currentSubtitle.end <= duration) {
         low = mid + 1;
       } else {
         high = mid - 1;

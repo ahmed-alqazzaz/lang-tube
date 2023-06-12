@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/word_selectability_provider.dart';
+import '../providers/word_selectability_provider.dart';
 
 typedef OnSubtitleTapped = void Function({
   required void Function() onReset,
@@ -15,8 +15,9 @@ class SubtitleBox extends ConsumerWidget {
     required this.words,
     required this.backgroundColor,
     required this.defaultTextColor,
-    this.onTap,
     required this.textFontSize,
+    this.onTapUp,
+    this.selectable = false,
     this.fontWeight = FontWeight.normal,
   });
   static const Color selectedTextColor = Colors.amber;
@@ -26,7 +27,8 @@ class SubtitleBox extends ConsumerWidget {
   final double textFontSize;
   final FontWeight fontWeight;
 
-  final OnSubtitleTapped? onTap;
+  final OnSubtitleTapped? onTapUp;
+  final bool selectable;
   final List<String> words;
 
   @override
@@ -50,11 +52,14 @@ class SubtitleBox extends ConsumerWidget {
                   TextSpan(
                     text: '${words[index]} ',
                     recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        ref
-                            .read(wordSelectabilityProvider)
-                            .updateSelectedWordIndex(index);
-                        onTap?.call(
+                      ..onTapUp = (details) {
+                        if (selectable) {
+                          ref
+                              .read(wordSelectabilityProvider)
+                              .updateSelectedWordIndex(index);
+                        }
+
+                        onTapUp?.call(
                           onReset: () {
                             ref.read(wordSelectabilityProvider).reset();
                           },

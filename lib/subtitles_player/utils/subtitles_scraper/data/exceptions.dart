@@ -1,7 +1,24 @@
-class SubtitlesScraperBlockedRequestException implements Exception {}
+import 'package:flutter/material.dart';
 
-class SubtitlesScraperUnknownException implements Exception {}
+@immutable
+class SubtitlesScraperException implements Exception {
+  const SubtitlesScraperException();
+}
 
-class SubtitlesScraperNetworkException implements Exception {}
+class SubtitlesScraperBlockedRequestException
+    extends SubtitlesScraperException {
+  const SubtitlesScraperBlockedRequestException();
+}
 
-class SubtitlesScraperNoCaptionsFoundExceptions implements Exception {}
+class SubtitlesScraperUnknownException extends SubtitlesScraperException {
+  const SubtitlesScraperUnknownException();
+}
+
+class SubtitlesScraperNetworkException extends SubtitlesScraperException {
+  const SubtitlesScraperNetworkException();
+}
+
+class SubtitlesScraperNoCaptionsFoundExceptions
+    extends SubtitlesScraperException {
+  const SubtitlesScraperNoCaptionsFoundExceptions();
+}

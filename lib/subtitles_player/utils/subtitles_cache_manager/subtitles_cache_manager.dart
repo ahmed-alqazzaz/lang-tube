@@ -1,13 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:lang_tube/subtitles_player/utils/subtitles_cache_manager/database_manager.dart/data/constants.dart';
 import 'package:lang_tube/subtitles_player/utils/subtitles_cache_manager/database_manager.dart/database_manager.dart';
-import 'package:lang_tube/subtitles_player/utils/subtitles_scraper/data/exceptions.dart';
-import 'package:lang_tube/subtitles_player/utils/subtitles_scraper/data/data.dart';
+import 'package:lang_tube/subtitles_player/utils/subtitles_scraper/data/data_classes.dart';
 import 'package:path_provider/path_provider.dart';
-
-import '../subtitles_scraper/subtitles_scraper.dart';
 
 @immutable
 class SubtitlesCacheManager {
