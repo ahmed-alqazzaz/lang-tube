@@ -30,13 +30,6 @@ class YoutubeWebViewManager {
           ),
         ),
         onConsoleMessage: (controller, consoleMessage) {
-          // final referenceErrorTest =
-          //     RegExp(r"Uncaught ReferenceError: (\w+) is not defined");
-          // // in case there is reference error
-          // if (referenceErrorTest.firstMatch(consoleMessage.message) != null) {
-          //   log('executed');
-          //   jsInjectionController.add(false);
-          // }
           log(consoleMessage.message);
         },
         onWebViewCreated: (controller) {

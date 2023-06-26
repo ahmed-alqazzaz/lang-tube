@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -79,6 +78,7 @@ class YoutubePlayerScraper {
   Future<void> navigateBack() async => await _webViewManager.navigateBack();
 
   Future<String> currentUrl() async => await _webViewManager.currentUrl();
+
   // it's critical that youtube doesn't redirect to any other urls
   // for instance if(https://www.youtube.com) it will redirect to
   // to a different url and cause errors with cookies management

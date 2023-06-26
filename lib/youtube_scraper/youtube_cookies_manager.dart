@@ -33,7 +33,6 @@ class YoutubeCookiesManager {
       }
       await _saveCookiesIntoStorage();
     });
-    log('executed call back');
     await cookiesUpdateCallBack();
   }
 
