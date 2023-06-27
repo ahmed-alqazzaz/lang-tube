@@ -16,7 +16,8 @@ class YoutubeCookiesManager {
     required this.cookiesUpdateCallBack,
   }) {
     synchronizeCookies();
-    Timer.periodic(Duration(seconds: 5), (timer) {
+    Timer.periodic(const Duration(seconds: 5), (timer) {
+      log('saved cookies');
       _saveCookiesIntoStorage();
     });
   }

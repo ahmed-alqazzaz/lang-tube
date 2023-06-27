@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lang_tube/youtube_scraper/youtube_cookies_manager.dart';
@@ -13,7 +12,9 @@ class YoutubePlayerScraper {
       initialRequest: _youtubeUrl,
       userAgent: userAgent,
       onUrlUpdated: onUrlUpdated,
-    )..clearCache().then((_) {
+    );
+    Timer(Duration(seconds: 5), () {
+      _webViewManager.clearCache().then((_) {
         _cookiesManager = YoutubeCookiesManager(
             uri: _youtubeUrl,
             cookiesUpdateCallBack: () async {
@@ -22,6 +23,7 @@ class YoutubePlayerScraper {
               });
             });
       });
+    });
   }
 
   final _videoItems = <YoutubeVideoItem>[];
@@ -58,12 +60,13 @@ class YoutubePlayerScraper {
     }
   }
 
-  Future<void> run() async => await _webViewManager.run();
+  InAppWebView get webview => _webViewManager.webView;
+  // Future<void> run() async => await _webViewManager.run();
 
-  Future<void> dispose() async {
-    await _cookiesManager.close();
-    await _webViewManager.dispose();
-  }
+  // Future<void> dispose() async {
+  //   await _cookiesManager.close();
+  //   await _webViewManager.dispose();
+  // }
 
   // keep navigating back until we're not watching a video
   Future<void> navigateHome() async {

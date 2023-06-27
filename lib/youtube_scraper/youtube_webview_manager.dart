@@ -15,8 +15,11 @@ class YoutubeWebViewManager {
   }) {
     // check if js file has been injected into the viewer
     final jsInjectionController = BehaviorSubject<bool>();
+    late final inAppWebViewController =
+        BehaviorSubject<InAppWebViewController>();
     return YoutubeWebViewManager._(
-      webView: HeadlessInAppWebView(
+      inAppWebViewController: inAppWebViewController,
+      webView: InAppWebView(
         initialUrlRequest: URLRequest(url: initialRequest),
         initialOptions: InAppWebViewGroupOptions(
           crossPlatform: InAppWebViewOptions(
@@ -33,6 +36,7 @@ class YoutubeWebViewManager {
           log(consoleMessage.message);
         },
         onWebViewCreated: (controller) {
+          inAppWebViewController.add(controller);
           log('web view created');
         },
         onLoadStart: (controller, url) async {
@@ -56,37 +60,39 @@ class YoutubeWebViewManager {
   }
 
   const YoutubeWebViewManager._({
-    required HeadlessInAppWebView webView,
+    required InAppWebView webView,
+    required this.inAppWebViewController,
     Future<void> Function()? disposeJsInjectionChecker,
-  })  : _webView = webView,
+  })  : webView = webView,
         _disposeJsInjectionChecker = disposeJsInjectionChecker;
 
-  final HeadlessInAppWebView _webView;
+  final InAppWebView webView;
   final Future<void> Function()? _disposeJsInjectionChecker;
-  InAppWebViewController get _controller => _webView.webViewController;
+  final BehaviorSubject<InAppWebViewController> inAppWebViewController;
+  InAppWebViewController? get _controller => inAppWebViewController.valueOrNull;
 
-  Future<void> run() async => await _webView.run();
-  Future<void> dispose() async {
-    await _webView.dispose();
-    await _disposeJsInjectionChecker?.call();
-  }
+  // Future<void> run() async => await _webView.run();
+  // Future<void> dispose() async {
+  //   await _webView.dispose();
+  //   await _disposeJsInjectionChecker?.call();
+  // }
 
   Future<String> currentUrl() async =>
-      await _controller.evaluateJavascript(source: 'currentUrl()').then(
+      await _controller!.evaluateJavascript(source: 'currentUrl()').then(
             (value) => value as String,
           );
   Future<void> navigateBack() async =>
-      await _controller.evaluateJavascript(source: 'navigateBack()');
+      await _controller!.evaluateJavascript(source: 'navigateBack()');
 
   Future<void> scrollToBottom() async =>
-      await _controller.evaluateJavascript(source: 'scrollToBottom()');
+      await _controller!.evaluateJavascript(source: 'scrollToBottom()');
 
   Future<bool> get isDocumentLoaded async =>
-      await isDocumentFullyLoaded(_controller);
+      await isDocumentFullyLoaded(_controller!);
 
-  Future<void> clearCache() async => await _controller.clearCache();
+  Future<void> clearCache() async => await _controller!.clearCache();
 
-  Future<void> reload() async => await _controller.reload();
+  Future<void> reload() async => await _controller!.reload();
 
   static Future<bool> isDocumentFullyLoaded(
           InAppWebViewController controller) async =>
