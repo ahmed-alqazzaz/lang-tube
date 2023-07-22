@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitle_player_provider.dart';
-import 'package:lang_tube/subtitles_player/views/main_subtitles_player.dart';
 import 'package:lang_tube/subtitles_player/views/subtitles_player_builders.dart';
-import 'package:lang_tube/youtube_video_player/actions/actions_provider.dart';
-import 'package:lang_tube/youtube_video_player/generic_actions/actions.dart';
 import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/portrait_player/actions.dart';
 import 'package:lang_tube/youtube_video_player/youtube_player_model/youtube_player_provider.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../../subtitles_player/providers/player_pointer_absorbtion_provider.dart';
 import '../../actions/views/actions.dart';

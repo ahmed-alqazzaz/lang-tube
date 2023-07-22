@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,7 +35,7 @@ class SubtitlesPlayerModel extends ChangeNotifier {
     required this.translatedSubtitlesController,
     required YoutubePlayerController youtubePlayerController,
   }) : _youtubePlayerController = youtubePlayerController {
-    log('instantiated subtitles listener');
+//    log('instantiated subtitles listener');
     _youtubePlayerController.addListener(youtubePlayerListener);
   }
   final SubtitlesController mainSubtitlesController;

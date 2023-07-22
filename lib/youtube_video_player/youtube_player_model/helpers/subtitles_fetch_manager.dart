@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,13 +27,10 @@ class YoutubePlayerSubtitlesFetchManager {
             if (error is SubtitlesScraperException) {
               _subtitlesScraperExceptionHandler(error);
             } else {
-              log(error.toString());
               throw error;
             }
           },
-          loading: () {
-            log('loading');
-          },
+          loading: () {},
         );
       }, fireImmediately: true),
     );

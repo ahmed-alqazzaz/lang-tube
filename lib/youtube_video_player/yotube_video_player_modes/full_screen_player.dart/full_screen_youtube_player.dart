@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import '../../../subtitles_player/providers/subtitle_player_provider.dart';
 import '../../../subtitles_player/views/subtitles_player_builders.dart';
-import '../../actions/actions_provider.dart';
 import '../../actions/views/actions.dart';
 import '../../youtube_player_model/youtube_player_provider.dart';
 import 'full_screen_player_action.dart';
@@ -88,7 +85,7 @@ class _FullScreenYoutubeVideoPlayerState
   Widget build(BuildContext context) {
     return Row(
       children: [
-        //   drawerSubtitlesPlayer(context),
+        drawerSubtitlesPlayer(context),
         Expanded(
           child: _youtubePlayerBuilder(),
         ),

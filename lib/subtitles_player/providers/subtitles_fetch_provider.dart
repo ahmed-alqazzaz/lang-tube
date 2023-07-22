@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider.dart';
 import 'package:lang_tube/subtitles_player/utils/subtitles_scraper/data/data_classes.dart';
 
 import '../utils/subtitles_scraper/subtitles_scraper.dart';
@@ -12,18 +15,15 @@ final subtitlesFetchProviderFamily = FutureProvider.family.autoDispose<
       String translatedLanguage,
     })>(
   (ref, args) async {
-    const userAgent = null;
-    // await FkUserAgent.getPropertyAsync("userAgent");
-    final subtitlesScraper = userAgent != null
-        ? await SubtitlesScraper.withUserAgent(userAgent)
-        : await SubtitlesScraper.withRandomUserAgent();
+    final subtitlesScraper = await ref.read(subtitlesScraperProvider.future);
     final subtitles = await subtitlesScraper.getSubtitle(
       youtubeVideoId: args.videoId,
       languages: (
-        mainLanguage: 'german',
-        translatedLanguage: 'English',
+        mainLanguage: args.mainLanguage,
+        translatedLanguage: args.translatedLanguage,
       ),
     );
+    log("$subtitles");
     subtitlesFetchProviderKeepAliveLink = ref.keepAlive();
     return subtitles;
   },

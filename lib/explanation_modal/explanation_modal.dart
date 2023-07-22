@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +6,13 @@ import 'package:lang_tube/explanation_modal/explanation_modal_constraints_provid
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ExplanationModalSheet extends ConsumerWidget {
-  static const theme = BottomSheetThemeData(dragHandleSize: Size(20, 4));
   ExplanationModalSheet({super.key, required String word})
       : _controller = WebViewController()
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
           ..loadRequest(
             Uri.parse(
-                'https://www.linguee.de/deutsch-englisch/uebersetzung/$word.html'),
-          ) {}
+                'https://www.oxfordlearnersdictionaries.com/definition/english/$word'),
+          );
   final WebViewController _controller;
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitle_player_provider.dart';
@@ -39,7 +37,6 @@ class YoutubePlayerModel extends ChangeNotifier {
     required SubtitlesBundle subtitles,
     required bool shouldInitialllyForceHd,
   }) {
-    log('model reinstantiated');
     _configurations = YoutubePlayerConfigurations(
       videoId: videoId,
       subtitles: subtitles,
@@ -54,12 +51,11 @@ class YoutubePlayerModel extends ChangeNotifier {
       },
     );
     _subtitlesFetchManager = YoutubePlayerSubtitlesFetchManager(
-      mainLanguage: 'german',
-      translatedLanguage: 'English',
+      mainLanguage: 'english',
+      translatedLanguage: 'arabic',
       videoId: videoId,
       ref: ref,
       onFetched: (subtitles) {
-        log('fetched');
         _configurations = _configurations.copyWith(subtitles: subtitles);
         notifyListeners();
       },

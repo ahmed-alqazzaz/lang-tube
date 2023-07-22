@@ -5,19 +5,39 @@ export 'data/subtitle.dart';
 // supports only srv1 subtitles
 class SubtitlesParser {
   SubtitlesParser._({required this.subtitles});
-
+  static const _helper = _SubtitleParsingHelper();
   final List<Subtitle> subtitles;
   factory SubtitlesParser(String subtitles) {
     return SubtitlesParser._(
-      subtitles: subtitles
-          .replaceFirst(
-              '<?xml version="1.0" encoding="utf-8" ?><transcript>', '')
-          .replaceFirst('</transcript>', '')
-          .split('</text>')
-          .where((line) => line.trim().isNotEmpty)
-          .map(const _SubtitleParsingHelper().convertRawLineToSubtitle)
+      subtitles: _helper
+          .santitizeDurations(subtitles
+              .replaceFirst(
+                  '<?xml version="1.0" encoding="utf-8" ?><transcript>', '')
+              .replaceFirst('</transcript>', '')
+              .split('</text>')
+              .where((line) => line.trim().isNotEmpty)
+              .map(_helper.convertRawLineToSubtitle)
+              .toList())
           .toList(),
     );
+  }
+
+  // average speed in syllables per milliseconds
+  // add individual subtitle speeds and divied by length
+  Future<double> get avgerageSyllablesPerMillisecond async {
+    final length = subtitles.length;
+    List<double> individualSyllablesPerMillisecond = [
+      for (final subtitle in subtitles) await subtitle.syllablesPerMillisecond
+    ]..sort();
+
+    // create a sublist of the middle
+    // %80 of subtitles to remove outliers
+    // and merge all values then divide by length
+    final margin = (subtitles.length * 0.1).toInt();
+    return individualSyllablesPerMillisecond
+            .sublist(margin, length - margin)
+            .fold<double>(0.0, (aggregate, element) => aggregate + element) /
+        (length - margin * 2);
   }
 
   // return subtitle index
@@ -43,6 +63,21 @@ class SubtitlesParser {
 
 class _SubtitleParsingHelper {
   const _SubtitleParsingHelper();
+  // ensure that the end duration of any subtitle
+  // is lower than or equal to the start duration
+  // of the consecutive subtitle
+  Iterable<Subtitle> santitizeDurations(List<Subtitle> subtitles) sync* {
+    for (int index = 0; index < subtitles.length - 1; index++) {
+      final subtitle = subtitles[index];
+      final consecutiveSubtitle = subtitles[index + 1];
+      if (subtitle.end <= consecutiveSubtitle.start) {
+        yield subtitle;
+      } else {
+        yield subtitle.copyWith(end: consecutiveSubtitle.start);
+      }
+    }
+  }
+
   Subtitle convertRawLineToSubtitle(String line) {
     final startRegex = RegExp(r'start="([\d.]+)"');
     final durationRegex = RegExp(r'dur="([\d.]+)"');
@@ -64,7 +99,7 @@ class _SubtitleParsingHelper {
 
     return Subtitle(
       start: start,
-      duration: duration,
+      end: start + duration,
       text: text,
     );
   }

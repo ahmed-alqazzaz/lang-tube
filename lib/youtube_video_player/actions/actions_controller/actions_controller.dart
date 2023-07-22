@@ -6,10 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitle_player_provider.dart';
 import 'package:lang_tube/youtube_video_player/actions/actions_controller/helpers/loop_controller.dart';
 import 'package:lang_tube/youtube_video_player/actions/actions_controller/helpers/subtitle_loop_controller.dart';
+import 'package:lang_tube/youtube_video_player/youtube_player_model/youtube_player_provider.dart';
 import 'package:rx_shared_preferences/rx_shared_preferences.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../../youtube_video_player.dart';
 import 'helpers/seek_subtitles_controller.dart';
 
 @immutable
@@ -44,14 +44,14 @@ class YoutubePlayerActionsController {
 
   Future<void> enableForceHd() async {
     await _rxSharedPreferences.setBool(
-      YoutubeVideoPlayerView.sharedPreferencesForceHdKey,
+      YoutubePlayerModel.sharedPreferencesForceHdKey,
       true,
     );
   }
 
   Future<void> disableForceHd() async {
     await _rxSharedPreferences.setBool(
-      YoutubeVideoPlayerView.sharedPreferencesForceHdKey,
+      YoutubePlayerModel.sharedPreferencesForceHdKey,
       true,
     );
   }

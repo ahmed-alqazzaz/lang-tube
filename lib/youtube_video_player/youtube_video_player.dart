@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fk_user_agent/fk_user_agent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +10,6 @@ import 'package:lang_tube/youtube_video_player/youtube_player_model/youtube_play
 import 'package:rx_shared_preferences/rx_shared_preferences.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../custom/widgets/youtube_player_widgets/custom_progress_bar.dart';
 import '../custom/widgets/youtube_player_widgets/custom_youtube_player_builder.dart';
 
 class YoutubeVideoPlayerView extends ConsumerStatefulWidget {
@@ -21,7 +20,6 @@ class YoutubeVideoPlayerView extends ConsumerStatefulWidget {
   final String videoId;
 
   static const double progressBarHandleRadius = 7;
-  static const String sharedPreferencesForceHdKey = 'yt_player_force_hd';
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _YoutubeVideoPlayerViewState();
@@ -35,7 +33,19 @@ class _YoutubeVideoPlayerViewState
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await FkUserAgent.init();
     });
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setPreferredOrientations([]);
+    Timer(const Duration(seconds: 2), () async {
+      await Connectivity().checkConnectivity().then((value) {
+        return ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              value.toString(),
+            ),
+          ),
+        );
+      });
+    });
 
     super.initState();
   }
@@ -44,6 +54,7 @@ class _YoutubeVideoPlayerViewState
   void dispose() {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     FkUserAgent.release();
+
     super.dispose();
   }
 
@@ -73,30 +84,26 @@ class _YoutubeVideoPlayerViewState
     //     },
     //   ),
     // );
-    return Material(
-      child: FutureBuilder(
-        future: RxSharedPreferences.getInstance()
-            .getBool(YoutubePlayerModel.sharedPreferencesForceHdKey),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final sharedPreferencesForceHd = snapshot.data!;
-            return Consumer(
-              builder: (context, ref, _) => adaptiveYoutubePlayer(
-                youtubePlayerModel: ref.watch(
-                  youtubePlayerProviderFamily(
-                    (
-                      shouldForceHd: sharedPreferencesForceHd,
-                      videoId: widget.videoId
-                    ),
-                  ),
+
+    return FutureBuilder(
+      future: RxSharedPreferences.getInstance()
+          .getBool(YoutubePlayerModel.sharedPreferencesForceHdKey),
+      builder: (context, snapshot) {
+        final sharedPreferencesForceHd = snapshot.data ?? false;
+        return Consumer(
+          builder: (context, ref, _) => adaptiveYoutubePlayer(
+            youtubePlayerModel: ref.watch(
+              youtubePlayerProviderFamily(
+                (
+                  shouldForceHd: sharedPreferencesForceHd,
+                  videoId: widget.videoId
                 ),
-                key: UniqueKey(),
               ),
-            );
-          }
-          return Container();
-        },
-      ),
+            ),
+            key: UniqueKey(),
+          ),
+        );
+      },
     );
   }
 

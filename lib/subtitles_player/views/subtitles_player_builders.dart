@@ -85,30 +85,26 @@ class MainSubtitlesPlayerBuilder extends SubtitlesPlayerBuilder {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-        bottomSheetTheme: ExplanationModalSheet.theme,
-      ),
-      child: MainSubtitlesPlayer(
-        subtitlesPlayerProvider: subtitlesPlayerProvider,
-        onTap: ({required Function() onReset, required String word}) {
-          controller.pause();
-          showModalBottomSheet(
-              context: context,
-              barrierColor: Colors.black12,
-              isScrollControlled: true,
-              builder: (context) {
-                return ExplanationModalSheet(
-                  word: word.replaceAll(RegExp(r'[^a-zA-Z]'), ''),
-                );
-              }).then(
-            (_) {
-              controller.play();
-              onReset();
-            },
-          );
-        },
-      ),
+    return MainSubtitlesPlayer(
+      subtitlesPlayerProvider: subtitlesPlayerProvider,
+      onTap: ({required Function() onReset, required String word}) {
+        controller.pause();
+        showModalBottomSheet(
+            showDragHandle: true,
+            context: context,
+            barrierColor: Colors.black12,
+            isScrollControlled: true,
+            builder: (context) {
+              return ExplanationModalSheet(
+                word: word.replaceAll(RegExp(r'[^a-zA-Z]'), ''),
+              );
+            }).then(
+          (_) {
+            controller.play();
+            onReset();
+          },
+        );
+      },
     );
   }
 }

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/generic_actions/buttons/closed_caption_button.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../actions/views/actions.dart';
-import '../../generic_actions/actions.dart';
 
 class FullScreenYoutubePlayerActions extends ConsumerWidget {
   const FullScreenYoutubePlayerActions({

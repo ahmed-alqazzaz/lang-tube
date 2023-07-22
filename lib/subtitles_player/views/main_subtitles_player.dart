@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/custom/widgets/youtube_player_widgets/custom_current_position.dart';
 import 'package:lang_tube/explanation_modal/explanation_modal_constraints_provider.dart';
 import 'package:lang_tube/subtitles_player/providers/player_pointer_absorbtion_provider.dart';
 
@@ -176,22 +176,52 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
                       );
                 },
                 child: Container(
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     vertical: MainSubtitlesPlayer.subtitleBoxVerticalPadding,
-                    horizontal: constraints.maxWidth * 0.15,
                   ),
-                  child: SubtitleBox(
-                    words: subtitle.words,
-                    backgroundColor: Colors.transparent,
-                    textFontSize: MainSubtitlesPlayer.textFontSize,
-                    defaultTextColor: MainSubtitlesPlayer.defaultTextColor,
-                    fontWeight: FontWeight.w300,
-                    selectable: false,
-                    onTapUp: ({required onReset, required word}) {
-                      Timer(MainSubtitlesPlayer.bodyScrollDuration, () {
-                        widget.onTap(onReset: onReset, word: word);
-                      });
-                    },
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: constraints.maxWidth * 0.03),
+                        child: Text(
+                          durationFormatter(subtitle.start.inMilliseconds),
+                          style: TextStyle(
+                            color: MainSubtitlesPlayer.defaultTextColor,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: SubtitleBox(
+                          words: subtitle.words,
+                          backgroundColor: Colors.transparent,
+                          textFontSize: MainSubtitlesPlayer.textFontSize,
+                          defaultTextColor:
+                              MainSubtitlesPlayer.defaultTextColor,
+                          fontWeight: FontWeight.w300,
+                          selectable: false,
+                          onTapUp: ({required onReset, required word}) {
+                            Timer(MainSubtitlesPlayer.bodyScrollDuration, () {
+                              widget.onTap(onReset: onReset, word: word);
+                            });
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: constraints.maxWidth * 0.05),
+                        child: Text(
+                          durationFormatter(subtitle.end.inMilliseconds),
+                          style: TextStyle(
+                            color: MainSubtitlesPlayer.defaultTextColor,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );
@@ -207,10 +237,10 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
     super.build(context);
     final shouldAbsorbPointers =
         ref.watch(mainSubtitlesPlayerPointerAbsorbtionProvider);
-    if (MediaQuery.of(context).orientation == Orientation.landscape) {
-      assert(!shouldAbsorbPointers,
-          'Main Subtitles player should not absorb pointers while in landscape');
-    }
+    // if (MediaQuery.of(context).orientation == Orientation.landscape) {
+    //   assert(!shouldAbsorbPointers,
+    //       'Main Subtitles player should not absorb pointers while in landscape');
+    // }
     return AbsorbPointer(
       absorbing: shouldAbsorbPointers,
       child: Container(

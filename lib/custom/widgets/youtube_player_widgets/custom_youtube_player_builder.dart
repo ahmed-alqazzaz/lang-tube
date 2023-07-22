@@ -49,8 +49,7 @@ class _CustomYoutubePlayerBuilderState extends State<CustomYoutubePlayerBuilder>
 
   @override
   void didChangeMetrics() {
-    final physicalSize = SchedulerBinding.instance.window.physicalSize;
-    if (physicalSize.width > physicalSize.height) {
+    if (MediaQuery.of(context).orientation == Orientation.landscape) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       widget.onEnterFullScreen?.call();
     } else {
