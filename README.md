@@ -1,16 +1,19 @@
 # lang_tube
 
-A new Flutter project.
+<p>
 
-## Getting Started
+A language learning flutter app that allows watching youtube videos with clickable subtitles
 
-This project is a starting point for a Flutter application.
+</p>
 
-A few resources to get you started if this is your first Flutter project:
+## Status
+<p>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+The project is a work in progress and is far from being finalized 
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+</p>
+
+## Features
+- watch youtube videos with clickable subtitles
+<img src="https://github.com/stevehighly0/lang-tube/assets/85782358/b31e2272-c83c-45cb-829a-660a4de746d5.gif" width=400>
+
