@@ -242,14 +242,6 @@ class YoutubePlayerController extends ValueNotifier<YoutubePlayerValue> {
       : throw Exception("Volume should be between 0 and 100");
 
   void setVideoQuality(VideoQuality quality) {
-    const qualityToString = {
-      VideoQuality.q144p: "144p",
-      VideoQuality.q240p: "240p",
-      VideoQuality.q360p: "360p",
-      VideoQuality.q480p: "480p",
-      VideoQuality.q720p: "720p",
-      VideoQuality.q1080p: "1080p",
-    };
     _callMethod("setVideoQuality('${qualityToString[quality]}')");
   }
 
@@ -280,6 +272,10 @@ class YoutubePlayerController extends ValueNotifier<YoutubePlayerValue> {
   void fitHeight(Size screenSize) {
     setSize(screenSize);
     _callMethod('setTopMargin("0px")');
+  }
+
+  void hideNativeControls() {
+    _callMethod("hideControls()");
   }
 
   /// Sets the playback speed for the video.

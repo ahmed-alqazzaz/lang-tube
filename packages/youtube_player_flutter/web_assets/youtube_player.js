@@ -4,7 +4,6 @@ var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 var player;
 var timerId;
-
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         height: '100%',
@@ -123,27 +122,28 @@ function setVideoQuality(quality) {
         console.assert(!JSON.parse(settingsButton.ariaExpanded), "setting menu is already expanded")
         settingsButton.click();
         settingsMenu.style.display = 'none';
-        clickMenuItem('Quality')
-        clickMenuItem(quality)
+        console.assert(clickMenuItem('Quality'), "unable to locate 'Quality' setting button")
+        if(!clickMenuItem(quality)) console.error(`Quality unavailable ${quality}`)   
     } finally {
         setTimeout(() => {
             if (JSON.parse(settingsButton.ariaExpanded)) {
                 settingsButton.click()
             }
-        }, 500
+        }, 300
         )
-
     }
 }
 
-function clickMenuItem(menuItemText) {
-    let menuItems = getMenuItems()
-    menuItems.forEach((menuItem) => {
+function clickMenuItem(menuItemLabel) {
+    let menuItems = getMenuItems();
+    for (const menuItem of menuItems) {
         let itemLabel = menuItem.querySelector('.ytp-menuitem-label');
-        if (itemLabel.textContent === menuItemText) {
+        if (itemLabel.textContent.includes(menuItemLabel)) {
             menuItem.click();
+            return true; // Return true if the menu item is found and clicked.
         }
-    });
+    }
+    return false; // Return false if the menu item is not found.
 }
 function getMenuItems() {
     let iframeDocument = getIFrameDocument();
