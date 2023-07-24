@@ -4,13 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitle_player_provider.dart';
-import 'package:lang_tube/youtube_video_player/actions/actions_controller/helpers/loop_controller.dart';
-import 'package:lang_tube/youtube_video_player/actions/actions_controller/helpers/subtitle_loop_controller.dart';
+import 'package:lang_tube/youtube_video_player/actions/actions_controller/utils/loop_controllers/raw_loop_controller.dart';
+import 'package:lang_tube/youtube_video_player/actions/actions_controller/utils/loop_controllers/subtitle_loop_controller.dart';
 import 'package:lang_tube/youtube_video_player/youtube_player_model/youtube_player_provider.dart';
 import 'package:rx_shared_preferences/rx_shared_preferences.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import 'helpers/seek_subtitles_controller.dart';
+import 'utils/seek_subtitles_controller.dart';
 
 @immutable
 class YoutubePlayerActionsController {
@@ -20,12 +20,12 @@ class YoutubePlayerActionsController {
     required AutoDisposeChangeNotifierProviderRef ref,
     int subtitleLoopCount = 1,
     int customLoopCount = 5,
-  })  : _seekSubtitleController = SeekSubtitleController(
+  })  : _seekSubtitleController = SubtitlesSeekController(
           ref: ref,
           subtitlesPlayerProvider: subtitlesPlayerProvider,
           youtubePlayerController: youtubePlayerController,
         ),
-        _loopController = YoutubePlayerLoopController(
+        _loopController = RawLoopController(
           youtubePlayerController: youtubePlayerController,
           loopCount: customLoopCount,
         ),
@@ -34,26 +34,26 @@ class YoutubePlayerActionsController {
           subtitlesPlayerProvider: subtitlesPlayerProvider,
           loopCount: subtitleLoopCount,
           youtubePlayerController: youtubePlayerController,
-        ),
-        _rxSharedPreferences = RxSharedPreferences.getInstance();
+        );
   final YoutubePlayerController youtubePlayerController;
-  final SeekSubtitleController _seekSubtitleController;
-  final YoutubePlayerLoopController _loopController;
+  final SubtitlesSeekController _seekSubtitleController;
+  final RawLoopController _loopController;
   final SubtitleLoopController _subtitleLoopController;
-  final RxSharedPreferences _rxSharedPreferences;
 
   Future<void> enableForceHd() async {
-    await _rxSharedPreferences.setBool(
-      YoutubePlayerModel.sharedPreferencesForceHdKey,
-      true,
-    );
+    youtubePlayerController.setVideoQuality(VideoQuality.hd1080p);
+    // await _rxSharedPreferences.setBool(
+    //   YoutubePlayerModel.sharedPreferencesForceHdKey,
+    //   true,
+    // );
   }
 
   Future<void> disableForceHd() async {
-    await _rxSharedPreferences.setBool(
-      YoutubePlayerModel.sharedPreferencesForceHdKey,
-      true,
-    );
+    youtubePlayerController.setVideoQuality(VideoQuality.auto);
+    // await _rxSharedPreferences.setBool(
+    //   YoutubePlayerModel.sharedPreferencesForceHdKey,
+    //   true,
+    // );
   }
 
   void displayMainSettings() {

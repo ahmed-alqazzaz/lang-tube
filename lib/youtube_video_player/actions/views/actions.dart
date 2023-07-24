@@ -13,11 +13,12 @@ import '../actions_provider.dart';
 @immutable
 class YoutubePlayerActions {
   YoutubePlayerActions({
-    required YoutubePlayerModel youtubePlayerModel,
+    required YoutubePlayerController youtubePlayerController,
+    required YoutubePlayerActionsProvider actionsProvider,
     required WidgetRef ref,
   })  : _ref = ref,
-        _youtubePlayerController = youtubePlayerModel.youtubePlayerController,
-        actionsProvider = youtubePlayerModel.actionsProvider;
+        _youtubePlayerController = youtubePlayerController,
+        actionsProvider = actionsProvider;
   static const double buttonsPadding = 15;
 
   static const Color progressBarBackgroungColor =
@@ -59,7 +60,7 @@ class YoutubePlayerActions {
         color: Colors.white,
         size: 25,
       ),
-      onPressed: _ref.read(actionsProvider).toggleSubtitleLoop,
+      onPressed: _ref.read(actionsProvider).toggleForceHd,
     );
   }
 

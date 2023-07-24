@@ -6,8 +6,8 @@ import '../../../../subtitles_player/providers/subtitle_player_provider.dart';
 import '../../../../subtitles_player/utils/subtitles_parser/data/subtitle.dart';
 
 @immutable
-class SeekSubtitleController {
-  const SeekSubtitleController({
+class SubtitlesSeekController {
+  const SubtitlesSeekController({
     required SubtitlesPlayerProvider subtitlesPlayerProvider,
     required YoutubePlayerController youtubePlayerController,
     required AutoDisposeChangeNotifierProviderRef ref,
@@ -30,10 +30,9 @@ class SeekSubtitleController {
       );
 
   void _seekSubtitle(Subtitle? subtitle) {
-    if (subtitle != null) {
-      _youtubePlayerController.seekTo(subtitle.start);
-    }
-    throw UnimplementedError();
+    subtitle != null
+        ? _youtubePlayerController.seekTo(subtitle.start)
+        : throw UnimplementedError();
   }
 }
 

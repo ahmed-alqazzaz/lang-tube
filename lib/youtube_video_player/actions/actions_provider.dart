@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/actions/actions_controller/actions_controller.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+import '../../subtitles_player/providers/subtitle_player_provider.dart';
 
 KeepAliveLink? playerActionsProviderKeepAliveLink;
 
@@ -9,32 +12,36 @@ typedef YoutubePlayerActionsProvider
 final youtubePlayerActionsProvider = ChangeNotifierProvider.autoDispose.family<
     YoutubePlayerActionsModel,
     ({
-      YoutubePlayerActionsController controller,
-      double playbackSpeed,
-      bool shouldForceHd,
+      YoutubePlayerController youtubePlayerController,
+      SubtitlesPlayerProvider subtitlesPlayerProvider,
     })>(
   (ref, args) {
+    playerActionsProviderKeepAliveLink?.close();
     playerActionsProviderKeepAliveLink = ref.keepAlive();
     return YoutubePlayerActionsModel(
-      shouldForceHd: args.shouldForceHd,
-      playbackSpeed: args.playbackSpeed,
-      controller: args.controller,
+      youtubePlayerController: args.youtubePlayerController,
+      subtitlesPlayerProvider: args.subtitlesPlayerProvider,
+      ref: ref,
     );
   },
 );
 
 class YoutubePlayerActionsModel extends ChangeNotifier {
   YoutubePlayerActionsModel({
-    required this.shouldForceHd,
-    required this.playbackSpeed,
-    required YoutubePlayerActionsController controller,
-  }) : _actionsController = controller {
+    required YoutubePlayerController youtubePlayerController,
+    required SubtitlesPlayerProvider subtitlesPlayerProvider,
+    required AutoDisposeChangeNotifierProviderRef ref,
+  }) : _actionsController = YoutubePlayerActionsController(
+          youtubePlayerController: youtubePlayerController,
+          subtitlesPlayerProvider: subtitlesPlayerProvider,
+          ref: ref,
+        ) {
     _actionsController.youtubePlayerController
         .addListener(_fullScreenActionsisibilityListener);
   }
   final YoutubePlayerActionsController _actionsController;
-  double playbackSpeed;
-  bool shouldForceHd;
+  double playbackSpeed = 0.75;
+  bool shouldForceHd = false;
   bool isCustomLoopActive = false;
   bool isSubtitleLoopActive = false;
   bool areFullScreenActionsVisible = false;
@@ -55,9 +62,10 @@ class YoutubePlayerActionsModel extends ChangeNotifier {
 
   void toggleSubtitleLoop() {
     try {
-      isSubtitleLoopActive
-          ? _actionsController.disableSubtitleLoop()
-          : _actionsController.enableSubtitleLoop();
+      toggleForceHd();
+      // isSubtitleLoopActive
+      //     ? _actionsController.disableSubtitleLoop()
+      //     : _actionsController.enableSubtitleLoop();
     } finally {
       isSubtitleLoopActive = !isSubtitleLoopActive;
     }

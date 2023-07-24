@@ -3,8 +3,8 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import 'loop_state.dart';
 
-class YoutubePlayerLoopController {
-  YoutubePlayerLoopController({
+class RawLoopController {
+  RawLoopController({
     required this.youtubePlayerController,
     required this.loopCount,
   }) {

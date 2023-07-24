@@ -5,18 +5,25 @@ import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/portrai
 import 'package:lang_tube/youtube_video_player/youtube_player_model/youtube_player_provider.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../../subtitles_player/providers/player_pointer_absorbtion_provider.dart';
+import '../../../subtitles_player/providers/subtitle_player_provider.dart';
+import '../../actions/actions_provider.dart';
 import '../../actions/views/actions.dart';
 
 class PortraitYoutubePlayer extends ConsumerStatefulWidget {
   const PortraitYoutubePlayer({
     super.key,
-    required this.youtubePlayerModel,
     required this.player,
+    required this.youtubePlayerController,
+    required this.actionsProvider,
+    required this.subtitlesPlayerProvider,
   });
   final Widget player;
-  final YoutubePlayerModel youtubePlayerModel;
+  final YoutubePlayerController youtubePlayerController;
+  final YoutubePlayerActionsProvider actionsProvider;
+  final SubtitlesPlayerProvider subtitlesPlayerProvider;
 
   @override
   ConsumerState<PortraitYoutubePlayer> createState() =>
@@ -25,13 +32,10 @@ class PortraitYoutubePlayer extends ConsumerStatefulWidget {
 
 class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
     with SubtitlesPlayerBuilders {
-  late final youtubePlayerController =
-      widget.youtubePlayerModel.youtubePlayerController;
-  late final subtitlesPlayerProvider =
-      widget.youtubePlayerModel.subtitlesPlayerProvider;
   late final actions = YoutubePlayerActions(
-    youtubePlayerModel: widget.youtubePlayerModel,
     ref: ref,
+    actionsProvider: widget.actionsProvider,
+    youtubePlayerController: widget.youtubePlayerController,
   );
   late final BehaviorSubject<bool> _subtitlesPlayerPointersController;
   @override
@@ -62,8 +66,8 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
 
   Widget subtitlesPlayer(BuildContext context) {
     return mainSubtitlesPlayer(
-      controller: youtubePlayerController,
-      subtitlesPlayerProvider: subtitlesPlayerProvider,
+      controller: widget.youtubePlayerController,
+      subtitlesPlayerProvider: widget.subtitlesPlayerProvider,
       context: context,
     );
   }

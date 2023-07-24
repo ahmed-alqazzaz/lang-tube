@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitle_player_provider.dart';
-import 'package:lang_tube/youtube_video_player/actions/actions_controller/helpers/loop_controller.dart';
-import 'package:lang_tube/youtube_video_player/actions/actions_controller/helpers/loop_state.dart';
+import 'package:lang_tube/youtube_video_player/actions/actions_controller/utils/loop_controllers/raw_loop_controller.dart';
+import 'package:lang_tube/youtube_video_player/actions/actions_controller/utils/loop_controllers/loop_state.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../../../../subtitles_player/utils/subtitles_parser/data/subtitle.dart';
+import '../../../../../subtitles_player/utils/subtitles_parser/data/subtitle.dart';
 
 class SubtitleLoopController {
   SubtitleLoopController({
@@ -12,7 +12,7 @@ class SubtitleLoopController {
     required AutoDisposeChangeNotifierProviderRef ref,
     required YoutubePlayerController youtubePlayerController,
     required int loopCount,
-  })  : _loopController = YoutubePlayerLoopController(
+  })  : _loopController = RawLoopController(
           loopCount: loopCount,
           youtubePlayerController: youtubePlayerController,
         ),
@@ -24,7 +24,7 @@ class SubtitleLoopController {
   }
   late final ProviderSubscription<SubtitlesPlayerModel>
       _subtitlesModelSubscription;
-  final YoutubePlayerLoopController _loopController;
+  final RawLoopController _loopController;
   final YoutubePlayerController _youtubePlayerController;
 
   bool _isEnabled = false;

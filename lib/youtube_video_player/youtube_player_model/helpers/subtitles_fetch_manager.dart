@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../subtitles_player/providers/subtitles_fetch_provider.dart';
-import '../../../subtitles_player/utils/subtitles_scraper/data/data_classes.dart';
-import '../../../subtitles_player/utils/subtitles_scraper/subtitles_scraper.dart';
+import '../../../subtitles_player/utils/subtitles_parser/subtitles_scraper/data/data_classes.dart';
+import '../../../subtitles_player/utils/subtitles_parser/subtitles_scraper/subtitles_scraper.dart';
 
 @immutable
 class YoutubePlayerSubtitlesFetchManager {
