@@ -1,6 +1,8 @@
 import 'package:circular_menu/circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/youtube_video_player/actions/views/actions_circular_menu.dart';
+import 'package:lang_tube/youtube_video_player/actions/views/bottom_actions_bar.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -20,7 +22,6 @@ class YoutubePlayerActions {
         _youtubePlayerController = youtubePlayerController,
         actionsProvider = actionsProvider;
   static const double buttonsPadding = 15;
-
   static const Color progressBarBackgroungColor =
       Color.fromARGB(255, 156, 156, 156);
   static const Color progressBarBufferColor = Color(0xFFCCCCCC);
@@ -29,14 +30,18 @@ class YoutubePlayerActions {
 
   static const circularMenuItemBackgroundColor =
       Color.fromARGB(255, 50, 50, 50);
-  final circularMenuToggleButtonColor = Colors.amber[600];
 
+  final circularMenuToggleButtonColor = Colors.amber[600];
   final YoutubePlayerActionsProvider actionsProvider;
   final WidgetRef _ref;
   final YoutubePlayerController _youtubePlayerController;
 
+  Widget bottomActionsBarBuilder() => BottomActionsBar(
+        retrieveActionsNotifier: () => _ref.read(actionsProvider),
+      );
+
   Widget progressBar() {
-    return CustomProgressBar(
+    return ProgressBar(
       controller: _youtubePlayerController,
       colors: ProgressBarColors(
         handleColor: progressBarPlayedColor,
@@ -44,12 +49,10 @@ class YoutubePlayerActions {
         bufferedColor: progressBarBufferColor.withOpacity(0.7),
         backgroundColor: progressBarBackgroungColor.withOpacity(0.5),
       ),
-      width: progressBarThickness,
-      handleRadius: YoutubeVideoPlayerView.progressBarHandleRadius,
     );
   }
 
-  Widget positionIndicator() => CustomCurrentPosition(
+  Widget positionIndicator() => CurrentPosition(
         controller: _youtubePlayerController,
       );
 
@@ -60,7 +63,17 @@ class YoutubePlayerActions {
         color: Colors.white,
         size: 25,
       ),
-      onPressed: _ref.read(actionsProvider).toggleForceHd,
+      onPressed: _ref.read(actionsProvider).toggleHd,
+    );
+  }
+
+  Widget subtitlesSettingsButton() {
+    return genericButton(
+      child: const Icon(
+        Icons.closed_caption_rounded,
+        color: Colors.white,
+      ),
+      onPressed: () => _ref.read(actionsProvider).displaySubtitlesSettings(),
     );
   }
 
@@ -104,16 +117,6 @@ class YoutubePlayerActions {
         color: Colors.white,
       ),
       onPressed: _ref.read(actionsProvider).displayMainSettings,
-    );
-  }
-
-  Widget subtitlesButton() {
-    return genericButton(
-      child: const Icon(
-        Icons.settings_outlined,
-        color: Colors.white,
-      ),
-      onPressed: _ref.read(actionsProvider).displaySubtitlesSettings,
     );
   }
 
@@ -167,67 +170,10 @@ class YoutubePlayerActions {
     );
   }
 
-  Widget actionsCircularMenu({required void Function() onActionsMenuToggled}) {
-    CircularMenuItem genericCircularMenuItem({
-      required IconData icon,
-      Color iconColor = Colors.white,
-      required void Function() onTap,
-    }) {
-      return CircularMenuItem(
-        icon: icon,
-        iconColor: iconColor,
-        color: circularMenuItemBackgroundColor,
-        onTap: onTap,
+  ActionsCircularMenu actionsCircularMenuBuilder(
+          {required void Function() onActionsMenuToggled}) =>
+      ActionsCircularMenu(
+        onActionsMenuToggled: onActionsMenuToggled,
+        retrieveActionsNotifier: () => _ref.watch(actionsProvider),
       );
-    }
-
-    CircularMenuItem circularMenuLoopButton(YoutubePlayerActionsModel model) {
-      return genericCircularMenuItem(
-        icon: Icons.repeat_one,
-        iconColor: model.isSubtitleLoopActive ? Colors.white : Colors.white30,
-        onTap: () async {
-          model.toggleSubtitleLoop();
-        },
-      );
-    }
-
-    CircularMenuItem circularMenuSubtitlesButton(
-        YoutubePlayerActionsModel model) {
-      return genericCircularMenuItem(
-        icon: Icons.closed_caption_rounded,
-        onTap: () => model.displaySubtitlesSettings(),
-      );
-    }
-
-    CircularMenuItem circulaMenuPlayBackSpeedButton(
-        YoutubePlayerActionsModel model) {
-      return genericCircularMenuItem(
-        icon: Icons.speed,
-        onTap: () => model.setPlaybackSpeed(0.75),
-      );
-    }
-
-    final items = <CircularMenuItem Function(YoutubePlayerActionsModel)>[
-      circularMenuLoopButton,
-      circularMenuSubtitlesButton,
-      circulaMenuPlayBackSpeedButton,
-    ];
-
-    return Consumer(
-      builder: (context, ref, _) {
-        return CircularMenu(
-          toggleButtonColor: circularMenuToggleButtonColor,
-          alignment: const Alignment(1, 0.95),
-          startingAngleInRadian: 2.8,
-          endingAngleInRadian: 4.8,
-          toggleButtonSize: 25,
-          toggleButtonOnPressed: onActionsMenuToggled,
-          toggleButtonBoxShadow: const [
-            BoxShadow(color: Colors.white, blurRadius: 0.5)
-          ],
-          items: items.map((item) => item(ref.watch(actionsProvider))).toList(),
-        );
-      },
-    );
-  }
 }
