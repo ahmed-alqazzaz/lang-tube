@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -27,7 +26,7 @@ class YoutubePlayerBuilder extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _YoutubePlayerBuilderState createState() => _YoutubePlayerBuilderState();
+  State<YoutubePlayerBuilder> createState() => _YoutubePlayerBuilderState();
 }
 
 class _YoutubePlayerBuilderState extends State<YoutubePlayerBuilder>
@@ -48,14 +47,10 @@ class _YoutubePlayerBuilderState extends State<YoutubePlayerBuilder>
 
   @override
   void didChangeMetrics() {
-    final physicalSize = SchedulerBinding.instance.window.physicalSize;
-    final controller = widget.player.controller;
-    if (physicalSize.width > physicalSize.height) {
-      controller.updateValue(controller.value.copyWith(isFullScreen: true));
+    if (MediaQuery.of(context).orientation == Orientation.landscape) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       widget.onEnterFullScreen?.call();
     } else {
-      controller.updateValue(controller.value.copyWith(isFullScreen: false));
       SystemChrome.restoreSystemUIOverlays();
       widget.onExitFullScreen?.call();
     }
@@ -64,24 +59,10 @@ class _YoutubePlayerBuilderState extends State<YoutubePlayerBuilder>
 
   @override
   Widget build(BuildContext context) {
-    final _player = Container(
+    final player = Container(
       key: playerKey,
-      child: WillPopScope(
-        onWillPop: () async {
-          final controller = widget.player.controller;
-          if (controller.value.isFullScreen) {
-            widget.player.controller.toggleFullScreenMode();
-            return false;
-          }
-          return true;
-        },
-        child: widget.player,
-      ),
+      child: widget.player,
     );
-    final child = widget.builder(context, _player);
-    return OrientationBuilder(
-      builder: (context, orientation) =>
-          orientation == Orientation.portrait ? child : _player,
-    );
+    return widget.builder(context, player);
   }
 }
