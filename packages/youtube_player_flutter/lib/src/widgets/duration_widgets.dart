@@ -5,6 +5,8 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import '../utils/duration_formatter.dart';
+
 /// A widget which displays the current position of the video.
 class CurrentPosition extends StatefulWidget {
   /// Overrides the default [YoutubePlayerController].
@@ -66,29 +68,60 @@ class _CurrentPositionState extends State<CurrentPosition> {
   }
 }
 
-/// Formats duration in milliseconds to xx:xx:xx format.
-String durationFormatter(int milliSeconds) {
-  var seconds = milliSeconds ~/ 1000;
-  final hours = seconds ~/ 3600;
-  seconds = seconds % 3600;
-  var minutes = seconds ~/ 60;
-  seconds = seconds % 60;
-  final hoursString = hours >= 10
-      ? '$hours'
-      : hours == 0
-          ? '00'
-          : '0$hours';
-  final minutesString = minutes >= 10
-      ? '$minutes'
-      : minutes == 0
-          ? '00'
-          : '0$minutes';
-  final secondsString = seconds >= 10
-      ? '$seconds'
-      : seconds == 0
-          ? '00'
-          : '0$seconds';
-  final formattedTime =
-      '${hoursString == '00' ? '' : '$hoursString:'}$minutesString:$secondsString';
-  return formattedTime;
+/// A widget which displays the remaining duration of the video.
+class RemainingDuration extends StatefulWidget {
+  /// Overrides the default [YoutubePlayerController].
+  final YoutubePlayerController? controller;
+
+  /// Creates [RemainingDuration] widget.
+  RemainingDuration({this.controller});
+
+  @override
+  _RemainingDurationState createState() => _RemainingDurationState();
+}
+
+class _RemainingDurationState extends State<RemainingDuration> {
+  late YoutubePlayerController _controller;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final controller = YoutubePlayerController.of(context);
+    if (controller == null) {
+      assert(
+        widget.controller != null,
+        '\n\nNo controller could be found in the provided context.\n\n'
+        'Try passing the controller explicitly.',
+      );
+      _controller = widget.controller!;
+    } else {
+      _controller = controller;
+    }
+    _controller.removeListener(listener);
+    _controller.addListener(listener);
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(listener);
+    super.dispose();
+  }
+
+  void listener() {
+    if (mounted) setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "- ${durationFormatter(
+        (_controller.metadata.duration.inMilliseconds) -
+            (_controller.value.position.inMilliseconds),
+      )}",
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 12.0,
+      ),
+    );
+  }
 }
