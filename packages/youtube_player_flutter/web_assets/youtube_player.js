@@ -114,6 +114,11 @@ function hideControls() {
     let controlsBar = iframeDocument.querySelector('.ytp-chrome-bottom')
     controlsBar.style.display = 'none'
 }
+function showControls(){
+    let iframeDocument = getIFrameDocument();
+    let controlsBar = iframeDocument.querySelector('.ytp-chrome-bottom')
+    controlsBar.style.display = 'block'
+}
 function setVideoQuality(quality) {
     let iframeDocument = getIFrameDocument();
     let settingsButton = iframeDocument.querySelector('.ytp-settings-button')
@@ -138,6 +143,7 @@ function clickMenuItem(menuItemLabel) {
     let menuItems = getMenuItems();
     for (const menuItem of menuItems) {
         let itemLabel = menuItem.querySelector('.ytp-menuitem-label');
+        console.log(itemLabel.textContent);
         if (itemLabel.textContent.includes(menuItemLabel)) {
             menuItem.click();
             return true; // Return true if the menu item is found and clicked.

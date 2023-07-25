@@ -274,8 +274,8 @@ class YoutubePlayerController extends ValueNotifier<YoutubePlayerValue> {
     _callMethod('setTopMargin("0px")');
   }
 
-  void hideNativeControls() {
-    _callMethod("hideControls()");
+  void showNativeControls() {
+    _callMethod("showControls()");
   }
 
   /// Sets the playback speed for the video.

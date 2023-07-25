@@ -1,4 +1,5 @@
 enum VideoQuality {
+  auto,
   tiny144p,
   small240p,
   medium360p,
@@ -9,6 +10,7 @@ enum VideoQuality {
 }
 
 const qualityToString = {
+  VideoQuality.auto: "Auto",
   VideoQuality.tiny144p: "144p",
   VideoQuality.small240p: "240p",
   VideoQuality.medium360p: "360p",
