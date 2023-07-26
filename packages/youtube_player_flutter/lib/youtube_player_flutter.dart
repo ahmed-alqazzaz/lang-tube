@@ -8,5 +8,5 @@ export 'src/utils/youtube_meta_data.dart';
 export 'src/utils/youtube_player_controller.dart';
 export 'src/utils/youtube_player_flags.dart';
 export 'src/utils/duration_formatter.dart';
-export 'src/utils/video_quality.dart' show VideoQuality;
+export 'src/enums/video_quality.dart' show VideoQuality;
 export 'src/widgets/widgets.dart';

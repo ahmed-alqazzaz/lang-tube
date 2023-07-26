@@ -5,7 +5,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:youtube_player_flutter/src/utils/video_quality.dart';
+import 'package:youtube_player_flutter/src/enums/video_quality.dart';
 
 import '../enums/playback_rate.dart';
 import '../enums/player_state.dart';
