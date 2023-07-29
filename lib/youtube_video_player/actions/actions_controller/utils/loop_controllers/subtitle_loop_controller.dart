@@ -1,14 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitle_player_provider.dart';
+import 'package:lang_tube/subtitles_player/providers/multi_subtitles_player_provider/display_subtitles.dart';
 import 'package:lang_tube/youtube_video_player/actions/actions_controller/utils/loop_controllers/raw_loop_controller.dart';
 import 'package:lang_tube/youtube_video_player/actions/actions_controller/utils/loop_controllers/loop_state.dart';
+import 'package:subtitles_player/subtitles_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../../../../../subtitles_player/utils/subtitles_parser/data/subtitle.dart';
+import '../../../../../subtitles_player/providers/multi_subtitles_player_provider/provider.dart';
 
 class SubtitleLoopController {
   SubtitleLoopController({
-    required SubtitlesPlayerProvider subtitlesPlayerProvider,
+    required MultiSubtitlesPlayerProvider multiSubtitlesPlayerProvider,
     required AutoDisposeChangeNotifierProviderRef ref,
     required YoutubePlayerController youtubePlayerController,
     required int loopCount,
@@ -18,11 +19,11 @@ class SubtitleLoopController {
         ),
         _youtubePlayerController = youtubePlayerController {
     _subtitlesModelSubscription =
-        ref.listen(subtitlesPlayerProvider, (_, model) {
-      _currentSubtitle = model.mainSubtitlesController.currentSubtitle;
+        ref.listen(multiSubtitlesPlayerProvider, (_, displayedSubtitles) {
+      _currentSubtitle = displayedSubtitles.mainSubtitle;
     });
   }
-  late final ProviderSubscription<SubtitlesPlayerModel>
+  late final ProviderSubscription<DisplayedSubtitles>
       _subtitlesModelSubscription;
   final RawLoopController _loopController;
   final YoutubePlayerController _youtubePlayerController;

@@ -1,55 +1,35 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:subtitles_player/subtitles_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../../../../subtitles_player/providers/subtitle_player_provider.dart';
-import '../../../../subtitles_player/utils/subtitles_parser/data/subtitle.dart';
+import '../../../../subtitles_player/providers/multi_subtitles_player_provider/provider.dart';
 
 @immutable
 class SubtitlesSeekController {
   const SubtitlesSeekController({
-    required SubtitlesPlayerProvider subtitlesPlayerProvider,
+    required MultiSubtitlesPlayerProvider multiSubtitlesPlayerProvider,
     required YoutubePlayerController youtubePlayerController,
     required AutoDisposeChangeNotifierProviderRef ref,
-  })  : _subtitlesPlayerProvider = subtitlesPlayerProvider,
+  })  : _multiSubtitlesPlayerProvider = multiSubtitlesPlayerProvider,
         _youtubePlayerController = youtubePlayerController,
         _ref = ref;
 
-  final SubtitlesPlayerProvider _subtitlesPlayerProvider;
+  final MultiSubtitlesPlayerProvider _multiSubtitlesPlayerProvider;
   final YoutubePlayerController _youtubePlayerController;
   final AutoDisposeChangeNotifierProviderRef _ref;
-  SubtitlesController get _subtitlesController =>
-      _ref.read(_subtitlesPlayerProvider).mainSubtitlesController;
 
   void seekPreviousSubtitle() => _seekSubtitle(
-        _subtitlesController.previousSubtitle,
+        _ref.read(_multiSubtitlesPlayerProvider.notifier).previousMainSubtitle,
       );
 
   void seekNextSubtitle() => _seekSubtitle(
-        _subtitlesController.nextSubtitle,
+        _ref.read(_multiSubtitlesPlayerProvider.notifier).nextMainSubtitle,
       );
 
   void _seekSubtitle(Subtitle? subtitle) {
     subtitle != null
         ? _youtubePlayerController.seekTo(subtitle.start)
         : throw UnimplementedError();
-  }
-}
-
-extension SubtitlesSequence on SubtitlesController {
-  Subtitle? get previousSubtitle {
-    final index = currentSubtitleIndex;
-    if (index != null && index > 0) {
-      subtitles[index - 1];
-    }
-    return null;
-  }
-
-  Subtitle? get nextSubtitle {
-    final index = currentSubtitleIndex;
-    if (index != null && index < subtitlesCount - 1) {
-      subtitles[index + 1];
-    }
-    return null;
   }
 }

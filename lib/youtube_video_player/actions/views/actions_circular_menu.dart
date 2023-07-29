@@ -14,6 +14,7 @@ class ActionsCircularMenu extends ConsumerWidget {
           _circularMenuSubtitlesButton,
           _circulaMenuPlayBackSpeedButton,
         ];
+
   final YoutubePlayerActionsModel Function() retrieveActionsNotifier;
   final void Function() onActionsMenuToggled;
   final circularMenuToggleButtonColor = Colors.amber[600];

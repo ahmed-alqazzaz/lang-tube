@@ -1,28 +1,27 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitle_player_provider.dart';
 import 'package:lang_tube/youtube_video_player/actions/actions_controller/utils/loop_controllers/raw_loop_controller.dart';
 import 'package:lang_tube/youtube_video_player/actions/actions_controller/utils/loop_controllers/subtitle_loop_controller.dart';
-import 'package:lang_tube/youtube_video_player/youtube_player_model/youtube_player_provider.dart';
-import 'package:rx_shared_preferences/rx_shared_preferences.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import '../../../subtitles_player/providers/multi_subtitles_player_provider/provider.dart';
 import 'utils/seek_subtitles_controller.dart';
 
 @immutable
 class YoutubePlayerActionsController {
   YoutubePlayerActionsController({
     required this.youtubePlayerController,
-    required SubtitlesPlayerProvider subtitlesPlayerProvider,
+    required MultiSubtitlesPlayerProvider multiSubtitlesPlayerProvider,
     required AutoDisposeChangeNotifierProviderRef ref,
     int subtitleLoopCount = 1,
     int customLoopCount = 5,
   })  : _seekSubtitleController = SubtitlesSeekController(
           ref: ref,
-          subtitlesPlayerProvider: subtitlesPlayerProvider,
+          multiSubtitlesPlayerProvider: multiSubtitlesPlayerProvider,
           youtubePlayerController: youtubePlayerController,
         ),
         _loopController = RawLoopController(
@@ -31,7 +30,7 @@ class YoutubePlayerActionsController {
         ),
         _subtitleLoopController = SubtitleLoopController(
           ref: ref,
-          subtitlesPlayerProvider: subtitlesPlayerProvider,
+          multiSubtitlesPlayerProvider: multiSubtitlesPlayerProvider,
           loopCount: subtitleLoopCount,
           youtubePlayerController: youtubePlayerController,
         );
@@ -40,20 +39,28 @@ class YoutubePlayerActionsController {
   final RawLoopController _loopController;
   final SubtitleLoopController _subtitleLoopController;
 
-  Future<void> enableForceHd() async {
+  Future<void> forceHd() async {
     youtubePlayerController.setVideoQuality(VideoQuality.hd1080p);
     // await _rxSharedPreferences.setBool(
     //   YoutubePlayerModel.sharedPreferencesForceHdKey,
     //   true,
     // );
+    log("forcing hd");
+    Timer(const Duration(seconds: 3), () {
+      log(youtubePlayerController.value.playbackQuality.toString());
+    });
   }
 
-  Future<void> disableForceHd() async {
+  Future<void> disableHd() async {
     youtubePlayerController.setVideoQuality(VideoQuality.auto);
+    log("disabling hd");
     // await _rxSharedPreferences.setBool(
     //   YoutubePlayerModel.sharedPreferencesForceHdKey,
     //   true,
     // );
+    Timer(const Duration(seconds: 3), () {
+      log(youtubePlayerController.value.playbackQuality.toString());
+    });
   }
 
   void displayMainSettings() {

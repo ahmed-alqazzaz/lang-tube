@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import '../../../subtitles_player/providers/subtitle_player_provider.dart';
+import '../../../subtitles_player/providers/multi_subtitles_player_provider/provider.dart';
 import '../../../subtitles_player/views/subtitles_player_builders.dart';
 import '../../actions/actions_provider.dart';
 import '../../actions/views/actions.dart';
-import '../../youtube_player_model/youtube_player_provider.dart';
+import '../../actions/views/full_screen_player_actions.dart';
 import 'full_screen_player_action.dart';
 
 class FullScreenYoutubeVideoPlayer extends ConsumerStatefulWidget {
@@ -15,12 +15,12 @@ class FullScreenYoutubeVideoPlayer extends ConsumerStatefulWidget {
     required this.player,
     required this.youtubePlayerController,
     required this.actionsProvider,
-    required this.subtitlesPlayerProvider,
+    required this.multiSubtitlesPlayerProvider,
   });
   final Widget player;
   final YoutubePlayerController youtubePlayerController;
   final YoutubePlayerActionsProvider actionsProvider;
-  final SubtitlesPlayerProvider subtitlesPlayerProvider;
+  final MultiSubtitlesPlayerProvider multiSubtitlesPlayerProvider;
 
   @override
   ConsumerState<FullScreenYoutubeVideoPlayer> createState() =>
@@ -47,7 +47,7 @@ class _FullScreenYoutubeVideoPlayerState
             left: 150,
             child: miniSubtitlesPlayer(
               controller: widget.youtubePlayerController,
-              subtitlesPlayerProvider: widget.subtitlesPlayerProvider,
+              multiSubtitlesPlayerProvider: widget.multiSubtitlesPlayerProvider,
               context: context,
             ),
           ),
@@ -56,9 +56,7 @@ class _FullScreenYoutubeVideoPlayerState
             left: YoutubeVideoPlayerView.progressBarHandleRadius,
             top: 0,
             bottom: 0,
-            child: FullScreenYoutubePlayerActions(
-              actions: actions,
-            ),
+            child: FullScreenYoutubePlayerActions(actions: actions),
           ),
         ],
       );
@@ -77,7 +75,7 @@ class _FullScreenYoutubeVideoPlayerState
           width: size.height,
           child: mainSubtitlesPlayer(
             controller: widget.youtubePlayerController,
-            subtitlesPlayerProvider: widget.subtitlesPlayerProvider,
+            multiSubtitlesPlayerProvider: widget.multiSubtitlesPlayerProvider,
             context: context,
           ),
         ),

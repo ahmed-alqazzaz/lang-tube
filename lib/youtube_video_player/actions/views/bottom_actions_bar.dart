@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
 
 import '../actions_provider.dart';
@@ -7,7 +8,6 @@ class BottomActionsBar extends StatelessWidget {
   const BottomActionsBar({super.key, required this.retrieveActionsNotifier});
   final splashRadius = 8.0;
   final YoutubePlayerActionsModel Function() retrieveActionsNotifier;
-
   Widget subtitlesSettingsButton() {
     return CircularInkWell(
       onTap: () => retrieveActionsNotifier().displaySubtitlesSettings(),

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_player/views/subtitles_player_builders.dart';
-import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/portrait_player/actions.dart';
-import 'package:lang_tube/youtube_video_player/youtube_player_model/youtube_player_provider.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../../../subtitles_player/providers/player_pointer_absorbtion_provider.dart';
-import '../../../subtitles_player/providers/subtitle_player_provider.dart';
-import '../../actions/actions_provider.dart';
-import '../../actions/views/actions.dart';
+import '../../subtitles_player/providers/multi_subtitles_player_provider/provider.dart';
+import '../../subtitles_player/providers/player_pointer_absorbtion_provider.dart';
+import '../actions/actions_provider.dart';
+import '../actions/views/actions.dart';
+import '../actions/views/portrait_player_actions.dart';
 
 class PortraitYoutubePlayer extends ConsumerStatefulWidget {
   const PortraitYoutubePlayer({
@@ -18,12 +17,12 @@ class PortraitYoutubePlayer extends ConsumerStatefulWidget {
     required this.player,
     required this.youtubePlayerController,
     required this.actionsProvider,
-    required this.subtitlesPlayerProvider,
+    required this.multiSubtitlesPlayerProvider,
   });
   final Widget player;
   final YoutubePlayerController youtubePlayerController;
   final YoutubePlayerActionsProvider actionsProvider;
-  final SubtitlesPlayerProvider subtitlesPlayerProvider;
+  final MultiSubtitlesPlayerProvider multiSubtitlesPlayerProvider;
 
   @override
   ConsumerState<PortraitYoutubePlayer> createState() =>
@@ -56,9 +55,7 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
       children: [
         widget.player,
         Positioned.fill(
-          child: PortraitPlayerActions(
-            actions: actions,
-          ),
+          child: PortraitPlayerActions(actions: actions),
         )
       ],
     );
@@ -67,7 +64,7 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
   Widget subtitlesPlayer(BuildContext context) {
     return mainSubtitlesPlayer(
       controller: widget.youtubePlayerController,
-      subtitlesPlayerProvider: widget.subtitlesPlayerProvider,
+      multiSubtitlesPlayerProvider: widget.multiSubtitlesPlayerProvider,
       context: context,
     );
   }
@@ -107,16 +104,25 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Stack(
-        children: [
-          _bodyBuilder(context),
-          Positioned.fill(
-            child: actions.actionsCircularMenu(
-              onActionsMenuToggled: _onActionMenuToggled,
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            _bodyBuilder(context),
+            Positioned(
+              height: 80,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: actions.bottomActionsBarBuilder(),
             ),
-          ),
-        ],
+            Positioned.fill(
+              child: actions.actionsCircularMenuBuilder(
+                onActionsMenuToggled: _onActionMenuToggled,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

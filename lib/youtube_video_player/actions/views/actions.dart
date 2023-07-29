@@ -1,15 +1,10 @@
-import 'package:circular_menu/circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/actions/views/actions_circular_menu.dart';
 import 'package:lang_tube/youtube_video_player/actions/views/bottom_actions_bar.dart';
-import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../../../custom/widgets/youtube_player_widgets/custom_current_position.dart';
-import '../../../custom/widgets/youtube_player_widgets/custom_progress_bar.dart';
 import '../../../custom/icons/custom_icons.dart';
-import '../../youtube_player_model/youtube_player_provider.dart';
 import '../actions_provider.dart';
 
 @immutable
@@ -36,10 +31,16 @@ class YoutubePlayerActions {
   final WidgetRef _ref;
   final YoutubePlayerController _youtubePlayerController;
 
-  Widget bottomActionsBarBuilder() => BottomActionsBar(
+  BottomActionsBar bottomActionsBarBuilder() => BottomActionsBar(
         retrieveActionsNotifier: () => _ref.read(actionsProvider),
       );
 
+  ActionsCircularMenu actionsCircularMenuBuilder(
+          {required void Function() onActionsMenuToggled}) =>
+      ActionsCircularMenu(
+        onActionsMenuToggled: onActionsMenuToggled,
+        retrieveActionsNotifier: () => _ref.watch(actionsProvider),
+      );
   Widget progressBar() {
     return ProgressBar(
       controller: _youtubePlayerController,
@@ -169,11 +170,4 @@ class YoutubePlayerActions {
       ),
     );
   }
-
-  ActionsCircularMenu actionsCircularMenuBuilder(
-          {required void Function() onActionsMenuToggled}) =>
-      ActionsCircularMenu(
-        onActionsMenuToggled: onActionsMenuToggled,
-        retrieveActionsNotifier: () => _ref.watch(actionsProvider),
-      );
 }
