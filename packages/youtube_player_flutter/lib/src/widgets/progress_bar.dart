@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import '../utils/youtube_player_controller.dart';
 
@@ -21,13 +23,16 @@ class ProgressBarColors {
   /// Defines color for handle of the [ProgressBar].
   final Color? handleColor;
 
+  /// Defines color for custom progress portion of the [ProgressBar].
+  final Color? customProgressColor;
+
   /// Creates [ProgressBarColors].
-  const ProgressBarColors({
-    this.backgroundColor,
-    this.playedColor,
-    this.bufferedColor,
-    this.handleColor,
-  });
+  const ProgressBarColors(
+      {this.backgroundColor,
+      this.playedColor,
+      this.bufferedColor,
+      this.handleColor,
+      this.customProgressColor});
 
   ///
   ProgressBarColors copyWith({
@@ -44,6 +49,13 @@ class ProgressBarColors {
       );
 }
 
+@immutable
+class CustomProgress {
+  const CustomProgress({required this.start, required this.end});
+  final double start;
+  final double end;
+}
+
 /// A widget to display video progress bar.
 class ProgressBar extends StatefulWidget {
   /// Overrides the default [YoutubePlayerController].
@@ -57,11 +69,14 @@ class ProgressBar extends StatefulWidget {
   /// Default is false.
   final bool isExpanded;
 
+  final Stream<CustomProgress>? customProgress;
+
   /// Creates [ProgressBar] widget.
   const ProgressBar({
     super.key,
     this.controller,
     this.colors,
+    this.customProgress,
     this.isExpanded = false,
   });
 
@@ -160,6 +175,7 @@ class _ProgressBarState extends State<ProgressBar> {
   }
 
   Widget _buildBar() {
+    log(_playedValue.toString());
     return GestureDetector(
       onHorizontalDragDown: (details) {
         _controller.updateValue(
@@ -182,17 +198,22 @@ class _ProgressBarState extends State<ProgressBar> {
         color: Colors.transparent,
         constraints:
             const BoxConstraints.expand(height: _progressBarHandleRadius * 2),
-        child: CustomPaint(
-          painter: _ProgressBarPainter(
-            progressWidth: 3.0,
-            handleRadius: _progressBarHandleRadius,
-            playedValue: _playedValue,
-            bufferedValue: _bufferedValue,
-            colors: widget.colors,
-            touchDown: _touchDown,
-            themeData: Theme.of(context),
-          ),
-        ),
+        child: StreamBuilder<CustomProgress>(
+            stream: widget.customProgress,
+            builder: (context, snapshot) {
+              return CustomPaint(
+                painter: _ProgressBarPainter(
+                  progressWidth: 3.0,
+                  handleRadius: _progressBarHandleRadius,
+                  playedValue: _playedValue,
+                  bufferedValue: _bufferedValue,
+                  colors: widget.colors,
+                  touchDown: _touchDown,
+                  customProgress: snapshot.data,
+                  themeData: Theme.of(context),
+                ),
+              );
+            }),
       ),
     );
   }
@@ -208,6 +229,7 @@ class _ProgressBarPainter extends CustomPainter {
   final double handleRadius;
   final double playedValue;
   final double bufferedValue;
+  final CustomProgress? customProgress;
   final ProgressBarColors? colors;
   final bool touchDown;
   final ThemeData themeData;
@@ -217,6 +239,7 @@ class _ProgressBarPainter extends CustomPainter {
     required this.handleRadius,
     required this.playedValue,
     required this.bufferedValue,
+    this.customProgress,
     this.colors,
     required this.touchDown,
     required this.themeData,
@@ -231,6 +254,7 @@ class _ProgressBarPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    customProgress;
     final paint = Paint()
       ..isAntiAlias = true
       ..strokeCap = StrokeCap.square
@@ -250,6 +274,13 @@ class _ProgressBarPainter extends CustomPainter {
       centerY,
     );
 
+    final customProgressStartPoint = customProgress != null
+        ? Offset(barLength * customProgress!.start + handleRadius, centerY)
+        : null;
+    final customProgressEndPoint = customProgress != null
+        ? Offset(barLength * customProgress!.end + handleRadius, centerY)
+        : null;
+
     final secondaryColor = themeData.colorScheme.secondary;
 
     paint.color = colors?.backgroundColor ?? secondaryColor.withOpacity(0.38);
@@ -260,6 +291,11 @@ class _ProgressBarPainter extends CustomPainter {
 
     paint.color = colors?.playedColor ?? secondaryColor;
     canvas.drawLine(startPoint, progressPoint, paint);
+
+    if (customProgressStartPoint != null && customProgressEndPoint != null) {
+      paint.color = colors?.customProgressColor ?? Colors.amber.shade600;
+      canvas.drawLine(customProgressStartPoint, customProgressEndPoint, paint);
+    }
 
     final handlePaint = Paint()..isAntiAlias = true;
 
