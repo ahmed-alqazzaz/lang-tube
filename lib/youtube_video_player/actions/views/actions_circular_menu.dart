@@ -1,27 +1,26 @@
 import 'package:circular_menu/circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../actions_provider.dart';
+import 'package:lang_tube/youtube_video_player/action_providers/youtube_hd_provider/provider.dart';
+import 'package:lang_tube/youtube_video_player/action_providers/loop_providers/subtitle_loop_provider.dart/provider.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ActionsCircularMenu extends ConsumerWidget {
   ActionsCircularMenu({
     super.key,
     required this.onActionsMenuToggled,
-    required this.retrieveActionsNotifier,
-  }) : items = [
-          _circularMenuHdButton,
-          _circularMenuSubtitlesButton,
-          _circulaMenuPlayBackSpeedButton,
-        ];
-
-  final YoutubePlayerActionsModel Function() retrieveActionsNotifier;
-  final void Function() onActionsMenuToggled;
+    required YoutubePlayerController youtubePlayerController,
+    required SubtitleLoopProvider subtitleLoopProvider,
+  })  : _subtitleLoopProvider = subtitleLoopProvider,
+        _youtubeHdProvider = youtubeHdProviderFamily(youtubePlayerController);
   final circularMenuToggleButtonColor = Colors.amber[600];
   static const circularMenuItemBackgroundColor =
       Color.fromARGB(255, 50, 50, 50);
 
-  final List<CircularMenuItem Function(YoutubePlayerActionsModel)> items;
+  final void Function() onActionsMenuToggled;
+  final SubtitleLoopProvider _subtitleLoopProvider;
+  final YoutubeHdProvider _youtubeHdProvider;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CircularMenu(
@@ -34,14 +33,18 @@ class ActionsCircularMenu extends ConsumerWidget {
       toggleButtonBoxShadow: const [
         BoxShadow(color: Colors.white, blurRadius: 0.5)
       ],
-      items: items.map((item) => item(retrieveActionsNotifier())).toList(),
+      items: [
+        _circularMenuHdButton(ref),
+        _circularMenuSubtitlesButton(ref),
+        _circulaMenuPlayBackSpeedButton(ref),
+      ],
     );
   }
 
-  static CircularMenuItem _genericCircularMenuItem({
+  _genericCircularMenuItem({
     required IconData icon,
-    Color iconColor = Colors.white,
     required void Function() onTap,
+    Color iconColor = Colors.white,
   }) {
     return CircularMenuItem(
       icon: icon,
@@ -51,29 +54,34 @@ class ActionsCircularMenu extends ConsumerWidget {
     );
   }
 
-  static CircularMenuItem _circularMenuHdButton(
-      YoutubePlayerActionsModel model) {
+  CircularMenuItem _circularMenuHdButton(WidgetRef ref) {
+    final isHd = ref.watch(_youtubeHdProvider);
+    final youtubeHdNotifier = ref.read(_youtubeHdProvider.notifier);
     return _genericCircularMenuItem(
       icon: Icons.hd_rounded,
-      iconColor: model.isHd ? Colors.white : Colors.white30,
-      onTap: () async => model.toggleHd(),
+      iconColor: isHd ? Colors.white : Colors.white30,
+      onTap: () async =>
+          isHd ? youtubeHdNotifier.disableHd() : youtubeHdNotifier.forceHd(),
     );
   }
 
-  static CircularMenuItem _circulaMenuPlayBackSpeedButton(
-      YoutubePlayerActionsModel model) {
+  CircularMenuItem _circulaMenuPlayBackSpeedButton(WidgetRef ref) {
+    final isLoopActive = ref.watch(_subtitleLoopProvider) != null;
+
+    final subtitleLoopNotifier = ref.read(_subtitleLoopProvider.notifier);
     return _genericCircularMenuItem(
       icon: Icons.repeat_one,
-      iconColor: model.isSubtitleLoopActive ? Colors.white : Colors.white30,
-      onTap: () => model.toggleSubtitleLoop(),
+      iconColor: isLoopActive ? Colors.white : Colors.white30,
+      onTap: () => isLoopActive
+          ? subtitleLoopNotifier.deactivateLoop()
+          : subtitleLoopNotifier.activateLoop(),
     );
   }
 
-  static CircularMenuItem _circularMenuSubtitlesButton(
-      YoutubePlayerActionsModel model) {
+  CircularMenuItem _circularMenuSubtitlesButton(WidgetRef ref) {
     return _genericCircularMenuItem(
       icon: Icons.closed_caption_rounded,
-      onTap: () => model.displaySubtitlesSettings(),
+      onTap: () {},
     );
   }
 }

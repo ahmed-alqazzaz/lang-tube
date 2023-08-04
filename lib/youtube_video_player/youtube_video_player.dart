@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_player/providers/multi_subtitles_player_provider/provider.dart';
-import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/full_screen_player.dart/full_screen_youtube_player.dart';
-import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/portrait_player/portrait_youtube_player.dart';
-import 'package:languages/language_utils.dart';
+import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/full_screen_youtube_player.dart';
+import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/portrait_youtube_player.dart';
+import 'package:languages/languages.dart';
 import 'package:rx_shared_preferences/rx_shared_preferences.dart';
 import 'package:value_notifier_transformer/value_notifier_transformer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../subtitles_player/providers/subtitles_scraper_provider/data/subtitles_bundle.dart';
 import '../subtitles_player/providers/subtitles_scraper_provider/subtitles_scraper_provider.dart';
-import 'actions/actions_provider.dart';
 
 class Tmp extends ConsumerWidget {
   const Tmp(this.videoId, {super.key});
@@ -59,7 +58,6 @@ class _YoutubeVideoPlayerViewState
     extends ConsumerState<YoutubeVideoPlayerView> {
   late final rxSharedPreferences = RxSharedPreferences.getInstance();
   late final YoutubePlayerController _youtubePlayerController;
-  late final YoutubePlayerActionsProvider _actionsProvider;
   late final MultiSubtitlesPlayerProvider _multiSubtitlesPlayerProvider;
   @override
   void initState() {
@@ -67,17 +65,17 @@ class _YoutubeVideoPlayerViewState
       initialVideoId: widget.videoId,
       flags: const YoutubePlayerFlags(enableCaption: false),
     );
+    Timer.periodic(Duration(seconds: 10), (timer) {
+      _youtubePlayerController.setPlaybackRate(0.25);
+    });
     _multiSubtitlesPlayerProvider = multiSubtitlesPlayerProvider((
       mainSubtitles: widget.subtitles.mainSubtitles.first.subtitles.toList(),
       translatedSubtitles:
           widget.subtitles.translatedSubtitles.first.subtitles.toList(),
       playbackPosition:
-          _youtubePlayerController.syncMap((value) => value.position)
-    ));
-
-    _actionsProvider = youtubePlayerActionsProvider((
-      youtubePlayerController: _youtubePlayerController,
-      multiSubtitlesPlayerProvider: _multiSubtitlesPlayerProvider,
+          _youtubePlayerController.where((event) => !event.isDragging).syncMap(
+                (value) => value.position,
+              )
     ));
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -123,14 +121,12 @@ class _YoutubeVideoPlayerViewState
                 if (orientation == Orientation.portrait) {
                   return PortraitYoutubePlayer(
                     player: player,
-                    actionsProvider: _actionsProvider,
                     multiSubtitlesPlayerProvider: _multiSubtitlesPlayerProvider,
                     youtubePlayerController: _youtubePlayerController,
                   );
                 }
                 return FullScreenYoutubeVideoPlayer(
                   player: player,
-                  actionsProvider: _actionsProvider,
                   multiSubtitlesPlayerProvider: _multiSubtitlesPlayerProvider,
                   youtubePlayerController: _youtubePlayerController,
                 );

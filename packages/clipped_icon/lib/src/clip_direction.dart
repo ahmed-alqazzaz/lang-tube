@@ -1,0 +1,4 @@
+enum ClipDirection { 
+  top
+, bottom 
+}

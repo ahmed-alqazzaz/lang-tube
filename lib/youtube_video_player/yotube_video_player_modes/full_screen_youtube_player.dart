@@ -2,24 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import '../../../subtitles_player/providers/multi_subtitles_player_provider/provider.dart';
-import '../../../subtitles_player/views/subtitles_player_builders.dart';
-import '../../actions/actions_provider.dart';
-import '../../actions/views/actions.dart';
-import '../../actions/views/full_screen_player_actions.dart';
-import 'full_screen_player_action.dart';
+import '../../subtitles_player/providers/multi_subtitles_player_provider/provider.dart';
+import '../../subtitles_player/views/subtitles_player_builders.dart';
+import '../actions/views/actions.dart';
+import '../actions/views/full_screen_player_actions.dart';
 
 class FullScreenYoutubeVideoPlayer extends ConsumerStatefulWidget {
   const FullScreenYoutubeVideoPlayer({
     super.key,
     required this.player,
     required this.youtubePlayerController,
-    required this.actionsProvider,
     required this.multiSubtitlesPlayerProvider,
   });
   final Widget player;
   final YoutubePlayerController youtubePlayerController;
-  final YoutubePlayerActionsProvider actionsProvider;
   final MultiSubtitlesPlayerProvider multiSubtitlesPlayerProvider;
 
   @override
@@ -31,10 +27,9 @@ class _FullScreenYoutubeVideoPlayerState
     extends ConsumerState<FullScreenYoutubeVideoPlayer>
     with SubtitlesPlayerBuilders {
   late final actions = YoutubePlayerActions(
-    ref: ref,
-    actionsProvider: widget.actionsProvider,
-    youtubePlayerController: widget.youtubePlayerController,
-  );
+      youtubePlayerController: widget.youtubePlayerController,
+      currentSubtitleGetter: () =>
+          ref.read(widget.multiSubtitlesPlayerProvider).mainSubtitle);
   Widget _youtubePlayerBuilder() {
     return LayoutBuilder(builder: (context, constraints) {
       return Stack(
