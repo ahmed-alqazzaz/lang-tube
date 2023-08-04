@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitle_player_provider.dart';
 import 'package:lang_tube/subtitles_player/views/subtitle_box.dart';
 
 import '../providers/multi_subtitles_player_provider/provider.dart';

@@ -5,7 +5,7 @@ import 'package:subtitles_player/subtitles_player.dart';
 
 import 'display_subtitles.dart';
 
-class MultiSubtitlesPlayer extends StateNotifier<DisplayedSubtitles> {
+class MultiSubtitlesPlayer extends StateNotifier<DisplaySubtitles> {
   MultiSubtitlesPlayer({
     required this.mainSubtitles,
     required this.translatedSubtitles,
@@ -18,12 +18,17 @@ class MultiSubtitlesPlayer extends StateNotifier<DisplayedSubtitles> {
           playbackPosition: playbackPosition,
           subtitles: translatedSubtitles,
         ),
-        super(const DisplayedSubtitles()) {
+        super(const DisplaySubtitles()) {
     mainSubtitlesPlayer.addListener(
-      (subtitle) => state = state.copyWith(mainSubtitle: subtitle),
+      (subtitle) => state = state.copyWith(
+        mainSubtitle: subtitle,
+        index: subtitle != null ? mainSubtitles.indexOf(subtitle) : null,
+      ),
     );
     translatedSubtitlesPlayer.addListener(
-      (subtitle) => state = state.copyWith(translatedSubtitle: subtitle),
+      (subtitle) => state = state.copyWith(
+        translatedSubtitle: subtitle,
+      ),
     );
   }
   final SubtitlesPlayer mainSubtitlesPlayer;

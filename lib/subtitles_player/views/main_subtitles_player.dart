@@ -5,15 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/explanation_modal/explanation_modal_constraints_provider.dart';
 import 'package:lang_tube/subtitles_player/providers/player_pointer_absorbtion_provider.dart';
 
-import 'package:lang_tube/subtitles_player/utils/subtitles_parser/data/subtitle.dart';
-
 import 'package:lang_tube/subtitles_player/views/subtitle_box.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:subtitles_player/subtitles_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../providers/multi_subtitles_player_provider/provider.dart';
-import '../providers/subtitle_player_provider.dart';
 
 final mainSubtitlesPlayerKey = GlobalKey<_MainSubtitlesPlayerState>();
 
@@ -52,32 +49,30 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
     _scrollController = ItemScrollController();
     _absorbtionNotifier =
         ref.read(mainSubtitlesPlayerPointerAbsorbtionProvider.notifier);
-    final mainSubtitles =
-        ref.read(widget.multiSubtitlesPlayerProvider.notifier).mainSubtitles;
-    final currentSubtitle =
-        ref.read(widget.multiSubtitlesPlayerProvider).mainSubtitle;
-    final currentIndex =
-        currentSubtitle != null ? mainSubtitles.indexOf(currentSubtitle) : null;
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      currentIndex != null
+    final multiSubtitlesPlayer =
+        ref.read(widget.multiSubtitlesPlayerProvider.notifier);
+    final length = multiSubtitlesPlayer.mainSubtitles.length;
+    final currentIndex = ref.read(widget.multiSubtitlesPlayerProvider).index;
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => currentIndex != null
           ? _subtitlesPlayerListener(
               index: currentIndex,
-              subtitlesCount: mainSubtitles.length,
+              subtitlesCount: length,
             )
-          : _scrollController.jumpTo(
-              index: mainSubtitles.length,
-            );
-    });
-    ref.listenManual(widget.multiSubtitlesPlayerProvider, (_, subtitle) {
-      final mainSubtitle = subtitle.mainSubtitle;
-      if (mainSubtitle != null) {
+          : _scrollController.jumpTo(index: length),
+    );
+
+    ref.listenManual(
+      widget.multiSubtitlesPlayerProvider,
+      (_, subtitle) {
         _subtitlesPlayerListener(
-          index: mainSubtitles.indexOf(mainSubtitle),
-          subtitlesCount: mainSubtitles.length,
+          index: subtitle.index,
+          subtitlesCount: length,
         );
-      }
-    });
+      },
+    );
 
     super.initState();
   }
@@ -85,10 +80,9 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
   @override
   void dispose() {
     _subtitlesPlayerProviderSubscription.close();
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _absorbtionNotifier.neverAbsorbPointers();
-    });
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) => _absorbtionNotifier.neverAbsorbPointers(),
+    );
 
     super.dispose();
   }
@@ -149,9 +143,11 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
     );
   }
 
-  Widget _body({required List<Subtitle> subtitles}) {
+  Widget _body() {
     final explanationModalConstraintsNotifier =
         ref.read(explanationModalConstraintsProvider);
+    final subtitles =
+        ref.read(widget.multiSubtitlesPlayerProvider.notifier).mainSubtitles;
     return LayoutBuilder(
       builder: (context, constraints) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -250,11 +246,7 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
           children: [
             _headerBuilder(),
             Expanded(
-              child: _body(
-                subtitles: ref
-                    .read(widget.multiSubtitlesPlayerProvider.notifier)
-                    .mainSubtitles,
-              ),
+              child: _body(),
             )
           ],
         ),

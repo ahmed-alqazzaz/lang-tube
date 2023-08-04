@@ -6,12 +6,12 @@ import 'display_subtitles.dart';
 
 KeepAliveLink? _keepAliveLink;
 
-typedef MultiSubtitlesPlayerProvider = AutoDisposeStateNotifierProvider<
-    MultiSubtitlesPlayer, DisplayedSubtitles>;
+typedef MultiSubtitlesPlayerProvider
+    = AutoDisposeStateNotifierProvider<MultiSubtitlesPlayer, DisplaySubtitles>;
 
 final multiSubtitlesPlayerProvider = StateNotifierProvider.family.autoDispose<
     MultiSubtitlesPlayer,
-    DisplayedSubtitles,
+    DisplaySubtitles,
     ({
       List<subtitles_player.Subtitle> mainSubtitles,
       List<subtitles_player.Subtitle> translatedSubtitles,
