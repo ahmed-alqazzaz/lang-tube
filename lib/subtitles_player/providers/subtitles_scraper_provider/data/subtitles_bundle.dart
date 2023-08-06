@@ -4,35 +4,37 @@ import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/
 
 @immutable
 final class SubtitlesBundle {
-  final Iterable<SubtitlesData> mainSubtitles;
-  final Iterable<SubtitlesData> translatedSubtitles;
+  final SubtitlesData mainSubtitlesData;
+  final SubtitlesData translatedSubtitlesData;
   const SubtitlesBundle({
-    required this.mainSubtitles,
-    required this.translatedSubtitles,
+    required this.mainSubtitlesData,
+    required this.translatedSubtitlesData,
   });
-
-  SubtitlesBundle copyWith({
-    Iterable<SubtitlesData>? mainSubtitles,
-    Iterable<SubtitlesData>? translatedSubtitles,
-  }) {
-    return SubtitlesBundle(
-      mainSubtitles: mainSubtitles ?? this.mainSubtitles,
-      translatedSubtitles: translatedSubtitles ?? this.translatedSubtitles,
-    );
-  }
 
   @override
   String toString() =>
-      'SubtitlesBundle(mainSubtitles: $mainSubtitles, translatedSubtitles: $translatedSubtitles)';
+      'SubtitlesBundle(mainSubtitles: $mainSubtitlesData, translatedSubtitles: $translatedSubtitlesData)';
 
   @override
   bool operator ==(covariant SubtitlesBundle other) {
     if (identical(this, other)) return true;
 
-    return other.mainSubtitles == mainSubtitles &&
-        other.translatedSubtitles == translatedSubtitles;
+    return other.mainSubtitlesData == mainSubtitlesData &&
+        other.translatedSubtitlesData == translatedSubtitlesData;
   }
 
   @override
-  int get hashCode => mainSubtitles.hashCode ^ translatedSubtitles.hashCode;
+  int get hashCode =>
+      mainSubtitlesData.hashCode ^ translatedSubtitlesData.hashCode;
+
+  SubtitlesBundle copyWith({
+    SubtitlesData? mainSubtitles,
+    SubtitlesData? translatedSubtitles,
+  }) {
+    return SubtitlesBundle(
+      mainSubtitlesData: mainSubtitles ?? this.mainSubtitlesData,
+      translatedSubtitlesData:
+          translatedSubtitles ?? this.translatedSubtitlesData,
+    );
+  }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/data/subtitles_bundle.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/data/subtitles_data.dart';
@@ -8,6 +10,7 @@ import 'package:subtitles_player/subtitles_player.dart' as subtitles_player;
 import '../subtitles_cache_provider/cache_manager.dart';
 import 'api_client.dart';
 import 'data/exceptions.dart';
+import 'package:quiver/iterables.dart';
 
 @immutable
 final class SubtitlesScraper {
@@ -20,86 +23,82 @@ final class SubtitlesScraper {
   final YoutubeSubtitlesScraper _scraper;
   final SubtitlesCacheManager cacheManager;
   // Function to fetch and process subtitles for a YouTube video in different languages.
-  Future<SubtitlesBundle> fetchSubtitlesBundle({
+  Future<Iterable<SubtitlesBundle>> fetchSubtitlesBundle({
     required String youtubeVideoId,
     required Language mainLanguage,
     required Language translatedLanguage,
   }) async {
-    return SubtitlesBundle(
-      mainSubtitles: await fetchSubtitles(
-            youtubeVideoId: youtubeVideoId,
-            language: mainLanguage,
-          ) ??
-          (throw SubtitlesScraperNoCaptionsFoundException),
-      translatedSubtitles: await fetchTranslatedSubtitles(
-            youtubeVideoId: youtubeVideoId,
-            mainLanguage: mainLanguage,
-            translatedLanguage: translatedLanguage,
-          ) ??
-          (throw SubtitlesScraperNoCaptionsFoundException),
+    // concurrently fetch list main and translated subs
+    return await Future.wait<Iterable<SubtitlesData>>([
+      () async {
+        return await _fetchCache(
+              youtubeVideoId: youtubeVideoId,
+              language: mainLanguage,
+            ).then((value) {
+              if (value == null) {
+                log("main cache is null");
+              }
+              return value;
+            }) ??
+            await scrapeSubtitles(
+              youtubeVideoId: youtubeVideoId,
+              language: mainLanguage,
+            ) ??
+            (throw SubtitlesScraperNoCaptionsFoundException);
+      }(),
+      () async {
+        return await _fetchCache(
+              youtubeVideoId: youtubeVideoId,
+              language: translatedLanguage,
+            ).then((value) {
+              if (value == null) {
+                log("tranlated cache is null");
+              }
+              return value;
+            }) ??
+            await scrapeSubtitles(
+              youtubeVideoId: youtubeVideoId,
+              language: mainLanguage,
+              translatedLanguage: translatedLanguage,
+            ) ??
+            (throw SubtitlesScraperNoCaptionsFoundException);
+      }()
+    ], eagerError: true)
+        .then(
+      (subtitlesPair) {
+        // zip the list(of two) returned by future.wait
+        return zip(subtitlesPair).map(
+          (pair) => SubtitlesBundle(
+            mainSubtitlesData: pair.first,
+            translatedSubtitlesData: pair.last,
+          ),
+        );
+      },
     );
   }
 
-  // Fetch subtitles from cache or scrape them from YouTube.
-  Future<Iterable<SubtitlesData>?> fetchSubtitles({
+  // in case translated language is provided,
+  // the function will return a translated version
+  // the main language subtitle
+  Future<Iterable<SubtitlesData>?> scrapeSubtitles({
     required String youtubeVideoId,
     required Language language,
+    Language? translatedLanguage,
   }) async =>
-      await _fetchCache(
-        youtubeVideoId: youtubeVideoId,
-        language: language,
-      ) ??
       await _scraper
-          .scrapeSubtitles(youtubeVideoId: youtubeVideoId, language: language)
-          .asyncMap(
-              (scrapedSubtitlesItem) => scrapedSubtitlesItem.toSubtitleData)
-          .toList()
-          .then((subtitles) => subtitles.isEmpty ? null : subtitles);
-
-  Future<Iterable<SubtitlesData>?> fetchTranslatedSubtitles({
-    required String youtubeVideoId,
-    required Language mainLanguage,
-    required Language translatedLanguage,
-  }) async {
-    return await _fetchCache(
-          youtubeVideoId: youtubeVideoId,
-          language: translatedLanguage,
-        ) ??
-        await _scrapeSubtitles<ScrapedSubtitles>(
-          youtubeVideoId: youtubeVideoId,
-          language: mainLanguage,
-        ).then(
-          (scrapedMainSubtitles) async => await scrapedMainSubtitles?.first
-              .translateTo(translatedLanguage)
-              .then(
-                (translatedSubtitlesItem) =>
-                    [translatedSubtitlesItem.toSubtitleData],
+          .scrapeSubtitles(
+            youtubeVideoId: youtubeVideoId,
+            language: language,
+            translatedLanguage: translatedLanguage,
+          )
+          .then(
+            (scrapedSubtitles) => scrapedSubtitles?.map(
+              (item) => SubtitlesData(
+                subtitles: SubtitlesScraper._parseSubtitles(item.subtitles),
+                isAutoGenerated: item.isAutoGenerated,
               ),
-        );
-  }
-
-  // Generic helper function to fetch and process subtitles for a given language.
-  Future<List<T>?> _scrapeSubtitles<T>({
-    required String youtubeVideoId,
-    required Language language,
-  }) async {
-    assert([SubtitlesData, ScrapedSubtitles].contains(T), 'Unsupported type');
-
-    // Scrape subtitles using the YouTube scraper and parse them into the desired type.
-    final subtitles = await _scraper
-        .scrapeSubtitles(youtubeVideoId: youtubeVideoId, language: language)
-        .asyncMap(
-      (scrapedSubtitlesItem) {
-        if (T is SubtitlesData) {
-          return scrapedSubtitlesItem.toSubtitleData as T;
-        }
-        return scrapedSubtitlesItem as T;
-      },
-    ).toList();
-
-    // Return subtitles if any are found, or null if none are available.
-    return subtitles.isNotEmpty ? subtitles : null;
-  }
+            ),
+          );
 
 // Helper function to fetch subtitles from the cache and return them as Subtitle data objects.
   Future<Iterable<SubtitlesData>?> _fetchCache({
@@ -127,11 +126,4 @@ final class SubtitlesScraper {
       (subtitle) => subtitles_player.Subtitle.fromMap(subtitle.toMap()),
     );
   }
-}
-
-extension on ScrapedSubtitles {
-  SubtitlesData get toSubtitleData => SubtitlesData(
-        subtitles: SubtitlesScraper._parseSubtitles(subtitles),
-        isAutoGenerated: isAutoGenerated,
-      );
 }
