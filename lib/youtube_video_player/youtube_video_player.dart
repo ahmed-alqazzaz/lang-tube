@@ -1,54 +1,28 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_player/providers/multi_subtitles_player_provider/provider.dart';
+import 'package:lang_tube/youtube_video_player/settings/subtitles_settings/settings.dart';
 import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/full_screen_youtube_player.dart';
 import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/portrait_youtube_player.dart';
 import 'package:languages/languages.dart';
-import 'package:rx_shared_preferences/rx_shared_preferences.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:subtitles_player/subtitles_player.dart';
 import 'package:value_notifier_transformer/value_notifier_transformer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../subtitles_player/providers/subtitles_scraper_provider/data/subtitles_bundle.dart';
-import '../subtitles_player/providers/subtitles_scraper_provider/subtitles_scraper_provider.dart';
-
-class Tmp extends ConsumerWidget {
-  const Tmp(this.videoId, {super.key});
-  final String videoId;
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return FutureBuilder(
-      future: ref.read(subtitlesScraperProvider.future).then(
-            (scraper) => scraper.fetchSubtitlesBundle(
-              youtubeVideoId: videoId,
-              mainLanguage: Language.english(),
-              translatedLanguage: Language.arabic(),
-            ),
-          ),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return YoutubeVideoPlayerView(
-            videoId: videoId,
-            subtitles: snapshot.data!,
-          );
-        }
-        return Container();
-      },
-    );
-  }
-}
+import '../subtitles_player/providers/subtitles_scraper_provider/provider.dart';
+import 'settings/subtitles_settings/selectability_builder.dart';
 
 class YoutubeVideoPlayerView extends ConsumerStatefulWidget {
   const YoutubeVideoPlayerView({
     super.key,
     required this.videoId,
-    required this.subtitles,
   });
   final String videoId;
-  final SubtitlesBundle subtitles;
-  static const double progressBarHandleRadius = 7;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _YoutubeVideoPlayerViewState();
@@ -56,27 +30,14 @@ class YoutubeVideoPlayerView extends ConsumerStatefulWidget {
 
 class _YoutubeVideoPlayerViewState
     extends ConsumerState<YoutubeVideoPlayerView> {
-  late final rxSharedPreferences = RxSharedPreferences.getInstance();
   late final YoutubePlayerController _youtubePlayerController;
-  late final MultiSubtitlesPlayerProvider _multiSubtitlesPlayerProvider;
+
   @override
   void initState() {
     _youtubePlayerController = YoutubePlayerController(
       initialVideoId: widget.videoId,
       flags: const YoutubePlayerFlags(enableCaption: false),
     );
-    Timer.periodic(Duration(seconds: 10), (timer) {
-      _youtubePlayerController.setPlaybackRate(0.25);
-    });
-    _multiSubtitlesPlayerProvider = multiSubtitlesPlayerProvider((
-      mainSubtitles: widget.subtitles.mainSubtitles.first.subtitles.toList(),
-      translatedSubtitles:
-          widget.subtitles.translatedSubtitles.first.subtitles.toList(),
-      playbackPosition:
-          _youtubePlayerController.where((event) => !event.isDragging).syncMap(
-                (value) => value.position,
-              )
-    ));
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setPreferredOrientations([]);
@@ -102,38 +63,82 @@ class _YoutubeVideoPlayerViewState
     super.dispose();
   }
 
+  MultiSubtitlesPlayerProvider buildMultiSubtitlesPlayerProvider({
+    required List<Subtitle>? mainSubtitles,
+    required List<Subtitle>? translatedSubtitles,
+  }) {
+    return multiSubtitlesPlayerProvider((
+      mainSubtitles: mainSubtitles ?? [],
+      translatedSubtitles: translatedSubtitles ?? [],
+      playbackPosition:
+          _youtubePlayerController.where((event) => !event.isDragging).syncMap(
+                (value) => value.position,
+              )
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-        scaffoldBackgroundColor: Colors.grey.shade900,
-      ),
-      child: Scaffold(
-        body: YoutubePlayerBuilder(
-          player: YoutubePlayer(
-            controller: _youtubePlayerController,
-            bottomActions: const [],
-            topActions: const [],
-          ),
-          builder: (context, player) {
-            return OrientationBuilder(
-              builder: (context, orientation) {
-                if (orientation == Orientation.portrait) {
-                  return PortraitYoutubePlayer(
-                    player: player,
-                    multiSubtitlesPlayerProvider: _multiSubtitlesPlayerProvider,
-                    youtubePlayerController: _youtubePlayerController,
-                  );
-                }
-                return FullScreenYoutubeVideoPlayer(
-                  player: player,
-                  multiSubtitlesPlayerProvider: _multiSubtitlesPlayerProvider,
-                  youtubePlayerController: _youtubePlayerController,
-                );
-              },
-            );
-          },
+    return Scaffold(
+      body: YoutubePlayerBuilder(
+        player: YoutubePlayer(
+          controller: _youtubePlayerController,
+          bottomActions: const [],
+          topActions: const [],
         ),
+        builder: (context, player) {
+          return FutureBuilder(
+            future: ref.read(subtitlesScraperProvider.future).then(
+                  (scraper) => scraper.fetchSubtitlesBundle(
+                    youtubeVideoId: widget.videoId,
+                    mainLanguage: Language.english(),
+                    translatedLanguage: Language.arabic(),
+                  ),
+                ),
+            builder: (context, snapshot) {
+              final subtitlesBundles = snapshot.data?.toList();
+              final options = subtitlesBundles?.map((subtitlesBundle) => (
+                    language: Language.english(),
+                    isAutoGenerated:
+                        subtitlesBundle.mainSubtitlesData.isAutoGenerated
+                  ));
+              return SubtitlesSelectabilityBuilder(
+                options: options?.toList() ?? [],
+                builder: (subtitlesSettings, selectedIndex, showTransaltion) {
+                  final selectedSubtitles = subtitlesBundles?[selectedIndex];
+                  final multiSubtitlesPlayerProvider =
+                      buildMultiSubtitlesPlayerProvider(
+                    mainSubtitles:
+                        selectedSubtitles?.mainSubtitlesData.subtitles.toList(),
+                    translatedSubtitles: showTransaltion
+                        ? selectedSubtitles?.translatedSubtitlesData.subtitles
+                            .toList()
+                        : null,
+                  );
+                  return OrientationBuilder(
+                    builder: (context, orientation) {
+                      if (orientation == Orientation.portrait) {
+                        return PortraitYoutubePlayer(
+                          player: player,
+                          subtitlesSettings: subtitlesSettings,
+                          multiSubtitlesPlayerProvider:
+                              multiSubtitlesPlayerProvider,
+                          youtubePlayerController: _youtubePlayerController,
+                        );
+                      }
+                      return FullScreenYoutubeVideoPlayer(
+                        player: player,
+                        multiSubtitlesPlayerProvider:
+                            multiSubtitlesPlayerProvider,
+                        youtubePlayerController: _youtubePlayerController,
+                      );
+                    },
+                  );
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }
