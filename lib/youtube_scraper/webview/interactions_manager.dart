@@ -3,13 +3,13 @@ import 'dart:convert';
 
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:rxdart/rxdart.dart';
-
-import '../../utils/debouncer.dart';
+import 'package:throttler/throttler.dart';
 
 class WebViewInteractionsManager {
   static const _homeNavigationReloadDelay = Duration(milliseconds: 1500);
   WebViewInteractionsManager(this.inAppWebViewController);
   int videoClickDepth = 0;
+  final throttler = Throttler.privateInstance();
   // replace with controller
   final BehaviorSubject<InAppWebViewController> inAppWebViewController;
   InAppWebViewController? get _controller => inAppWebViewController.valueOrNull;
@@ -45,7 +45,7 @@ class WebViewInteractionsManager {
   Future<void> clickVideoById(
       {required InAppWebViewController controller,
       required String videoId}) async {
-    debouncer(const Duration(milliseconds: 1500), () async {
+    throttler.throttle(const Duration(milliseconds: 1500), () async {
       videoClickDepth++;
       await controller.evaluateJavascript(
         source: "clickVideoById('$videoId')",

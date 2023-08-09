@@ -4,12 +4,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/video_recommendations.dart/video_recommendations_view.dart';
 import 'package:lang_tube/youtube_scraper/webview/cookies_manager.dart';
 
 import 'package:lang_tube/youtube_scraper/youtube_player_scraper.dart';
 
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
+import 'package:user_agent/user_agent.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -17,6 +17,7 @@ import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await UserAgentManager().initilize();
   if (Platform.isAndroid) {
     await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
@@ -25,11 +26,14 @@ Future<void> main() async {
     if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
     return stack;
   };
-
   runApp(
     ProviderScope(
       child: MaterialApp(
-        home: MyWidget(),
+        home: const YoutubeVideoPlayerView(videoId: '9FppammO1zk'),
+        theme: ThemeData(
+          iconTheme: const IconThemeData(size: 30),
+          scaffoldBackgroundColor: Colors.grey.shade900,
+        ),
         debugShowCheckedModeBanner: false,
       ),
     ),

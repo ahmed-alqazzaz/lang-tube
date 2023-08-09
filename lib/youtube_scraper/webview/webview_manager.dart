@@ -4,8 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lang_tube/youtube_scraper/webview/interactions_manager.dart';
 import 'package:rxdart/rxdart.dart';
-
-import '../../utils/debouncer.dart';
+import 'package:throttler/throttler.dart';
 
 @immutable
 class YoutubeWebViewManager {
@@ -22,6 +21,7 @@ class YoutubeWebViewManager {
         BehaviorSubject<InAppWebViewController>();
     late final interactionManager =
         WebViewInteractionsManager(inAppWebViewController);
+    late final throttler = Throttler.privateInstance();
     return YoutubeWebViewManager._(
       interactionManager: interactionManager,
       webView: InAppWebView(
@@ -50,7 +50,7 @@ class YoutubeWebViewManager {
         },
         onLoadError: (controller, url, code, message) =>
             log('load error: $message error code :$code'),
-        onScrollChanged: (controller, x, y) => debouncer(
+        onScrollChanged: (controller, x, y) => throttler.throttle(
           const Duration(milliseconds: 1500),
           () => onViewportUpdated(controller, interactionManager),
         ),

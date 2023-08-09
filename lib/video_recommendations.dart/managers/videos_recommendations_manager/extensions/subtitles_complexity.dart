@@ -4,6 +4,6 @@ import 'package:lang_tube/video_recommendations.dart/managers/videos_recommendat
 extension SubtitleComplexityCalculator on YoutubeVideo {
   Future<SubtitleComplexity> get subtitlesComplexity async =>
       await rustApi.calculateSubtitleComplexity(
-        text: subtitles.mainSubtitles.subtitles,
+        text: subtitles.subtitles.map((e) => e.text).join(),
       );
 }

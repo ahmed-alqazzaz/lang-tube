@@ -161,6 +161,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.0"
+  circular_inkwell:
+    dependency: "direct main"
+    description:
+      path: "packages/circular_inkwell"
+      relative: true
+    source: path
+    version: "0.0.1"
   circular_menu:
     dependency: "direct main"
     description:
@@ -177,6 +184,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.0"
+  clipped_icon:
+    dependency: "direct main"
+    description:
+      path: "packages/clipped_icon"
+      relative: true
+    source: path
+    version: "0.0.1"
   clock:
     dependency: transitive
     description:
@@ -306,15 +320,22 @@ packages:
     source: hosted
     version: "0.7.8"
   dio:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: dio
-      sha256: a9d76e72985d7087eb7c5e7903224ae52b337131518d127c554b9405936752b8
+      sha256: "3866d67f93523161b643187af65f5ac08bc991a5bcdaf41a2d587fe4ccb49993"
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.1+1"
-  dio_cache_interceptor:
+    version: "5.3.0"
+  dio_api_client:
     dependency: "direct main"
+    description:
+      path: "packages/dio_api_client"
+      relative: true
+    source: path
+    version: "0.0.1"
+  dio_cache_interceptor:
+    dependency: transitive
     description:
       name: dio_cache_interceptor
       sha256: a89166e6fb9c90a4bf2b7f20b5c055087969bc445ced3282e32505543e296e0f
@@ -322,7 +343,7 @@ packages:
     source: hosted
     version: "3.4.2"
   dio_cache_interceptor_hive_store:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: dio_cache_interceptor_hive_store
       sha256: "7a376b1db0a153e16ad51ce0cf1d2549ca14a2ddf462523c362fac9e077c5f14"
@@ -386,7 +407,7 @@ packages:
     source: hosted
     version: "1.1.0"
   fk_user_agent:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: fk_user_agent
       sha256: fd6c94e120786985a292d12f61422a581f4e851148d5940af38b819357b8ad0d
@@ -443,6 +464,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.78.0"
+  flutter_switch:
+    dependency: "direct main"
+    description:
+      name: flutter_switch
+      sha256: b91477f926bba135d2d203d7b24367492662d8d9c3aa6adb960b14c1087d3c41
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -575,6 +604,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.1"
+  languages:
+    dependency: "direct main"
+    description:
+      path: "packages/languages"
+      relative: true
+    source: path
+    version: "0.0.1"
   lints:
     dependency: transitive
     description:
@@ -583,6 +619,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  listenable_stream:
+    dependency: "direct main"
+    description:
+      name: listenable_stream
+      sha256: "5458276035c7eb66477c30f8eab0942e56537ba3d268172574f7af97e265e894"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   logging:
     dependency: transitive
     description:
@@ -631,6 +675,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.2"
+  mutex:
+    dependency: "direct main"
+    description:
+      name: mutex
+      sha256: "03116a4e46282a671b46c12de649d72c0ed18188ffe12a8d0fc63e83f4ad88f4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   nested:
     dependency: transitive
     description:
@@ -792,7 +844,7 @@ packages:
     source: hosted
     version: "3.1.1"
   quiver:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: quiver
       sha256: b1c1ac5ce6688d77f65f3375a9abb9319b3cb32486bdc7a1e0fdf004d7ba4e47
@@ -824,13 +876,13 @@ packages:
     source: hosted
     version: "0.3.1"
   riverpod_lint:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: riverpod_lint
-      sha256: "043ff016011be4c5887b3239bfbca05d284bdb68db0a5363cee0242b7567e250"
+      sha256: "17ad319914ac6863c64524e598913c0f17e30688aca8f5b7509e96d6e372d493"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.2"
+    version: "1.4.0"
   rx_shared_preferences:
     dependency: "direct main"
     description:
@@ -951,6 +1003,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  size_utils:
+    dependency: "direct main"
+    description:
+      path: "packages/size_utils"
+      relative: true
+    source: path
+    version: "0.0.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1044,6 +1103,20 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  subtitles_parser:
+    dependency: "direct main"
+    description:
+      path: "packages/subtitles_parser"
+      relative: true
+    source: path
+    version: "0.0.1"
+  subtitles_player:
+    dependency: "direct main"
+    description:
+      path: "packages/subtitles_player"
+      relative: true
+    source: path
+    version: "0.0.1"
   sync_http:
     dependency: transitive
     description:
@@ -1076,6 +1149,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
+  throttler:
+    dependency: "direct main"
+    description:
+      path: "packages/throttler"
+      relative: true
+    source: path
+    version: "0.0.1"
   timing:
     dependency: transitive
     description:
@@ -1100,6 +1180,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+  user_agent:
+    dependency: "direct main"
+    description:
+      path: "packages/user_agent"
+      relative: true
+    source: path
+    version: "0.0.1"
   uuid:
     dependency: transitive
     description:
@@ -1108,6 +1195,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"
+  value_notifier_transformer:
+    dependency: "direct main"
+    description:
+      path: "packages/value_notifier_transformer"
+      relative: true
+    source: path
+    version: "0.0.1"
   vector_math:
     dependency: transitive
     description:
@@ -1239,11 +1333,17 @@ packages:
   youtube_player_flutter:
     dependency: "direct main"
     description:
-      name: youtube_player_flutter
-      sha256: "72d487e1a1b9155a2dc9d448c137380791101a0ff623723195275ac275ac6942"
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/youtube_player_flutter"
+      relative: true
+    source: path
     version: "8.1.2"
+  youtube_subtitles_scraper:
+    dependency: "direct main"
+    description:
+      path: "packages/youtube_subtitles_scraper"
+      relative: true
+    source: path
+    version: "0.0.1"
 sdks:
   dart: ">=3.0.1 <4.0.0"
   flutter: ">=3.3.0"

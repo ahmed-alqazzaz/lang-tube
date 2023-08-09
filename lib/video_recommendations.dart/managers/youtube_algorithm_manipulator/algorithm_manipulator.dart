@@ -6,7 +6,7 @@ import 'package:lang_tube/video_recommendations.dart/managers/helpers/diversity_
 import 'package:lang_tube/video_recommendations.dart/managers/helpers/target_language_videos.dart';
 import 'package:lang_tube/video_recommendations.dart/managers/youtube_algorithm_manipulator/webview_actions_handle.dart';
 import 'package:lang_tube/youtube_scraper/data/youtube_video_item.dart';
-import '../../../utils/language_patterns.dart';
+import 'package:languages/languages.dart';
 import 'history_manager.dart';
 
 // @immutable
@@ -70,7 +70,7 @@ class YoutubeAlgorithmManipulator {
 
     // TODO: add MUTEX
     final targetLangaugeVideos =
-        videoItems.getTargetLanguageVideos(LanguagePatterns.english).toList();
+        videoItems.getTargetLanguageVideos(Language.english().pattern).toList();
     final watchHistory = getUserWatchHistory();
 
     if (await actionsHandle.getClickDepth() > _maxClickDepth) {

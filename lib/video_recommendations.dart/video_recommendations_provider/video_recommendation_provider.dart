@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/data/subtitles_data.dart';
 import 'package:lang_tube/video_recommendations.dart/video_recommendations_provider/video_recommendations_notifer.dart';
 import 'package:lang_tube/video_recommendations.dart/video_recommendations_provider/video_recommendations_state.dart';
 import 'package:lang_tube/youtube_scraper/data/youtube_video_item.dart';
-
-import '../../subtitles_player/providers/subtitles_fetch_provider.dart';
-import '../../subtitles_player/utils/subtitles_scraper/subtitles_scraper.dart';
+import 'package:languages/languages.dart';
+import '../../subtitles_player/providers/subtitles_scraper_provider/provider.dart';
 import '../../utils/cefr.dart';
 import '../../youtube_scraper/youtube_player_scraper.dart';
 import '../managers/videos_recommendations_manager/data/youtube_video.dart';
@@ -45,34 +45,44 @@ class RecommendationsProviderHelper {
             historyManager: AlgorithmManipulatorHistoryManager(),
             getUserWatchHistory: () => [],
             findMostRelevantItem: (videoItems) async {
-              return VideosRecommendationsManager.findMostRelevantVideo([
-                for (final item in videoItems)
-                  YoutubeVideo(
-                    item: item,
-                    subtitles: await fetchSubtitles(
-                      ref: ref,
-                      videoId: item.videoId,
-                      mainLanguage: 'english',
-                      targetLanguage: 'german',
-                    ),
-                    cefrLevel: CEFR.a1,
-                  )
-              ]).item;
+              ;
+              return VideosRecommendationsManager.findMostRelevantVideo(
+                [
+                  for (final item in videoItems) ...[
+                    () async {
+                      final subtitles = await fetchSubtitles(
+                        ref: ref,
+                        videoId: item.videoId,
+                        language: Language.english(),
+                      );
+                      if (subtitles != null) {
+                        return YoutubeVideo(
+                          item: item,
+                          subtitles: subtitles,
+                          cefrLevel: CEFR.a1,
+                        );
+                      }
+                    }()
+                  ]
+                ].whereType<YoutubeVideo>().toList(),
+              ).item;
             }),
         recommendationsManager = VideosRecommendationsManager(
           youtubeScraper.observedVideos.asyncExpand(
             (videoItems) async* {
               for (final item in videoItems) {
-                yield YoutubeVideo(
-                  item: item,
-                  subtitles: await fetchSubtitles(
-                    ref: ref,
-                    videoId: item.videoId,
-                    mainLanguage: 'english',
-                    targetLanguage: 'german',
-                  ),
-                  cefrLevel: CEFR.a1,
+                final subtitles = await fetchSubtitles(
+                  ref: ref,
+                  videoId: item.videoId,
+                  language: Language.english(),
                 );
+                if (subtitles != null) {
+                  yield YoutubeVideo(
+                    item: item,
+                    subtitles: subtitles,
+                    cefrLevel: CEFR.a1,
+                  );
+                }
               }
             },
           ),
@@ -84,19 +94,18 @@ class RecommendationsProviderHelper {
     await algorithmManipulator.close();
   }
 
-  static Future<SubtitlesBundle> fetchSubtitles({
+  static Future<SubtitlesData?> fetchSubtitles({
     required StateNotifierProviderRef ref,
     required String videoId,
-    required String mainLanguage,
-    required String targetLanguage,
+    required Language language,
   }) async {
-    return await ref.read(
-      subtitlesFetchProviderFamily((
-        videoId: videoId,
-        mainLanguage: mainLanguage,
-        translatedLanguage: targetLanguage,
-      )).future,
-    );
+    return await ref.read(subtitlesScraperProvider.future).then(
+          (scraper) => scraper
+              .scrapeSubtitles(youtubeVideoId: videoId, language: language)
+              .then(
+                (value) => value?.first,
+              ),
+        );
   }
 }
 

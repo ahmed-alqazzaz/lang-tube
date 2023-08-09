@@ -1,12 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:lang_tube/subtitles_player/utils/subtitles_scraper/data/data_classes.dart';
+import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/data/subtitles_data.dart';
 import 'package:lang_tube/youtube_scraper/data/youtube_video_item.dart';
 
 import '../../../../utils/cefr.dart';
 
 class YoutubeVideo {
   final YoutubeVideoItem item;
-  final SubtitlesBundle subtitles;
+  final SubtitlesData subtitles;
   final CEFR cefrLevel;
 
   YoutubeVideo({
@@ -17,7 +17,7 @@ class YoutubeVideo {
 
   YoutubeVideo copyWith({
     YoutubeVideoItem? item,
-    SubtitlesBundle? subtitles,
+    SubtitlesData? subtitles,
     CEFR? cefrLevel,
   }) {
     return YoutubeVideo(

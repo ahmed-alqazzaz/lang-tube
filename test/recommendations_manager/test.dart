@@ -4,8 +4,7 @@ import 'package:lang_tube/subtitles_player/utils/subtitles_parser/subtitles_pars
 import 'package:lang_tube/utils/cefr.dart';
 import 'package:lang_tube/video_recommendations.dart/managers/videos_recommendations_manager/data/youtube_video.dart';
 import 'package:lang_tube/video_recommendations.dart/managers/videos_recommendations_manager/videos_difficulty_ranker/ranker.dart';
-import 'package:lang_tube/subtitles_player/utils/subtitles_scraper/subtitles_scraper.dart';
-import 'package:lang_tube/video_recommendations.dart/video_recommendations_provider/video_recommendation_provider.dart';
+import 'package:lang_tube/subtitles_player/utils/subtitles_parser/subtitles_scraper/subtitles_scraper.dart';
 import 'package:lang_tube/youtube_scraper/data/youtube_video_item.dart';
 
 import 'consts.dart';

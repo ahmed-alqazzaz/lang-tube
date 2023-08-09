@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:lang_tube/video_recommendations.dart/managers/videos_recommendations_manager/videos_difficulty_ranker/ranker.dart';
-import 'package:lang_tube/youtube_scraper/data/youtube_video_item.dart';
 
 class VideosRecommendationsManager {
   VideosRecommendationsManager(Stream<YoutubeVideo> observedVideos) {
