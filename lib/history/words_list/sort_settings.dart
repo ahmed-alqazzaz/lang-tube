@@ -1,0 +1,4 @@
+enum WordsListSortSettings {
+  recent,
+  difficult,
+}
