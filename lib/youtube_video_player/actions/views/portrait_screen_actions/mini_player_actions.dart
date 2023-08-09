@@ -1,24 +1,20 @@
 import 'package:flutter/cupertino.dart';
+import '../generic_actions.dart';
 
-import 'actions.dart';
-
-class PortraitPlayerActions extends StatelessWidget {
-  const PortraitPlayerActions({super.key, required this.actions});
-  final YoutubePlayerActions actions;
-  static const buttonsPadding = YoutubePlayerActions.buttonsPadding;
+class MiniPlayerActions extends StatelessWidget {
+  const MiniPlayerActions({super.key, required this.actions});
+  final YoutubePlayerGenericActions actions;
+  static const buttonsPadding = 15.0;
 
   Widget _bottomActions() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Transform.translate(
-          offset: const Offset(buttonsPadding, 0),
-          child: actions.positionIndicator(),
-        ),
-        Transform.translate(
-          offset: const Offset(buttonsPadding, 0),
-          child: actions.toggleFullScreenButton(),
+        actions.currentPositionIndicator(padding: buttonsPadding),
+        Padding(
+          padding: const EdgeInsets.only(right: 5),
+          child: actions.toggleFullScreenButton(iconSize: 22),
         ),
       ],
     );
@@ -35,7 +31,7 @@ class PortraitPlayerActions extends StatelessWidget {
         ),
         Transform.translate(
           offset: const Offset(buttonsPadding, 0),
-          child: actions.settingsButton(),
+          child: actions.backButton(),
         ),
       ],
     );

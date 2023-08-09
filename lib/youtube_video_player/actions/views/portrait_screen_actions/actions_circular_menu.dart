@@ -1,8 +1,8 @@
 import 'package:circular_menu/circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/action_providers/youtube_hd_provider/provider.dart';
-import 'package:lang_tube/youtube_video_player/action_providers/loop_providers/subtitle_loop_provider.dart/provider.dart';
+import 'package:lang_tube/youtube_video_player/actions/action_providers/youtube_hd_provider/provider.dart';
+import 'package:lang_tube/youtube_video_player/actions/action_providers/loop_providers/subtitle_loop_provider.dart/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ActionsCircularMenu extends ConsumerWidget {
@@ -11,8 +11,9 @@ class ActionsCircularMenu extends ConsumerWidget {
     required this.onActionsMenuToggled,
     required YoutubePlayerController youtubePlayerController,
     required SubtitleLoopProvider subtitleLoopProvider,
+    required YoutubeHdProvider youtubeHdProvider,
   })  : _subtitleLoopProvider = subtitleLoopProvider,
-        _youtubeHdProvider = youtubeHdProviderFamily(youtubePlayerController);
+        _youtubeHdProvider = youtubeHdProvider;
   final circularMenuToggleButtonColor = Colors.amber[600];
   static const circularMenuItemBackgroundColor =
       Color.fromARGB(255, 50, 50, 50);
@@ -36,12 +37,12 @@ class ActionsCircularMenu extends ConsumerWidget {
       items: [
         _circularMenuHdButton(ref),
         _circularMenuSubtitlesButton(ref),
-        _circulaMenuPlayBackSpeedButton(ref),
+        circularMenuSubtitlesLoopButton(ref),
       ],
     );
   }
 
-  _genericCircularMenuItem({
+  CircularMenuItem _genericCircularMenuItem({
     required IconData icon,
     required void Function() onTap,
     Color iconColor = Colors.white,
@@ -65,10 +66,11 @@ class ActionsCircularMenu extends ConsumerWidget {
     );
   }
 
-  CircularMenuItem _circulaMenuPlayBackSpeedButton(WidgetRef ref) {
-    final isLoopActive = ref.watch(_subtitleLoopProvider) != null;
-
+  CircularMenuItem circularMenuSubtitlesLoopButton(WidgetRef ref) {
+    final isLoopActive =
+        ref.watch(_subtitleLoopProvider.select((value) => value != null));
     final subtitleLoopNotifier = ref.read(_subtitleLoopProvider.notifier);
+
     return _genericCircularMenuItem(
       icon: Icons.repeat_one,
       iconColor: isLoopActive ? Colors.white : Colors.white30,
