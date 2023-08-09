@@ -5,9 +5,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart'
     as subtitles_scraper;
 
-import 'data/cached_subtitle.dart';
-import 'data/constants.dart';
-import 'database_manager.dart';
+import 'database_manager/data/cached_subtitle.dart';
+import 'database_manager/data/constants.dart';
+import 'database_manager/manager.dart';
 
 @immutable
 class SubtitlesCacheManager implements subtitles_scraper.CacheManager {
@@ -16,7 +16,6 @@ class SubtitlesCacheManager implements subtitles_scraper.CacheManager {
 
   static Future<SubtitlesCacheManager> open() async {
     final cacheDirectory = await getTemporaryDirectory();
-    // await File('${cacheDirectory.path}$subtitlesDbName').delete();
     return SubtitlesCacheManager._(
       await SubtitlesDbManager.open('${cacheDirectory.path}$subtitlesDbName'),
     );

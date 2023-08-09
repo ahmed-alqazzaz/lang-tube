@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_player/providers/multi_subtitles_player_provider/player.dart';
@@ -18,6 +20,7 @@ final multiSubtitlesPlayerProvider = StateNotifierProvider.family.autoDispose<
       ValueListenable<Duration> playbackPosition,
     })>(
   (ref, args) {
+    // Timer(const Duration(seconds: 1), () => _keepAliveLink?.close());
     _keepAliveLink?.close();
     _keepAliveLink = ref.keepAlive();
     return MultiSubtitlesPlayer(

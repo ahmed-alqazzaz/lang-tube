@@ -18,10 +18,11 @@ class SubtitleBox extends ConsumerWidget {
     required this.textFontSize,
     this.onTapUp,
     this.selectable = false,
+    this.maxLines = 3,
     this.fontWeight = FontWeight.normal,
   });
   static const Color selectedTextColor = Colors.amber;
-  static const int maxLines = 3;
+  final int maxLines;
   final Color backgroundColor;
   final Color defaultTextColor;
   final double textFontSize;
@@ -42,41 +43,43 @@ class SubtitleBox extends ConsumerWidget {
         builder: (context, ref, _) {
           final selectedWordIndex =
               ref.watch(wordSelectabilityProvider).selectedWordIndex;
-          return RichText(
-            overflow: TextOverflow.ellipsis,
-            maxLines: maxLines,
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              children: [
-                for (int index = 0; index < words.length; index++) ...[
-                  TextSpan(
-                    text: '${words[index]} ',
-                    recognizer: TapGestureRecognizer()
-                      ..onTapUp = (details) {
-                        if (selectable) {
-                          ref
-                              .read(wordSelectabilityProvider)
-                              .updateSelectedWordIndex(index);
-                        }
+          return Container(
+            color: backgroundColor,
+            child: RichText(
+              overflow: TextOverflow.ellipsis,
+              maxLines: maxLines,
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                children: [
+                  for (int index = 0; index < words.length; index++) ...[
+                    TextSpan(
+                      text: '${words[index]} ',
+                      recognizer: TapGestureRecognizer()
+                        ..onTapUp = (details) {
+                          if (selectable) {
+                            ref
+                                .read(wordSelectabilityProvider)
+                                .updateSelectedWordIndex(index);
+                          }
 
-                        onTapUp?.call(
-                          onReset: () {
-                            ref.read(wordSelectabilityProvider).reset();
-                          },
-                          word: words[index],
-                        );
-                      },
-                    style: TextStyle(
-                      color: selectedWordIndex == index
-                          ? selectedTextColor
-                          : defaultTextColor,
-                      fontSize: textFontSize,
-                      backgroundColor: backgroundColor,
-                      fontWeight: fontWeight,
-                    ),
-                  )
-                ]
-              ],
+                          onTapUp?.call(
+                            onReset: () {
+                              ref.read(wordSelectabilityProvider).reset();
+                            },
+                            word: words[index],
+                          );
+                        },
+                      style: TextStyle(
+                        color: selectedWordIndex == index
+                            ? selectedTextColor
+                            : defaultTextColor,
+                        fontSize: textFontSize,
+                        fontWeight: fontWeight,
+                      ),
+                    )
+                  ]
+                ],
+              ),
             ),
           );
         },

@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/data/constants.dart';
+import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/database_manager/data/constants.dart';
 
 import '../utils/int_to_bool.dart';
 

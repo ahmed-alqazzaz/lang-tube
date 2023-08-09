@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/explanation_modal/explanation_modal_constraints_provider.dart';
+import 'package:lang_tube/subtitles_player/providers/multi_subtitles_player_provider/display_subtitles.dart';
 import 'package:lang_tube/subtitles_player/providers/player_pointer_absorbtion_provider.dart';
 
 import 'package:lang_tube/subtitles_player/views/subtitle_box.dart';
@@ -11,8 +13,6 @@ import 'package:subtitles_player/subtitles_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../providers/multi_subtitles_player_provider/provider.dart';
-
-final mainSubtitlesPlayerKey = GlobalKey<_MainSubtitlesPlayerState>();
 
 class MainSubtitlesPlayer extends ConsumerStatefulWidget {
   const MainSubtitlesPlayer({
@@ -42,44 +42,43 @@ class MainSubtitlesPlayer extends ConsumerStatefulWidget {
 class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
     with AutomaticKeepAliveClientMixin {
   late final ItemScrollController _scrollController;
-  late final ProviderSubscription _subtitlesPlayerProviderSubscription;
   late final MainSubtitlesPlayerPointerAbsorbtionNotifier _absorbtionNotifier;
+  ProviderSubscription? _currentSubtitleSubscription;
+
   @override
   void initState() {
     _scrollController = ItemScrollController();
     _absorbtionNotifier =
         ref.read(mainSubtitlesPlayerPointerAbsorbtionProvider.notifier);
-
-    final multiSubtitlesPlayer =
-        ref.read(widget.multiSubtitlesPlayerProvider.notifier);
-    final length = multiSubtitlesPlayer.mainSubtitles.length;
-    final currentIndex = ref.read(widget.multiSubtitlesPlayerProvider).index;
-
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => currentIndex != null
-          ? _subtitlesPlayerListener(
-              index: currentIndex,
-              subtitlesCount: length,
-            )
-          : _scrollController.jumpTo(index: length),
-    );
-
-    ref.listenManual(
-      widget.multiSubtitlesPlayerProvider,
-      (_, subtitle) {
-        _subtitlesPlayerListener(
-          index: subtitle.index,
-          subtitlesCount: length,
-        );
-      },
-    );
-
     super.initState();
   }
 
   @override
+  void didUpdateWidget(covariant MainSubtitlesPlayer oldWidget) {
+    if (mounted) {
+      final multiSubtitlesPlayer =
+          ref.read(widget.multiSubtitlesPlayerProvider.notifier);
+      final length = multiSubtitlesPlayer.mainSubtitles.length;
+      _currentSubtitleSubscription?.close();
+      _currentSubtitleSubscription = ref.listenManual<DisplaySubtitles>(
+        widget.multiSubtitlesPlayerProvider,
+        (_, subtitle) {
+          if (subtitle.index != null && mounted) {
+            _scrollController.scrollTo(
+              index: length - subtitle.index!,
+              duration: MainSubtitlesPlayer.bodyScrollDuration,
+            );
+          }
+        },
+      );
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
-    _subtitlesPlayerProviderSubscription.close();
+    _currentSubtitleSubscription?.close();
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) => _absorbtionNotifier.neverAbsorbPointers(),
     );
@@ -87,20 +86,10 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
     super.dispose();
   }
 
-  void _subtitlesPlayerListener(
-      {required int? index, required int subtitlesCount}) {
-    if (index != null) {
-      _scrollController.scrollTo(
-        index: subtitlesCount - index,
-        duration: MainSubtitlesPlayer.bodyScrollDuration,
-      );
-    }
-  }
-
   Widget _headerBuilder() {
-    SubtitleBox mainLine(Subtitle? currentSubtitle) {
+    SubtitleBox mainLine(Subtitle currentSubtitle) {
       return SubtitleBox(
-        words: currentSubtitle?.words ?? [],
+        words: currentSubtitle.words,
         backgroundColor: Colors.transparent,
         textFontSize: MainSubtitlesPlayer.headerTextFontSize,
         onTapUp: widget.onTap,
@@ -108,9 +97,9 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
       );
     }
 
-    SubtitleBox translatedLine(Subtitle? currentSubtitle) {
+    SubtitleBox translatedLine(Subtitle currentSubtitle) {
       return SubtitleBox(
-        words: currentSubtitle?.words ?? [],
+        words: currentSubtitle.words,
         backgroundColor: Colors.transparent,
         textFontSize: MainSubtitlesPlayer.headerTextFontSize,
         defaultTextColor: Colors.amber,
@@ -128,13 +117,16 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
           child: Consumer(builder: (context, ref, _) {
             final currentSubtitle =
                 ref.watch(widget.multiSubtitlesPlayerProvider);
+            final mainSubtitle = currentSubtitle.mainSubtitle;
+            final translatedSubtitle = currentSubtitle.translatedSubtitle;
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                mainLine(currentSubtitle.mainSubtitle),
+                if (mainSubtitle != null) mainLine(mainSubtitle),
                 const SizedBox(
                     height: MainSubtitlesPlayer.headerlinesDividerHeight),
-                translatedLine(currentSubtitle.translatedSubtitle),
+                if (translatedSubtitle != null)
+                  translatedLine(translatedSubtitle),
               ],
             );
           }),
@@ -161,6 +153,9 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
           child: ScrollablePositionedList.builder(
             padding: EdgeInsets.only(bottom: constraints.maxHeight),
             itemScrollController: _scrollController,
+            initialScrollIndex:
+                ref.read(widget.multiSubtitlesPlayerProvider).index ??
+                    subtitles.length,
             itemCount: subtitles.length + 1,
             itemBuilder: (context, index) {
               if (index >= subtitles.length) return Container();
