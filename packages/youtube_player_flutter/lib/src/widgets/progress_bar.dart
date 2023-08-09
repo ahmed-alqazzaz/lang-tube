@@ -1,60 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
-import 'dart:developer';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 import '../utils/youtube_player_controller.dart';
 
-const double _progressBarHandleRadius = 7.0;
-
-/// Defines different colors for [ProgressBar].
-class ProgressBarColors {
-  /// Defines background color of the [ProgressBar].
-  final Color? backgroundColor;
-
-  /// Defines color for played portion of the [ProgressBar].
-  final Color? playedColor;
-
-  /// Defines color for buffered portion of the [ProgressBar].
-  final Color? bufferedColor;
-
-  /// Defines color for handle of the [ProgressBar].
-  final Color? handleColor;
-
-  /// Defines color for custom progress portion of the [ProgressBar].
-  final Color? customProgressColor;
-
-  /// Creates [ProgressBarColors].
-  const ProgressBarColors(
-      {this.backgroundColor,
-      this.playedColor,
-      this.bufferedColor,
-      this.handleColor,
-      this.customProgressColor});
-
-  ///
-  ProgressBarColors copyWith({
-    Color? backgroundColor,
-    Color? playedColor,
-    Color? bufferedColor,
-    Color? handleColor,
-  }) =>
-      ProgressBarColors(
-        backgroundColor: backgroundColor ?? this.backgroundColor,
-        handleColor: handleColor ?? this.handleColor,
-        bufferedColor: bufferedColor ?? this.bufferedColor,
-        playedColor: playedColor ?? this.playedColor,
-      );
-}
-
-@immutable
-class CustomProgress {
-  const CustomProgress({required this.start, required this.end});
-  final double start;
-  final double end;
-}
+const double progressBarHandleRadius = 7.0;
 
 /// A widget to display video progress bar.
 class ProgressBar extends StatefulWidget {
@@ -69,7 +23,7 @@ class ProgressBar extends StatefulWidget {
   /// Default is false.
   final bool isExpanded;
 
-  final Stream<CustomProgress>? customProgress;
+  final Stream<List<CustomProgress?>>? customProgress;
 
   /// Creates [ProgressBar] widget.
   const ProgressBar({
@@ -93,7 +47,18 @@ class _ProgressBarState extends State<ProgressBar> {
   double _playedValue = 0.0;
   double _bufferedValue = 0.0;
 
+  late final StreamSubscription<List<CustomProgress?>>?
+      _customProgressSubscription;
+  List<CustomProgress?> _customProgress = [];
+
   late Duration _position;
+
+  @override
+  void dispose() {
+    _controller.removeListener(positionListener);
+    _customProgressSubscription?.cancel();
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() {
@@ -109,15 +74,11 @@ class _ProgressBarState extends State<ProgressBar> {
     } else {
       _controller = controller;
     }
+    _customProgressSubscription = widget.customProgress?.listen(
+      (customProgress) => setState(() => _customProgress = customProgress),
+    );
     _controller.addListener(positionListener);
     positionListener();
-  }
-
-  @override
-  void dispose() {
-    _controller.removeListener(positionListener);
-
-    super.dispose();
   }
 
   void positionListener() {
@@ -175,7 +136,6 @@ class _ProgressBarState extends State<ProgressBar> {
   }
 
   Widget _buildBar() {
-    log(_playedValue.toString());
     return GestureDetector(
       onHorizontalDragDown: (details) {
         _controller.updateValue(
@@ -188,6 +148,7 @@ class _ProgressBarState extends State<ProgressBar> {
       },
       onHorizontalDragUpdate: (details) {
         _seekToRelativePosition(details.globalPosition);
+
         setState(_setValue);
       },
       onHorizontalDragEnd: (details) {
@@ -195,26 +156,21 @@ class _ProgressBarState extends State<ProgressBar> {
       },
       onHorizontalDragCancel: _dragEndActions,
       child: Container(
-        color: Colors.transparent,
-        constraints:
-            const BoxConstraints.expand(height: _progressBarHandleRadius * 2),
-        child: StreamBuilder<CustomProgress>(
-            stream: widget.customProgress,
-            builder: (context, snapshot) {
-              return CustomPaint(
-                painter: _ProgressBarPainter(
-                  progressWidth: 3.0,
-                  handleRadius: _progressBarHandleRadius,
-                  playedValue: _playedValue,
-                  bufferedValue: _bufferedValue,
-                  colors: widget.colors,
-                  touchDown: _touchDown,
-                  customProgress: snapshot.data,
-                  themeData: Theme.of(context),
-                ),
-              );
-            }),
-      ),
+          color: Colors.transparent,
+          constraints:
+              const BoxConstraints.expand(height: progressBarHandleRadius * 2),
+          child: CustomPaint(
+            painter: _ProgressBarPainter(
+              progressWidth: 3.0,
+              handleVisible: _controller.value.isControlsVisible,
+              playedValue: _playedValue,
+              bufferedValue: _bufferedValue,
+              colors: widget.colors,
+              touchDown: _touchDown,
+              customProgress: _customProgress,
+              themeData: Theme.of(context),
+            ),
+          )),
     );
   }
 
@@ -226,21 +182,21 @@ class _ProgressBarState extends State<ProgressBar> {
 
 class _ProgressBarPainter extends CustomPainter {
   final double progressWidth;
-  final double handleRadius;
   final double playedValue;
   final double bufferedValue;
-  final CustomProgress? customProgress;
+  final List<CustomProgress?> customProgress;
   final ProgressBarColors? colors;
+  final bool handleVisible;
   final bool touchDown;
   final ThemeData themeData;
 
   _ProgressBarPainter({
     required this.progressWidth,
-    required this.handleRadius,
     required this.playedValue,
     required this.bufferedValue,
-    this.customProgress,
+    this.customProgress = const [],
     this.colors,
+    required this.handleVisible,
     required this.touchDown,
     required this.themeData,
   });
@@ -261,25 +217,18 @@ class _ProgressBarPainter extends CustomPainter {
       ..strokeWidth = progressWidth;
 
     final centerY = size.height / 2.0;
-    final barLength = size.width - handleRadius * 2.0;
+    final barLength = size.width - progressBarHandleRadius * 2.0;
 
-    final startPoint = Offset(handleRadius, centerY);
-    final endPoint = Offset(size.width - handleRadius, centerY);
+    final startPoint = Offset(progressBarHandleRadius, centerY);
+    final endPoint = Offset(size.width - progressBarHandleRadius, centerY);
     final progressPoint = Offset(
-      barLength * playedValue + handleRadius,
+      barLength * playedValue + progressBarHandleRadius,
       centerY,
     );
     final secondProgressPoint = Offset(
-      barLength * bufferedValue + handleRadius,
+      barLength * bufferedValue + progressBarHandleRadius,
       centerY,
     );
-
-    final customProgressStartPoint = customProgress != null
-        ? Offset(barLength * customProgress!.start + handleRadius, centerY)
-        : null;
-    final customProgressEndPoint = customProgress != null
-        ? Offset(barLength * customProgress!.end + handleRadius, centerY)
-        : null;
 
     final secondaryColor = themeData.colorScheme.secondary;
 
@@ -292,19 +241,95 @@ class _ProgressBarPainter extends CustomPainter {
     paint.color = colors?.playedColor ?? secondaryColor;
     canvas.drawLine(startPoint, progressPoint, paint);
 
-    if (customProgressStartPoint != null && customProgressEndPoint != null) {
-      paint.color = colors?.customProgressColor ?? Colors.amber.shade600;
-      canvas.drawLine(customProgressStartPoint, customProgressEndPoint, paint);
+    for (var progress in customProgress) {
+      if (progress != null) {
+        final customProgressStartPoint = Offset(
+            barLength * progress.start + progressBarHandleRadius, centerY);
+        final customProgressEndPoint =
+            Offset(barLength * progress.end + progressBarHandleRadius, centerY);
+        paint.color = progress.color;
+        canvas.drawLine(
+            customProgressStartPoint, customProgressEndPoint, paint);
+      }
     }
+    if (handleVisible) {
+      final handlePaint = Paint()..isAntiAlias = true;
+      final handleColor = colors?.handleColor ?? secondaryColor;
 
-    final handlePaint = Paint()..isAntiAlias = true;
-
-    handlePaint.color = Colors.transparent;
-    canvas.drawCircle(progressPoint, centerY, handlePaint);
-
-    final handleColor = colors?.handleColor ?? secondaryColor;
-
-    handlePaint.color = handleColor;
-    canvas.drawCircle(progressPoint, handleRadius, handlePaint);
+      handlePaint.color = handleColor;
+      canvas.drawCircle(progressPoint, progressBarHandleRadius, handlePaint);
+    }
   }
+}
+
+/// Defines different colors for [ProgressBar].
+class ProgressBarColors {
+  /// Defines background color of the [ProgressBar].
+  final Color? backgroundColor;
+
+  /// Defines color for played portion of the [ProgressBar].
+  final Color? playedColor;
+
+  /// Defines color for buffered portion of the [ProgressBar].
+  final Color? bufferedColor;
+
+  /// Defines color for handle of the [ProgressBar].
+  final Color? handleColor;
+
+  /// Creates [ProgressBarColors].
+  const ProgressBarColors({
+    this.backgroundColor,
+    this.playedColor,
+    this.bufferedColor,
+    this.handleColor,
+  });
+
+  ///
+  ProgressBarColors copyWith({
+    Color? backgroundColor,
+    Color? playedColor,
+    Color? bufferedColor,
+    Color? handleColor,
+  }) =>
+      ProgressBarColors(
+        backgroundColor: backgroundColor ?? this.backgroundColor,
+        handleColor: handleColor ?? this.handleColor,
+        bufferedColor: bufferedColor ?? this.bufferedColor,
+        playedColor: playedColor ?? this.playedColor,
+      );
+}
+
+@immutable
+class CustomProgress {
+  const CustomProgress(
+      {required this.start, required this.end, required this.color});
+  final double start;
+  final double end;
+  final Color color;
+
+  CustomProgress copyWith({
+    double? start,
+    double? end,
+    Color? color,
+  }) {
+    return CustomProgress(
+      start: start ?? this.start,
+      end: end ?? this.end,
+      color: color ?? this.color,
+    );
+  }
+
+  @override
+  String toString() =>
+      'CustomProgress(start: $start, end: $end, color: $color)';
+
+  @override
+  bool operator ==(covariant CustomProgress other) {
+    if (identical(this, other)) return true;
+
+    return other.start == start && other.end == end && other.color == color;
+  }
+
+  @override
+  int get hashCode => start.hashCode ^ end.hashCode ^ color.hashCode;
 }

@@ -28,10 +28,27 @@ extension ValueNotifierTransformer<T> on ValueNotifier<T> {
 
   ValueNotifier<R> syncMap<R>(R Function(T event) mapper) {
     final resultNotifier = ValueNotifier<R>(mapper(value));
-
+    Stream.fromIterable([]).asyncMap((event) => null);
     void updateResult(T value) {
       final mappedValue = mapper(value);
       resultNotifier.value = mappedValue;
+    }
+
+    // Initial update
+    updateResult(value);
+
+    // Listen to changes in the source ValueNotifier
+    addListener(() => updateResult(value));
+    return resultNotifier;
+  }
+
+  ValueNotifier<T> where(bool Function(T event) predicate) {
+    final resultNotifier = ValueNotifier<T>(value);
+
+    void updateResult(T value) {
+      if (predicate(value)) {
+        resultNotifier.value = value;
+      }
     }
 
     // Initial update

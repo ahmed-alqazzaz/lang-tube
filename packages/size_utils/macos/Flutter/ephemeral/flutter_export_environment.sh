@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=C:\Users\acer\AppData\Local\Programs\flutter"
-export "FLUTTER_APPLICATION_PATH=C:\Users\acer\workspace1\langtube\packages\value_notifier_transoformer"
+export "FLUTTER_APPLICATION_PATH=C:\Users\acer\workspace1\langtube\packages\size_utils"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=0.0.1"

@@ -5,8 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../utils/duration_formatter.dart';
-
 /// A widget which displays the current position of the video.
 class CurrentPosition extends StatefulWidget {
   /// Overrides the default [YoutubePlayerController].
@@ -55,11 +53,8 @@ class _CurrentPositionState extends State<CurrentPosition> {
     final currentDuration = durationFormatter(
       _controller.value.position.inMilliseconds,
     );
-    final videoDuration = durationFormatter(
-      _controller.value.metaData.duration.inMilliseconds,
-    );
     return Text(
-      '$currentDuration / $videoDuration',
+      '$currentDuration',
       style: const TextStyle(
         color: Colors.white,
         fontSize: 12.0,

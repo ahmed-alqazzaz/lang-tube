@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_inappwebview: ^5.7.2+3
+  rxdart: ^0.27.7
 
 dev_dependencies:
   flutter_test:
@@ -20,7 +21,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
   assets:
     - assets/speedometer.webp
     - web_assets/youtube_player.js

@@ -26,7 +26,7 @@ function onYouTubeIframeAPIReady() {
         events: {
             onReady: function(event) {
                 hideControls();
-                //hideHeader();
+                hideHeader();
                 window.flutter_inappwebview.callHandler('Ready'); 
             },
             onStateChange: function(event) { sendPlayerStateChange(event.data); },

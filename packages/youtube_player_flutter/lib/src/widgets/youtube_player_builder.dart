@@ -51,7 +51,10 @@ class _YoutubePlayerBuilderState extends State<YoutubePlayerBuilder>
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       widget.onEnterFullScreen?.call();
     } else {
-      SystemChrome.restoreSystemUIOverlays();
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual,
+        overlays: SystemUiOverlay.values,
+      );
       widget.onExitFullScreen?.call();
     }
     super.didChangeMetrics();

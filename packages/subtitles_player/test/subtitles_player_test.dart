@@ -26,7 +26,7 @@ void main() {
       final playbackPosition = ValueNotifier<Duration>(Duration.zero);
 
       // Create the SubtitlePlayer with the test subtitle list and the playback position ValueNotifier
-      final subtitlePlayer = SubtitlePlayer(
+      final subtitlePlayer = SubtitlesPlayer(
         subtitles: testSubtitles,
         playbackPosition: playbackPosition,
       );
@@ -62,7 +62,7 @@ void main() {
           ValueNotifier<Duration>(const Duration(seconds: 0));
 
       // Create the SubtitlePlayer with the test subtitle list and the playback position ValueNotifier
-      final subtitlePlayer = SubtitlePlayer(
+      final subtitlePlayer = SubtitlesPlayer(
         subtitles: testSubtitles,
         playbackPosition: playbackPosition,
       );

@@ -17,7 +17,7 @@ class CircularInkWell extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () => onTap?.call(),
-        customBorder: const CircleBorder(),
+        customBorder: const OvalBorder(),
         child: Padding(
           padding: EdgeInsets.all(splashRadius),
           child: child,

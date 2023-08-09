@@ -12,21 +12,23 @@ Future<void> main() async {
 
   group('scraping kurzesagt: ${kurzgesagt_video2.topic}', () {
     List<ScrapedSubtitles>? englishSubtitles;
+    List<ScrapedSubtitles>? arabicSubtitles;
     setUp(() async {
-      englishSubtitles = await scraper
-          .scrapeSubtitles(
-            youtubeVideoId: 'uoJwt9l-XhQ',
-            language: Language.english(),
-          )
-          .toList();
+      englishSubtitles = await scraper.scrapeSubtitles(
+        youtubeVideoId: 'uoJwt9l-XhQ',
+        language: Language.english(),
+      );
+      arabicSubtitles = await scraper.scrapeSubtitles(
+        youtubeVideoId: 'uoJwt9l-XhQ',
+        language: Language.english(),
+        translatedLanguage: Language.arabic(),
+      );
     });
     test('scrapes english subtitles successfully', () async {
       expect(englishSubtitles, kurzgesagt_video2.englishSubtitles);
     });
     test('scrapes auto generated arabic subtitles successfully ', () async {
-      final subtitles =
-          await englishSubtitles?[0].translateTo(Language.arabic());
-      expect(subtitles, kurzgesagt_video2.arabicSubtitle);
+      expect(arabicSubtitles.first, kurzgesagt_video2.arabicSubtitle);
     });
   });
 }
