@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:throttler/throttler.dart';
 
@@ -51,6 +53,52 @@ void main() {
       Future.delayed(const Duration(milliseconds: 500), () {
         // No callbacks should have been executed.
         expect(calls, isEmpty);
+      });
+    });
+    test('should reset count after rate limit duration', () async {
+      const rateLimit = CallbackRateLimit(
+        maxCount: 3,
+        duration: Duration(seconds: 1),
+      );
+      final throttler = Throttler(rateLimit: rateLimit);
+      final calls = <int>[];
+
+      void callback(int callIndex) {
+        calls.add(callIndex);
+      }
+
+      for (var i = 0; i < 5; i++) {
+        throttler.throttle(
+            const Duration(milliseconds: 100), () => callback(i));
+      }
+
+      // Wait for the rate limit duration to ensure all timer callbacks have been executed.
+      await Future.delayed(rateLimit.duration, () async {
+        expect(calls, []);
+      });
+
+      // Call throttle again after the rate limit duration has passed.
+      for (var i = 5; i < 16; i++) {
+        throttler.throttle(
+            const Duration(milliseconds: 100), () => callback(i));
+        await Future.delayed(const Duration(milliseconds: 110));
+      }
+
+      // Wait for another rate limit duration to ensure all timer callbacks have been executed.
+      await Future.delayed(rateLimit.duration, () async {
+        // The next maxCount calls should have been executed.
+        expect(calls, [5, 6, 7, 8]);
+      });
+      calls.clear();
+      for (var i = 5; i < 15; i++) {
+        throttler.throttle(
+            const Duration(milliseconds: 400), () => callback(i));
+        await Future.delayed(const Duration(milliseconds: 400));
+      }
+
+      await Future.delayed(rateLimit.duration, () async {
+        // The next maxCount calls should have been executed.
+        expect(calls, [5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
       });
     });
   });
