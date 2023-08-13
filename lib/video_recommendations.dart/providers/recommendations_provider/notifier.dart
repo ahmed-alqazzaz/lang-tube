@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:collection/collection.dart';
-import 'package:lang_tube/video_recommendations.dart/data/video_recommendations.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../data/recommended_videos.dart';
+import '../../data/video_recommendations.dart';
 
-class VideosRecommendationsManager {
-  VideosRecommendationsManager(Stream<RecommendedVideo> observedVideos) {
-    observedVideosSubscription = observedVideos.listen(
+class RecommendationsNotifier extends ChangeNotifier {
+  RecommendationsNotifier({required Stream<RecommendedVideo> observedVideos}) {
+    _observedVideosSubscription = observedVideos.listen(
       (video) {
         log("adding video $video");
         _addVideo(video);
@@ -17,11 +18,15 @@ class VideosRecommendationsManager {
       onDone: () => log("observed videos stream is finnished"),
     );
   }
-  late final StreamSubscription<RecommendedVideo> observedVideosSubscription;
+  late final StreamSubscription<RecommendedVideo> _observedVideosSubscription;
 
   final _recommendationsList = <VideoRecommendations>[];
   List<VideoRecommendations> get recommendationsList =>
       List.unmodifiable(_recommendationsList);
+
+  void fetchMore() {
+    notifyListeners();
+  }
 
   Future<void> _addVideo(RecommendedVideo video) async {
     // fetch the Video recommendations whose source tab is
@@ -39,5 +44,11 @@ class VideosRecommendationsManager {
         VideoRecommendations(sourceTab: video.sourceTab)..addVideo(video),
       );
     }
+  }
+
+  @override
+  void dispose() {
+    _observedVideosSubscription.cancel();
+    super.dispose();
   }
 }

@@ -1,52 +1,26 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
-import 'package:lang_tube/video_recommendations.dart/managers/helpers/diversity_score.dart';
-import 'package:lang_tube/video_recommendations.dart/managers/helpers/target_language_videos.dart';
-import 'package:lang_tube/video_recommendations.dart/managers/youtube_algorithm_manipulator/webview_actions_handle.dart';
-import 'package:lang_tube/youtube_scraper/data/youtube_video_item.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/video_recommendations.dart/utils/diversity_score.dart';
+import 'package:lang_tube/video_recommendations.dart/utils/target_language_videos.dart';
 import 'package:languages/languages.dart';
-import 'history_manager.dart';
 
-// @immutable
-// class YoutubeAlgorithmManipulator {
-//   const YoutubeAlgorithmManipulator._();
-//   static const Duration _videoClickDelay = Duration(seconds: 3);
+import '../../../youtube_scraper/data/youtube_video_item.dart';
+import '../../managers/youtube_algorithm_manipulator/history_manager.dart';
+import '../../managers/youtube_algorithm_manipulator/webview_actions_handle.dart';
+import 'state.dart';
 
-//   // this method should be triggered when there are
-//   // videos in languages other than target language
-//   static Future<void> steerTowardsRelevantVideos(
-//       List<YoutubeVideo> videos) async {
-//     assert(videos.isNotEmpty);
-
-//     final ranker = VideosDifficultyRanker.newInstance();
-//     for (final video in videos) {
-//       await ranker.addVideo(video);
-//     }
-
-//     // todo: choose based on level
-//     await Future.delayed(
-//       _videoClickDelay,
-//       ranker.recommendations.first.item.click,
-//     );
-//   }
-// }
-
-@immutable
-class YoutubeAlgorithmManipulator {
-  static const Duration _videoClickDelay = Duration(seconds: 2);
-  static const Duration _navigateHomeDelay = Duration(seconds: 3);
-  static const int _maxClickDepth = 3;
-
-  YoutubeAlgorithmManipulator({
+class YoutubeAlgorithmMinpulator
+    extends StateNotifier<YoutubeAlgorithmManipulatorState> {
+  YoutubeAlgorithmMinpulator({
     required Stream<Iterable<YoutubeVideoItem>> observedVideos,
     required WebviewActionsHandle actionsHandle,
     required ManipulatorHistoryManager historyManager,
     required List<YoutubeVideoItem> Function() getUserWatchHistory,
     required Future<YoutubeVideoItem> Function(List<YoutubeVideoItem> items)
         findMostRelevantItem,
-  }) : _videosObserverSubscription = observedVideos.listen(
+  })  : _videosObserverSubscription = observedVideos.listen(
           (videoItems) => videosObserver(
             videoItems: videoItems,
             actionsHandle: actionsHandle,
@@ -54,7 +28,9 @@ class YoutubeAlgorithmManipulator {
             findMostRelevantItem: findMostRelevantItem,
             getUserWatchHistory: getUserWatchHistory,
           ),
-        );
+        ),
+        super(YoutubeAlgorithmManipulatorState.inactive);
+
   final StreamSubscription<Iterable<YoutubeVideoItem>>
       _videosObserverSubscription;
 
@@ -113,7 +89,7 @@ class YoutubeAlgorithmManipulator {
     if (watchHistory.length < 20) {}
   }
 
-  Future<void> close() async {
-    await _videosObserverSubscription.cancel();
-  }
+  static const Duration _videoClickDelay = Duration(seconds: 2);
+  static const Duration _navigateHomeDelay = Duration(seconds: 3);
+  static const int _maxClickDepth = 3;
 }
