@@ -3,8 +3,8 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable
-class YoutubeVideoItem {
-  final String videoId;
+class ObservedVideo {
+  final String id;
   final String title;
   final String channelIconUrl;
   final String thumbnailUrl;
@@ -12,9 +12,9 @@ class YoutubeVideoItem {
 
   final List<String> badges;
   final Future<void> Function() click;
-  const YoutubeVideoItem({
+  const ObservedVideo({
     required Future<void> Function() onClick,
-    required this.videoId,
+    required this.id,
     required this.title,
     required this.channelIconUrl,
     required this.thumbnailUrl,
@@ -24,7 +24,7 @@ class YoutubeVideoItem {
 
   String get channelName => badges.first;
 
-  YoutubeVideoItem copyWith({
+  ObservedVideo copyWith({
     String? videoId,
     String? title,
     String? channelIconUrl,
@@ -33,8 +33,8 @@ class YoutubeVideoItem {
     List<String>? badges,
     Future<void> Function()? onClick,
   }) {
-    return YoutubeVideoItem(
-      videoId: videoId ?? this.videoId,
+    return ObservedVideo(
+      id: videoId ?? this.id,
       title: title ?? this.title,
       channelIconUrl: channelIconUrl ?? this.channelIconUrl,
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
@@ -46,15 +46,15 @@ class YoutubeVideoItem {
 
   @override
   String toString() {
-    return 'YoutubeVideoItem(videoId: $videoId, title: $title, channelIconUrl: $channelIconUrl, thumbnailUrl: $thumbnailUrl, sourceTab: $sourceTab, badges: $badges, click: $click)';
+    return 'YoutubeVideoItem(videoId: $id, title: $title, channelIconUrl: $channelIconUrl, thumbnailUrl: $thumbnailUrl, sourceTab: $sourceTab, badges: $badges, click: $click)';
   }
 
   @override
-  bool operator ==(covariant YoutubeVideoItem other) {
+  bool operator ==(covariant ObservedVideo other) {
     if (identical(this, other)) return true;
     final listEquals = const DeepCollectionEquality().equals;
 
-    return other.videoId == videoId &&
+    return other.id == id &&
         other.title == title &&
         other.channelIconUrl == channelIconUrl &&
         other.thumbnailUrl == thumbnailUrl &&
@@ -65,7 +65,7 @@ class YoutubeVideoItem {
 
   @override
   int get hashCode {
-    return videoId.hashCode ^
+    return id.hashCode ^
         title.hashCode ^
         channelIconUrl.hashCode ^
         thumbnailUrl.hashCode ^

@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:throttler/throttler.dart';
 
-class WebViewInteractionsManager {
+class YoutubeInteractionsController {
   static const _homeNavigationReloadDelay = Duration(milliseconds: 1500);
-  WebViewInteractionsManager(this.inAppWebViewController);
+  YoutubeInteractionsController(this.inAppWebViewController);
   int videoClickDepth = 0;
   final _throttler = Throttler.privateInstance(
     rateLimit: const CallbackRateLimit(
@@ -81,7 +82,7 @@ class WebViewInteractionsManager {
       source: 'fetchRecommendedVideosData()',
     );
     if (data == null) {
-      printError('fetchRecommendedVideosData is returning null');
+      printRed('fetchRecommendedVideosData is returning null');
       return Future.delayed(
           const Duration(milliseconds: 500), fetchObservedVideos);
     }
@@ -94,5 +95,3 @@ class WebViewInteractionsManager {
     );
   }
 }
-
-void printError(String text) => print('\x1B[31m$text\x1B[0m');

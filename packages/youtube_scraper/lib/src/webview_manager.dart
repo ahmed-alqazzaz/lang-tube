@@ -1,11 +1,11 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:lang_tube/youtube_scraper/webview/interactions_manager.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:throttler/throttler.dart';
+
+import 'interactions_controller.dart';
 
 @immutable
 class YoutubeWebViewManager {
@@ -13,7 +13,7 @@ class YoutubeWebViewManager {
     required String userAgent,
     required Uri initialRequest,
     required Function(InAppWebViewController controller,
-            WebViewInteractionsManager interactionsManager)
+            YoutubeInteractionsController interactionsManager)
         onViewportUpdated,
   }) {
     // check if js file has been injected into the viewer
@@ -21,7 +21,7 @@ class YoutubeWebViewManager {
     late final inAppWebViewController =
         BehaviorSubject<InAppWebViewController>();
     late final interactionManager =
-        WebViewInteractionsManager(inAppWebViewController);
+        YoutubeInteractionsController(inAppWebViewController);
     late final throttler = Throttler.privateInstance();
 
     return YoutubeWebViewManager._(
@@ -65,7 +65,7 @@ class YoutubeWebViewManager {
               () => interactionManager.scrollToBottom());
           final hasJsBeenInjected = jsInjectionController.value;
           if (!hasJsBeenInjected) {
-            WebViewInteractionsManager.injectJs(controller);
+            YoutubeInteractionsController.injectJs(controller);
             jsInjectionController.add(true);
           }
           onViewportUpdated(controller, interactionManager);
@@ -80,7 +80,7 @@ class YoutubeWebViewManager {
   });
 
   final InAppWebView webView;
-  final WebViewInteractionsManager interactionManager;
+  final YoutubeInteractionsController interactionManager;
 
   // Future<void> run() async => await _webView.run();
   // Future<void> dispose() async {

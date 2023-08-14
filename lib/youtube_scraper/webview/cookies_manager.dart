@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:path_provider/path_provider.dart';
 
 const Duration cookieReloadDuration = Duration(seconds: 3);
+bool x = false;
 
 @immutable
 class YoutubeCookiesManager {
@@ -16,7 +18,9 @@ class YoutubeCookiesManager {
   }) {
     synchronizeCookies();
     Timer.periodic(const Duration(seconds: 5), (timer) {
-      _saveCookiesIntoStorage();
+      if (x) {
+        _saveCookiesIntoStorage();
+      }
     });
   }
   final Uri uri;
@@ -30,6 +34,7 @@ class YoutubeCookiesManager {
       if (value != null) {
         await _injectCookiesIntoWebView(jsonDecode(value));
       }
+      await Future.delayed(const Duration(seconds: 2));
       await _saveCookiesIntoStorage();
     });
     await cookiesUpdateCallBack();
