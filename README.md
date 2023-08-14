@@ -15,4 +15,4 @@ The project is a work in progress and is far from being finalized
 
 ## Features
 - watch youtube videos with clickable subtitles
-<img src="https://github.com/ahmed-alqazzaz/lang-tube/assets/85782358/d6893906-68a3-4d47-9b09-ea7a3c8b7dd2" width=400>
+<img src="https://github.com/ahmed-alqazzaz/lang-tube/assets/85782358/50dda8b3-e34f-4a8b-804c-6649e2d2f2e4" width=400>
