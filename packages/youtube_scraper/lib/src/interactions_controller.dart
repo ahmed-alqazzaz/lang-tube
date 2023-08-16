@@ -91,7 +91,7 @@ class YoutubeInteractionsController {
 
   static Future<void> injectJs(InAppWebViewController controller) async {
     return await controller.injectJavascriptFileFromAsset(
-      assetFilePath: 'javascript/youtube_scraper.js',
+      assetFilePath: 'packages/youtube_Scraper/javascript/youtube_scraper.js',
     );
   }
 }

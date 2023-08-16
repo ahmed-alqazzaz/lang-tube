@@ -1,6 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+
+typedef VideoClicker = FutureOr<void> Function(String videoId);
 
 @immutable
 class ObservedVideo {
@@ -9,11 +13,11 @@ class ObservedVideo {
   final String channelIconUrl;
   final String thumbnailUrl;
   final String sourceTab;
-
   final List<String> badges;
-  final Future<void> Function() click;
+  final VoidCallback click;
+
   const ObservedVideo({
-    required Future<void> Function() onClick,
+    required VoidCallback onClick,
     required this.id,
     required this.title,
     required this.channelIconUrl,
@@ -25,7 +29,7 @@ class ObservedVideo {
   String get channelName => badges.first;
 
   ObservedVideo copyWith({
-    String? videoId,
+    String? id,
     String? title,
     String? channelIconUrl,
     String? thumbnailUrl,
@@ -34,7 +38,7 @@ class ObservedVideo {
     Future<void> Function()? onClick,
   }) {
     return ObservedVideo(
-      id: videoId ?? this.id,
+      id: id ?? this.id,
       title: title ?? this.title,
       channelIconUrl: channelIconUrl ?? this.channelIconUrl,
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
@@ -72,5 +76,29 @@ class ObservedVideo {
         sourceTab.hashCode ^
         badges.hashCode ^
         click.hashCode;
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'title': title,
+      'channelIconUrl': channelIconUrl,
+      'thumbnailUrl': thumbnailUrl,
+      'sourceTab': sourceTab,
+      'badges': badges,
+    };
+  }
+
+  factory ObservedVideo.fromMap(
+      {required Map<String, dynamic> map, required VideoClicker videoClicker}) {
+    return ObservedVideo(
+      id: map['id'] as String,
+      title: map['title'] as String,
+      channelIconUrl: map['channelIconUrl'] as String,
+      thumbnailUrl: map['thumbnailUrl'] as String,
+      sourceTab: map['sourceTab'] as String,
+      badges: List<String>.from((map['badges'] as List<String>)),
+      onClick: () => videoClicker(map['id'] as String),
+    );
   }
 }
