@@ -21,7 +21,6 @@ extension SubtitlesSpeed on SubtitlesData {
 }
 
 extension SubtitleSpeed on subtitles_player.Subtitle {
-  Future<double> get syllablesPerMillisecond async {
-    return (await rustApi.countSyllables(text: text)) / duration.inMilliseconds;
-  }
+  Future<double> get syllablesPerMillisecond async =>
+      (await countSyllables(text: text)) / duration.inMilliseconds;
 }

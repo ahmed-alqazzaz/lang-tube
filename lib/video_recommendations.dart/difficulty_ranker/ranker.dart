@@ -1,4 +1,4 @@
-import 'package:lang_tube/video_recommendations.dart/data/recommended_videos.dart';
+import 'package:lang_tube/video_recommendations.dart/data/recommended_video.dart';
 
 class VideosDifficultyRanker {
   // binary search to find the suitable
