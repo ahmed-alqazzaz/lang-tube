@@ -1,0 +1,8 @@
+# Run with `flutter pub run ffigen --config ffigen.yaml`.
+name: ReadabilityBindings
+description: |
+  Bindings for `src/readability.h`.
+
+  Regenerate bindings with `flutter pub run ffigen --config ffigen.yaml`.
+llvm:
+  path: C:\\Program Files\\LLVM
