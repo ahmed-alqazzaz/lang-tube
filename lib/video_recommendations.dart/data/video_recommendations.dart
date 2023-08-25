@@ -1,10 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:collection/collection.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
-
 import 'recommended_video.dart';
 
 class VideoRecommendations {
@@ -16,28 +13,6 @@ class VideoRecommendations {
     required this.sourceTab,
     required List<RecommendedVideo>? videos,
   }) : _videos = videos ?? [];
-
-  Future<VideoRecommendations> addVideo(RecommendedVideo video) async {
-    if (video.thumbnailUrl.isEmpty) {
-      log("${video.title} discarded no thumbnail");
-      return VideoRecommendations(
-        sourceTab: sourceTab,
-        videos: List.from(_videos),
-      );
-    }
-    if (_videos.isVideoPresent(video)) {
-      log("${video.title} already present");
-      return VideoRecommendations(
-        sourceTab: sourceTab,
-        videos: List.from(_videos),
-      );
-    }
-    //final index = await _determineVideoIndex(video);
-    return VideoRecommendations(
-      sourceTab: sourceTab,
-      videos: List.from(_videos)..add(video),
-    );
-  }
 
   @override
   String toString() =>
@@ -84,41 +59,5 @@ class VideoRecommendations {
           )
           .toList(),
     );
-  }
-  String toJson() => json.encode(toMap());
-
-  factory VideoRecommendations.fromJson(
-          {required String source, required VideoClicker clicker}) =>
-      VideoRecommendations.fromMap(
-        map: json.decode(source) as Map<String, dynamic>,
-        clicker: clicker,
-      );
-}
-
-extension VideoRecommendationsListExtension on List<VideoRecommendations> {
-  String toJson() {
-    final List<Map<String, dynamic>> listMap =
-        map((videoRec) => videoRec.toMap()).toList();
-    return json.encode(listMap);
-  }
-
-  static Iterable<VideoRecommendations> fromJson(
-          {required String source, required VideoClicker clicker}) =>
-      (json.decode(source) as List<dynamic>).map(
-        (map) => VideoRecommendations.fromMap(
-          map: map as Map<String, dynamic>,
-          clicker: clicker,
-        ),
-      );
-}
-
-extension on List<RecommendedVideo> {
-  bool isVideoPresent(RecommendedVideo video) {
-    for (var element in this) {
-      if (element.title == video.title) {
-        return true;
-      }
-    }
-    return false;
   }
 }

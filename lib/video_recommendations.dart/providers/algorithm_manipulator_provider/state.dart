@@ -1,0 +1,4 @@
+enum YoutubeAlgorithmManipulatorState {
+  active,
+  inactive,
+}

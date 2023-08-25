@@ -1,42 +1,49 @@
 import 'dart:developer';
 
+import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/video_recommendations.dart/difficulty_ranker/subtitles_complexity.dart';
-import 'package:lang_tube/video_recommendations.dart/difficulty_ranker/subtitles_speed.dart';
+import 'package:lang_tube/video_recommendations.dart/difficulty_ranker/subtitles_readability_calculator.dart';
+import 'package:lang_tube/video_recommendations.dart/difficulty_ranker/subtitles_speed_calculator.dart';
 import 'package:lang_tube/video_recommendations.dart/providers/recommendations_provider/notifier.dart';
-import 'package:lang_tube/video_recommendations.dart/providers/youtube_scraper_provider.dart';
+import 'package:lang_tube/video_recommendations.dart/utils/target_language_videos.dart';
 import 'package:languages/languages.dart';
-
-import '../../../subtitles_player/providers/subtitles_scraper_provider/data/exceptions.dart';
 import '../../../subtitles_player/providers/subtitles_scraper_provider/provider.dart';
 import '../../../utils/cefr.dart';
-import '../../data/recommended_videos.dart';
+import '../../data/recommended_video.dart';
+import '../youtube_scraper_provider/provider.dart';
 
 final videoRecommendationsProvider = ChangeNotifierProvider((ref) {
   final youtubeScraper = ref.read(youtubeScraperProvider);
   final subtitlesScraperCallback = ref.read(subtitlesScraperProvider.future);
   return RecommendationsNotifier(
+    clicker: (videoId) => youtubeScraper.interactions.clickVideoById(
+      videoId: videoId,
+    ),
     observedVideos: youtubeScraper.observedVideos.asyncExpand(
-      (videoItems) async* {
+      (videos) async* {
         final subtitlesScraper = await subtitlesScraperCallback;
-        for (final item in videoItems) {
-          try {
-            final subtitlesData = await subtitlesScraper
-                .scrapeSubtitles(
-                  youtubeVideoId: item.videoId,
-                  language: Language.english(),
-                )
-                .then((value) => value.first);
+        final targetLanguageVideos =
+            videos.getTargetLanguageVideos(Language.english().pattern);
+        for (final video in targetLanguageVideos) {
+          log("scraping subtitles");
 
-            yield RecommendedVideo.fromVideoItem(
-              item: item,
+          final subtitlesData = await subtitlesScraper
+              .scrapeSubtitles(
+                youtubeVideoId: video.id,
+                language: Language.english(),
+              )
+              .then((value) => value?.first);
+
+          if (subtitlesData != null) {
+            yield RecommendedVideo.fromObservedVideo(
+              video: video,
               subtitlesComplexity: await subtitlesData.subtitlesComplexity,
               syllablesPerMillisecond:
                   await subtitlesData.avgerageSyllablesPerMillisecond,
               cefr: CEFR.a1,
             );
-          } on SubtitlesScraperNoCaptionsFoundException catch (_) {
-            log("${item.title} has no subtitles");
+          } else {
+            printRed("${video.title} has no subtitles");
           }
         }
       },

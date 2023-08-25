@@ -5,20 +5,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/video_recommendations.dart/utils/diversity_score.dart';
 import 'package:lang_tube/video_recommendations.dart/utils/target_language_videos.dart';
 import 'package:languages/languages.dart';
+import 'package:youtube_scraper/youtube_scraper.dart';
 
 import '../../../youtube_scraper/data/youtube_video_item.dart';
-import '../../managers/youtube_algorithm_manipulator/history_manager.dart';
-import '../../managers/youtube_algorithm_manipulator/webview_actions_handle.dart';
+import 'history_manager.dart';
+import 'webview_actions_handle.dart';
 import 'state.dart';
 
 class YoutubeAlgorithmMinpulator
     extends StateNotifier<YoutubeAlgorithmManipulatorState> {
   YoutubeAlgorithmMinpulator({
-    required Stream<Iterable<YoutubeVideoItem>> observedVideos,
+    required Stream<Iterable<ObservedVideo>> observedVideos,
     required WebviewActionsHandle actionsHandle,
     required ManipulatorHistoryManager historyManager,
-    required List<YoutubeVideoItem> Function() getUserWatchHistory,
-    required Future<YoutubeVideoItem> Function(List<YoutubeVideoItem> items)
+    required List<ObservedVideo> Function() getUserWatchHistory,
+    required Future<ObservedVideo> Function(List<ObservedVideo> items)
         findMostRelevantItem,
   })  : _videosObserverSubscription = observedVideos.listen(
           (videoItems) => videosObserver(
@@ -31,15 +32,14 @@ class YoutubeAlgorithmMinpulator
         ),
         super(YoutubeAlgorithmManipulatorState.inactive);
 
-  final StreamSubscription<Iterable<YoutubeVideoItem>>
-      _videosObserverSubscription;
+  final StreamSubscription<Iterable<ObservedVideo>> _videosObserverSubscription;
 
   static Future<void> videosObserver({
-    required Iterable<YoutubeVideoItem> videoItems,
+    required Iterable<ObservedVideo> videoItems,
     required WebviewActionsHandle actionsHandle,
     required ManipulatorHistoryManager historyManager,
-    required List<YoutubeVideoItem> Function() getUserWatchHistory,
-    required Future<YoutubeVideoItem> Function(List<YoutubeVideoItem> items)
+    required List<ObservedVideo> Function() getUserWatchHistory,
+    required Future<ObservedVideo> Function(List<ObservedVideo> items)
         findMostRelevantItem,
   }) async {
     return;
@@ -87,6 +87,12 @@ class YoutubeAlgorithmMinpulator
       uniqueWatchedVideos.isNotEmpty ? null : null;
     }
     if (watchHistory.length < 20) {}
+  }
+
+  @override
+  void dispose() {
+    _videosObserverSubscription.cancel();
+    super.dispose();
   }
 
   static const Duration _videoClickDelay = Duration(seconds: 2);

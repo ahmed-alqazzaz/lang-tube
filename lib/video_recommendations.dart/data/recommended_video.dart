@@ -1,17 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
+import 'package:readability/readability.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
 
 import '../../utils/cefr.dart';
-import '../difficulty_ranker/rust_api/rust_bridge.dart';
 
 @immutable
 class RecommendedVideo extends ObservedVideo {
   const RecommendedVideo({
     required super.onClick,
     required super.id,
+    required super.duration,
     required super.title,
     required super.channelIconUrl,
     required super.thumbnailUrl,
@@ -21,17 +20,18 @@ class RecommendedVideo extends ObservedVideo {
     required this.syllablesPerMillisecond,
     required this.cefr,
   });
-  final SubtitleComplexity subtitlesComplexity;
+  final ReadabilityScore subtitlesComplexity;
   final double syllablesPerMillisecond;
   final CEFR cefr;
 
   factory RecommendedVideo.fromObservedVideo({
     required ObservedVideo video,
-    required SubtitleComplexity subtitlesComplexity,
+    required ReadabilityScore subtitlesComplexity,
     required double syllablesPerMillisecond,
     required CEFR cefr,
   }) =>
       RecommendedVideo(
+        duration: video.duration,
         title: video.title,
         id: video.id,
         badges: video.badges,
@@ -46,7 +46,7 @@ class RecommendedVideo extends ObservedVideo {
 
   @override
   String toString() =>
-      'RecommendedVideo(subtitlesComplexity: $subtitlesComplexity, syllablesPerMillisecond: $syllablesPerMillisecond, cefr: $cefr)';
+      'RecommendedVideo(videoId: $id, title: $title, channelIconUrl: $channelIconUrl, thumbnailUrl: $thumbnailUrl, sourceTab: $sourceTab, badges: $badges,  subtitlesComplexity: $subtitlesComplexity, syllablesPerMillisecond: $syllablesPerMillisecond, cefr: $cefr, duration: $duration)';
 
   @override
   bool operator ==(covariant RecommendedVideo other) {
@@ -54,14 +54,27 @@ class RecommendedVideo extends ObservedVideo {
 
     return other.subtitlesComplexity == subtitlesComplexity &&
         other.syllablesPerMillisecond == syllablesPerMillisecond &&
-        other.cefr == cefr;
+        other.cefr == cefr &&
+        other.id == id &&
+        other.title == title &&
+        other.channelIconUrl == channelIconUrl &&
+        other.thumbnailUrl == thumbnailUrl &&
+        other.sourceTab == sourceTab &&
+        other.duration == duration &&
+        listEquals(other.badges, badges);
   }
 
   @override
   int get hashCode =>
       subtitlesComplexity.hashCode ^
       syllablesPerMillisecond.hashCode ^
-      cefr.hashCode;
+      cefr.hashCode ^
+      id.hashCode ^
+      title.hashCode ^
+      channelIconUrl.hashCode ^
+      thumbnailUrl.hashCode ^
+      sourceTab.hashCode ^
+      badges.hashCode;
 
   @override
   Map<String, dynamic> toMap() {
@@ -76,20 +89,11 @@ class RecommendedVideo extends ObservedVideo {
       {required Map<String, dynamic> map, required VideoClicker clicker}) {
     return RecommendedVideo.fromObservedVideo(
       video: ObservedVideo.fromMap(map: map, videoClicker: clicker),
-      subtitlesComplexity: SubtitleComplexity.fromMap(
+      subtitlesComplexity: ReadabilityScore.fromMap(
         map['subtitlesComplexity'] as Map<String, dynamic>,
       ),
       syllablesPerMillisecond: map['syllablesPerMillisecond'] as double,
       cefr: CEFR.a1,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory RecommendedVideo.fromJson(
-          {required String source, required VideoClicker clicker}) =>
-      RecommendedVideo.fromMap(
-        map: json.decode(source) as Map<String, dynamic>,
-        clicker: clicker,
-      );
 }

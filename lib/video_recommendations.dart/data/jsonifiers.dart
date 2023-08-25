@@ -5,6 +5,7 @@ import 'package:youtube_scraper/youtube_scraper.dart';
 
 import 'recommended_video.dart';
 
+// it's important to ensure that order of the elements stays the same
 extension VideoRecommendationsListJsonifier on List<VideoRecommendations> {
   String toJson() {
     final List<Map<String, dynamic>> listMap =

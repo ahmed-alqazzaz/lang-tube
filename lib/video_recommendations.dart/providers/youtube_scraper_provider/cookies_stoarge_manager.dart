@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
 
-class YoutubeScraperCookiesStorageManager extends CookieStorageManager {
+class YoutubeScraperCookiesStorageManager extends CookiesStorageManager {
   @override
   Future<String?> retrieveCookies() async {
     final file = File(await _cookiesStoargePath);

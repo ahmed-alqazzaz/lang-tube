@@ -1,6 +1,6 @@
 import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/data/subtitles_data.dart';
+import 'package:readability/readability.dart';
 import 'package:subtitles_player/subtitles_player.dart' as subtitles_player;
-import 'rust_api/api.dart';
 
 extension SubtitlesSpeed on SubtitlesData {
   Future<double> get avgerageSyllablesPerMillisecond async {
