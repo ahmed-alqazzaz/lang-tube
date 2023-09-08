@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 extension RectMapper on Rect {
   static Rect fromMap(Map<String, dynamic> map) {
     return Rect.fromLTRB(
-      map['left'] as double,
-      map['top'] as double,
-      map['right'] as double,
-      map['bottom'] as double,
+      (map['left'] as num).toDouble(),
+      (map['top'] as num).toDouble(),
+      (map['right'] as num).toDouble(),
+      (map['bottom'] as num).toDouble(),
     );
   }
 
