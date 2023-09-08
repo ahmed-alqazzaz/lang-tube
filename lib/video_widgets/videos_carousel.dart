@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:lang_tube/main.dart';
-import 'package:lang_tube/video_recommendations.dart/views/videos_list/videos_carousel/carousel_video_item.dart';
+import 'package:lang_tube/video_widgets/display_video_item.dart';
 import 'package:size_utils/size_utils.dart';
 import 'package:sized_button/sized_button.dart';
-import '../video_item/video_item.dart';
+import 'video_item.dart';
 
 class VideosCarousel extends StatelessWidget {
   const VideosCarousel({
@@ -25,7 +23,7 @@ class VideosCarousel extends StatelessWidget {
 
   final String topic;
   final bool useLargeLoadMoreButton;
-  final List<CarouselVideoItem> videoItems;
+  final List<DisplayVideoItem> videoItems;
 
   Widget _actionMenuBuilder() {
     return CircularInkWell(
@@ -123,8 +121,9 @@ class VideosCarousel extends StatelessWidget {
               ),
               SliverList.separated(
                 itemCount: videoItems.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(width: VideoItemView.actionsMenuOffset * 2),
+                separatorBuilder: (context, index) => const SizedBox(
+                  width: CircularInkWell.defaultSplashRadius * 2,
+                ),
                 itemBuilder: (context, index) {
                   final item = videoItems[index];
                   return MaterialButton(
@@ -132,12 +131,12 @@ class VideosCarousel extends StatelessWidget {
                     onPressed: item.onPressed,
                     child: SizedBox(
                       width: videoItemWidth,
-                      child: VideoItemView(
+                      child: VideoItemView.large(
                         title: item.title,
                         badges: item.badges,
                         thumbnailUrl: item.thumbnailUrl,
                         duration: '1:12',
-                        actionsMenu: _actionMenuBuilder(),
+                        trailing: _actionMenuBuilder(),
                       ),
                     ),
                   );

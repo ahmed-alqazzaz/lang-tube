@@ -5,39 +5,44 @@ import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
 
 final class VideoItemView extends StatelessWidget {
-  const VideoItemView({
+  const VideoItemView.large({
     super.key,
     required this.title,
     required this.badges,
     required this.thumbnailUrl,
-    required this.actionsMenu,
+    required this.trailing,
     required this.duration,
-  });
-  static const _constraintsAspectRatioError =
-      "Video item height can not exceed its width";
+  }) : _useLargeItem = true;
+  const VideoItemView.small({
+    super.key,
+    required this.title,
+    required this.badges,
+    required this.thumbnailUrl,
+    required this.trailing,
+    required this.duration,
+  }) : _useLargeItem = false;
+
   static const double _thumbnailPadding = 10;
   final String title;
   final String thumbnailUrl;
   final String duration;
   final List<String> badges;
-  final Widget actionsMenu;
+  final Widget trailing;
+  final bool _useLargeItem;
 
   static const double largeItemMaximumAspectRatio = 1.25;
   static const double smallItemMinimumAspectRatio = 3;
-  static const double actionsMenuOffset = CircularInkWell.defaultSplashRadius;
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final aspectRatio = constraints.maxWidth / constraints.maxHeight;
-        assert(
-            aspectRatio <= largeItemMaximumAspectRatio ||
-                aspectRatio >= smallItemMinimumAspectRatio,
-            "$aspectRatio $largeItemMaximumAspectRatio");
-        return constraints.maxHeight <= constraints.maxWidth / 3
-            ? _smallItemBuilder()
-            : _largeItemBuilder();
+        if (_useLargeItem) {
+          assert(aspectRatio <= largeItemMaximumAspectRatio);
+          return _largeItemBuilder();
+        }
+        assert(aspectRatio >= smallItemMinimumAspectRatio);
+        return _smallItemBuilder();
       },
     );
   }
@@ -51,40 +56,33 @@ final class VideoItemView extends StatelessWidget {
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: _thumbnailPadding),
-              child: thumbnailBuilder(thumbnailUrl),
+              child: Stack(
+                children: [
+                  thumbnailBuilder(thumbnailUrl),
+                  Positioned(
+                    bottom: constraints.maxHeight * 0.04,
+                    right: constraints.maxWidth * 0.01,
+                    child: _durationBuilder(),
+                  )
+                ],
+              ),
             ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  titleBuilder(title: title, maxLines: 3),
+                  titleBuilder(
+                      title: title, maxLines: 3, fontWeight: FontWeight.w400),
                   SizedBox(height: constraints.maxHeight * 0.025),
                   badgeBuilder(badge: "CNN"),
                   badgeBuilder(badge: "220k views"),
                 ],
               ),
             ),
-            actionsMenu,
+            trailing,
           ],
         );
       },
-    );
-  }
-
-  Widget _durationBuilder() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.65),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      padding: const EdgeInsets.symmetric(
-        vertical: 2.0,
-        horizontal: 4,
-      ),
-      child: Text(
-        duration,
-        style: const TextStyle(color: Colors.white, fontSize: 13),
-      ),
     );
   }
 
@@ -101,9 +99,10 @@ final class VideoItemView extends StatelessWidget {
                 children: [
                   thumbnailBuilder(thumbnailUrl),
                   Positioned(
-                      bottom: constraints.maxHeight * 0.03,
-                      right: constraints.maxWidth * 0.03,
-                      child: _durationBuilder())
+                    bottom: constraints.maxHeight * 0.03,
+                    right: constraints.maxWidth * 0.03,
+                    child: _durationBuilder(),
+                  )
                 ],
               ),
             ),
@@ -123,7 +122,7 @@ final class VideoItemView extends StatelessWidget {
                           CircularInkWell.defaultSplashRadius,
                           0,
                         ),
-                        child: actionsMenu,
+                        child: trailing,
                       )
                     ],
                   ),
@@ -146,6 +145,23 @@ final class VideoItemView extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget _durationBuilder() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.65),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      padding: const EdgeInsets.symmetric(
+        vertical: 2.0,
+        horizontal: 4,
+      ),
+      child: Text(
+        duration,
+        style: const TextStyle(color: Colors.white, fontSize: 13),
+      ),
     );
   }
 
@@ -189,7 +205,8 @@ final class VideoItemView extends StatelessWidget {
     );
   }
 
-  Widget titleBuilder({required String title, required int maxLines}) {
+  Widget titleBuilder(
+      {required String title, required int maxLines, FontWeight? fontWeight}) {
     return Builder(
       builder: (context) {
         return Text(
@@ -198,6 +215,7 @@ final class VideoItemView extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 fontSize: 15,
+                fontWeight: fontWeight,
               ),
         );
       },
@@ -217,27 +235,48 @@ final class VideoItemView extends StatelessWidget {
     );
   }
 
-  //  Widget _itemLarge() {
-  //   return Column(
-  //     children: [
-  //       _thumbnailBuilder(),
-  //       Padding(
-  //         padding: const EdgeInsets.symmetric(vertical: 10),
-  //         child: Row(
-  //           children: [
-  //             _channelIconBuilder(),
-  //             Expanded(
-  //               child: _titleBuilder(
-  //                 text:
-  //                     "Here's what Kushner's testimony reveals about special counsel investigation",
-  //                 maxLines: 2,
-  //               ),
-  //             ),
-  //             const SizedBox(width: 30),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
+  Widget _itemLarge() {
+    return Column(
+      children: [
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return Container(
+              constraints: constraints.copyWith(minWidth: constraints.minWidth),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Image.asset('assets/maxresdefault.jpg'),
+                ),
+              ),
+            );
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Image.asset(
+                  "assets/maxresdefault.jpg",
+                  fit: BoxFit.cover,
+                  width: 36,
+                  height: 36,
+                ),
+              ),
+              Expanded(
+                child: titleBuilder(
+                  title:
+                      "Here's what Kushner's testimony reveals about special counsel investigation",
+                  maxLines: 2,
+                ),
+              ),
+              const SizedBox(width: 30),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
