@@ -1,9 +1,11 @@
 const YOUTUBE_LOGO_QUERY =  'ytm-home-logo';
+const TAB_CONTAINER_QUERY = 'div.chip-container';
 const VIDEO_ITEM_QUERY = 'ytm-media-item';
 const ITEM_DETAILS_QUERY = 'div.details';
 const ITEM_TITLE_QUERY = 'h3.media-item-headline';
 const ITEM_BADGES_QUERY = 'ytm-badge-and-byline-renderer';
 const THUMBNAIL_QUERY = 'a.media-item-thumbnail-container';
+const ITEM_DURATION_QUERY = 'ytm-thumbnail-overlay-time-status-renderer';
 const CHANNEL_ICON_QUERY = 'ytm-channel-thumbnail-with-link-renderer';
 const IMAGE_QUERY = 'img';
 
@@ -33,6 +35,7 @@ function clickVideoById(id) {
             return clickVideo(element);
           })
         }
+        // observedVideosError Invalid argument (urlOrUrl): Invalid YouTube video ID or URL: "RS7IzU2VJIQ&t=15s"
         return console.log(`click video by Id input must match ${VIDEO_ITEM_QUERY}`);
       }
     }
@@ -43,25 +46,42 @@ function clickVideoById(id) {
   console.log(`click video by url input must be a string`);
 
 }
-function isDocumentFullyLoaded() {
-  return document.readyState === "complete";
-}
-function scrollToBottom() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-function currentUrl() {
-  return window.location.href;
-}
-function navigateBack() {
-  window.history.back();
-}
-function navigateHome(){
-  document.querySelector(YOUTUBE_LOGO_QUERY).firstElementChild.click();
-}
-function getVideoClickDepth(){
-  return videoClickDepth;
+function clickTabByName(tabName) {
+  document.querySelectorAll(TAB_CONTAINER_QUERY).forEach(tab => {
+    if (tab.textContent.toLowerCase() === tabName.toLowerCase()) {
+      tab.scrollIntoView({ behavior: 'smooth' });
+      return sleep(1200).then(() => {
+        return tab.click();
+      })
+      
+    }
+    console.log(`tab name: ${tabName} is not available`);
+  });
 }
 
+function getSelectedTab() {
+  const tabs = document.querySelectorAll(TAB_CONTAINER_QUERY);
+
+  for (let i = 1; i < tabs.length; i++) {
+    const tab = tabs[i];
+    const parentElement = tab.parentElement;
+    if (parentElement && parentElement.ariaSelected === 'true') {
+      return tab.textContent;
+    }
+  }
+
+  return null;
+}
+
+const getTabs = () =>
+  Array.from(document.querySelectorAll(TAB_CONTAINER_QUERY)).slice(1).map(
+    element => element.textContent
+  );
+const isDocumentFullyLoaded = () => document.readyState === "complete";
+const scrollToBottom = () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+const currentUrl = () => window.location.href;
+const navigateBack = () => window.history.back();
+const navigateHome = () => document.querySelector(YOUTUBE_LOGO_QUERY).firstElementChild.click();
 
 
 // MUST NOT BE EXPOSED TO DART
@@ -70,14 +90,14 @@ function getVideoClickDepth(){
 // along with their elements
 function fetchVideoItems() {
   const VIDEO_ITEMS_LIST = [];
-
   const videoItems = document.querySelectorAll(VIDEO_ITEM_QUERY);
+  
   for (let i = 0; i < videoItems.length; i++) {
     const videoItem = videoItems[i];
     const videoDetails = getVideoDetails(videoItem);
     const videoThumbnail = getVideoThumbnail(videoItem);
     const videoChannelIcon = getChannelIcon(videoDetails);
-    const videoUrl = getVideoUrl(videoThumbnail)
+    const videoUrl = getVideoUrl(videoThumbnail);
     
     if(videoThumbnail && videoDetails  && videoChannelIcon && !videoUrl.includes('shorts')){
       const videoItemJson = {
@@ -85,8 +105,10 @@ function fetchVideoItems() {
         'id': getVideoId(videoUrl),
         'title': getVideoTitle(videoDetails),
         'badges': getVideoBadges(videoDetails),
-        'channel_icon_url': getFirstImageUrlFromElement(videoChannelIcon),
-        'thumbnail_url': getFirstImageUrlFromElement(videoThumbnail),
+        'channelIconUrl': getFirstImageUrlFromElement(videoChannelIcon),
+        'thumbnailUrl': getFirstImageUrlFromElement(videoThumbnail),
+        'duration': getVideoDuration(videoItem),
+        'sourceTab' : getSelectedTab()
       };
       VIDEO_ITEMS_LIST.push(videoItemJson);
     }
@@ -113,7 +135,7 @@ function getVideoId(url) {
     return id.split('&')[0]; 
   }
   return id;
-  console.log(`get video  input must be a String`);
+  
 }
 
 function getVideoDetails(element) {
@@ -125,6 +147,17 @@ function getVideoDetails(element) {
   }
   console.log(`get video details input must be an Element`);
 }
+
+function getVideoDuration(element){
+  if (element instanceof Element) {
+    if (element.matches(VIDEO_ITEM_QUERY)) {
+      return element.querySelector(ITEM_DURATION_QUERY).textContent;
+    }
+    return console.log(`get video duration input must match ${VIDEO_ITEM_QUERY}`);
+  }
+  console.log(`get video duration input must be an Element`);
+}
+
 function getVideoTitle(element) {
   if (element instanceof Element) {
     if (element.matches(ITEM_DETAILS_QUERY)) {

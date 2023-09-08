@@ -77,16 +77,13 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
   @override
   Widget build(BuildContext context) {
     controller = YoutubePlayerController.of(context);
-    return IgnorePointer(
-      ignoring: true,
-      child: InAppWebView(
-        key: widget.key,
-        initialData: initialData,
-        initialOptions: initialOptions,
-        onConsoleMessage: consoleMessageListener,
-        onWebViewCreated: webviewCreationListener,
-        onLoadStop: webviewLoadStopListener,
-      ),
+    return InAppWebView(
+      key: widget.key,
+      initialData: initialData,
+      initialOptions: initialOptions,
+      onConsoleMessage: consoleMessageListener,
+      onWebViewCreated: webviewCreationListener,
+      onLoadStop: webviewLoadStopListener,
     );
   }
 

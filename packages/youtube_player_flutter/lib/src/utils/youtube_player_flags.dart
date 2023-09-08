@@ -9,6 +9,16 @@ class YoutubePlayerFlags {
   /// Default is false.
   final bool hideControls;
 
+  /// If set to true, hides the Iframe controls.
+  ///
+  /// Default is true.
+  final bool hideNativeControls;
+
+  /// If set to true, hides the Iframe header.
+  ///
+  /// Default is true.
+  final bool hideNativeHeader;
+
   /// Is set to true, controls will be visible at start.
   ///
   /// Default is false.
@@ -82,6 +92,8 @@ class YoutubePlayerFlags {
   /// Creates [YoutubePlayerFlags].
   const YoutubePlayerFlags({
     this.hideControls = false,
+    this.hideNativeControls = true,
+    this.hideNativeHeader = true,
     this.controlsVisibleAtStart = false,
     this.autoPlay = true,
     this.mute = false,

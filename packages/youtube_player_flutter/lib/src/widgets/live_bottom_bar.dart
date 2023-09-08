@@ -80,7 +80,7 @@ class _LiveBottomBarState extends State<LiveBottomBar> {
           const SizedBox(
             width: 14.0,
           ),
-          CurrentPosition(),
+          PositionIndicator(),
           Expanded(
             child: Padding(
               child: Slider(

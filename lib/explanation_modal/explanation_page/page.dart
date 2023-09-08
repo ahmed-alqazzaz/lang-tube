@@ -125,10 +125,6 @@ class _ExplanationPageState extends State<ExplanationPage> {
                 : _youtubeExamples.length,
             separatorBuilder: (context, index) {
               return _youtubeExampleBuilder(example: _youtubeExamples.first);
-
-              return _youtubeExampleBuilder(example: _youtubeExamples.last);
-
-              return Container();
             },
             itemBuilder: (context, index) {
               return Container(
@@ -277,11 +273,10 @@ class _ExplanationPageState extends State<ExplanationPage> {
     required Color wordHighlightColor,
     required EdgeInsets padding,
   }) {
-    final entries = widget.data.entries;
     return PreloadPageView.builder(
       controller: _pageController,
-      preloadPagesCount: entries.length,
-      itemCount: entries.length,
+      preloadPagesCount: _entries.length,
+      itemCount: _entries.length,
       itemBuilder: (context, index) {
         return Padding(
           padding: padding,
@@ -299,7 +294,7 @@ class _ExplanationPageState extends State<ExplanationPage> {
                     side: index < 2 ? CardSide.FRONT : CardSide.BACK,
                     flipController:
                         (_flashcardContorllers..add(FlipCardController())).last,
-                    entry: entries[index],
+                    entry: _entries[index],
                   ),
                 ),
               )

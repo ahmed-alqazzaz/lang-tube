@@ -13,6 +13,8 @@ dependencies:
     sdk: flutter
   flutter_inappwebview: ^5.7.2+3
   rxdart: ^0.27.7
+  value_notifier_transformer:
+    path: ../value_notifier_transformer
 
 dev_dependencies:
   flutter_test:

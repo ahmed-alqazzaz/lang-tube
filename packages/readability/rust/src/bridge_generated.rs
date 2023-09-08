@@ -50,37 +50,37 @@ fn wire_count_syllables_impl(port_: MessagePort, text: impl Wire2Api<String> + U
         },
     )
 }
-fn wire_indices_list__method__ReadbilityScore_impl(
+fn wire_indices_list__method__ReadabilityScore_impl(
     port_: MessagePort,
-    that: impl Wire2Api<ReadbilityScore> + UnwindSafe,
+    that: impl Wire2Api<ReadabilityScore> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
         WrapInfo {
-            debug_name: "indices_list__method__ReadbilityScore",
+            debug_name: "indices_list__method__ReadabilityScore",
             port: Some(port_),
             mode: FfiCallMode::Normal,
         },
         move || {
             let api_that = that.wire2api();
-            move |task_callback| Ok(ReadbilityScore::indices_list(&api_that))
+            move |task_callback| Ok(ReadabilityScore::indices_list(&api_that))
         },
     )
 }
-fn wire_compare_to__method__ReadbilityScore_impl(
+fn wire_compare_to__method__ReadabilityScore_impl(
     port_: MessagePort,
-    that: impl Wire2Api<ReadbilityScore> + UnwindSafe,
-    other: impl Wire2Api<ReadbilityScore> + UnwindSafe,
+    that: impl Wire2Api<ReadabilityScore> + UnwindSafe,
+    other: impl Wire2Api<ReadabilityScore> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
         WrapInfo {
-            debug_name: "compare_to__method__ReadbilityScore",
+            debug_name: "compare_to__method__ReadabilityScore",
             port: Some(port_),
             mode: FfiCallMode::Normal,
         },
         move || {
             let api_that = that.wire2api();
             let api_other = other.wire2api();
-            move |task_callback| Ok(ReadbilityScore::compare_to(&api_that, api_other))
+            move |task_callback| Ok(ReadabilityScore::compare_to(&api_that, api_other))
         },
     )
 }
@@ -121,7 +121,7 @@ impl Wire2Api<u8> for u8 {
 
 // Section: impl IntoDart
 
-impl support::IntoDart for ReadbilityScore {
+impl support::IntoDart for ReadabilityScore {
     fn into_dart(self) -> support::DartAbi {
         vec![
             self.lix_index.into_dart(),
@@ -133,7 +133,7 @@ impl support::IntoDart for ReadbilityScore {
         .into_dart()
     }
 }
-impl support::IntoDartExceptPrimitive for ReadbilityScore {}
+impl support::IntoDartExceptPrimitive for ReadabilityScore {}
 
 // Section: executor
 

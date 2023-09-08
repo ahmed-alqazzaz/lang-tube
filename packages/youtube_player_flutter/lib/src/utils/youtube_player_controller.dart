@@ -274,9 +274,17 @@ class YoutubePlayerController extends ValueNotifier<YoutubePlayerValue> {
     _callMethod('setTopMargin("0px")');
   }
 
-  void showNativeControls() {
-    _callMethod("showControls()");
-  }
+  /// Shows Iframe controls
+  void showNativeControls() => _callMethod("showControls()");
+
+  // Hides Iframe controls
+  void hideNativeControls() => _callMethod("hideControls()");
+
+  // Shows Iframe header
+  void showNativeHeader() => _callMethod("showHeader()");
+
+  // hides Iframe header
+  void hideNativeHeader() => _callMethod("hideHeader()");
 
   /// Sets the playback speed for the video.
   void setPlaybackRate(double rate) => _callMethod('setPlaybackRate($rate)');

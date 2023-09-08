@@ -4,23 +4,28 @@ import 'dart:async';
 
 import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class SearchAppbar extends StatefulWidget implements PreferredSizeWidget {
   const SearchAppbar({
     super.key,
-    required this.onQueryUpdated,
     required this.searchFieldHint,
-    required this.leading,
+    this.leading,
     required this.title,
+    this.toolbarHeight,
+    this.actions,
+    this.bottom,
     this.cursorColor,
+    this.onChange,
   });
 
-  final Widget leading;
+  final Widget? leading;
+  final PreferredSizeWidget? bottom;
+  final double? toolbarHeight;
+  final List<Widget>? actions;
   final String searchFieldHint;
   final String title;
-  final void Function(String) onQueryUpdated;
   final Color? cursorColor;
+  final void Function(String)? onChange;
 
   @override
   State<SearchAppbar> createState() => SearchAppbarState();
@@ -30,30 +35,34 @@ class SearchAppbar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class SearchAppbarState extends State<SearchAppbar> {
+  late String title = widget.title;
+  late String searchFieldHint = widget.searchFieldHint;
+  set setTitle(String newTitle) => setState(() => title = newTitle);
+  set setSearchFieldHint(String newHint) =>
+      setState(() => searchFieldHint = newHint);
+
   late final FocusNode _focusNode;
-  late final StreamSubscription<bool> _keyboardSubscription;
   late final TextEditingController _textEditingController;
 
   bool _isSearching = false;
+
   @override
   void dispose() {
-    _keyboardSubscription.cancel();
-    _focusNode.dispose();
     _textEditingController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
+    _textEditingController = TextEditingController();
     _focusNode = FocusNode()
       ..addListener(() {
-        setState(() => _isSearching = _focusNode.hasFocus);
+        setState(() {
+          _isSearching = _focusNode.hasFocus;
+          _textEditingController.clear();
+        });
       });
-    _textEditingController = TextEditingController()
-      ..addListener(() => widget.onQueryUpdated(_textEditingController.text));
-    _keyboardSubscription = KeyboardVisibilityController().onChange.listen(
-          (event) => event ? null : _focusNode.unfocus(),
-        );
 
     super.initState();
   }
@@ -66,23 +75,19 @@ class SearchAppbarState extends State<SearchAppbar> {
     return _isSearching ? null : widget.leading;
   }
 
-  Widget title() {
-    return _isSearching
-        ? searchField()
-        : Text(
-            widget.title,
-          );
-  }
-
-  Widget action() {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: _isSearching
+  List<Widget> get actions {
+    final items = <Widget>[];
+    if (!_isSearching && widget.actions != null) items.addAll(widget.actions!);
+    items.add(
+      _isSearching
           ? CircularInkWell(
               child: const Icon(Icons.clear_sharp),
-              onTap: () => _textEditingController.text.isEmpty
-                  ? _focusNode.unfocus()
-                  : _textEditingController.clear(),
+              onTap: () => Timer(
+                const Duration(milliseconds: 350),
+                () => _textEditingController.text.isEmpty
+                    ? _focusNode.unfocus()
+                    : _textEditingController.clear(),
+              ),
             )
           : CircularInkWell(
               onTap: () => setState(() {
@@ -92,12 +97,16 @@ class SearchAppbarState extends State<SearchAppbar> {
               child: const Icon(Icons.search_outlined),
             ),
     );
+    return items
+        .map((item) => AspectRatio(aspectRatio: 1, child: item))
+        .toList();
   }
 
   Widget searchField() {
     return TextField(
       focusNode: _focusNode,
       controller: _textEditingController,
+      onChanged: widget.onChange,
       autofocus: true,
       autocorrect: false,
       textAlign: TextAlign.start,
@@ -105,7 +114,7 @@ class SearchAppbarState extends State<SearchAppbar> {
       cursorColor: widget.cursorColor,
       cursorOpacityAnimates: true,
       decoration: InputDecoration(
-        hintText: widget.searchFieldHint,
+        hintText: searchFieldHint,
       ),
     );
   }
@@ -116,8 +125,14 @@ class SearchAppbarState extends State<SearchAppbar> {
       child: AppBar(
         automaticallyImplyLeading: !_isSearching,
         leading: leading(),
-        title: title(),
-        actions: [action()],
+        title: _isSearching
+            ? searchField()
+            : Text(
+                title,
+              ),
+        toolbarHeight: widget.toolbarHeight,
+        bottom: widget.bottom,
+        actions: actions,
       ),
       onWillPop: () async {
         if (_focusNode.hasFocus) {

@@ -30,22 +30,6 @@ class YoutubePlayerGenericActions {
   final CustomLoopProvider _customLoopProvider;
   final SubtitleLoopProvider _subtitleLoopProvider;
 
-  Widget currentDuration() => CurrentPosition(
-        controller: _youtubePlayerController,
-      );
-  Widget remainingDuration() => RemainingDuration(
-        controller: _youtubePlayerController,
-      );
-  Widget videoDuration() {
-    final videoDuration = durationFormatter(
-      _youtubePlayerController.value.metaData.duration.inMilliseconds,
-    );
-    return Text(
-      videoDuration,
-      style: const TextStyle(fontSize: 12, color: Colors.white),
-    );
-  }
-
   Widget backButton() {
     return RawMaterialButton(
       child: const Icon(
@@ -264,12 +248,16 @@ class YoutubePlayerGenericActions {
   }
 
   Widget currentPositionIndicator({required double padding}) {
-    bool showRemainingDuration = false;
+    PositionIndicatorValue indicatorValue =
+        PositionIndicatorValue.currentPosition;
     return StatefulBuilder(
       builder: (context, setState) {
         return GestureDetector(
           onTap: () => setState(
-            () => showRemainingDuration = !showRemainingDuration,
+            () => indicatorValue =
+                indicatorValue == PositionIndicatorValue.currentPosition
+                    ? PositionIndicatorValue.remainingPosition
+                    : PositionIndicatorValue.currentPosition,
           ),
           child: Padding(
             padding: EdgeInsets.all(padding),
@@ -277,11 +265,16 @@ class YoutubePlayerGenericActions {
               text: TextSpan(
                 children: [
                   WidgetSpan(
-                    child: currentDuration(),
+                    child: PositionIndicator(
+                      controller: _youtubePlayerController,
+                      positionValue: indicatorValue,
+                    ),
                   ),
                   const TextSpan(text: ' / '),
                   WidgetSpan(
-                    child: videoDuration(),
+                    child: PositionIndicator(
+                        controller: _youtubePlayerController,
+                        positionValue: PositionIndicatorValue.videoDuration),
                   ),
                 ],
               ),

@@ -1,8 +1,8 @@
 import 'package:readability/rust_bridge/api.dart';
-
 import 'rust_bridge/readability_score.dart';
+export 'rust_bridge/readability_score.dart';
 
-Future<ReadbilityScore> calculateTextReadability(
+Future<ReadabilityScore> calculateTextReadability(
         {required String text}) async =>
     rustApi.calculateSubtitleComplexity(text: text);
 

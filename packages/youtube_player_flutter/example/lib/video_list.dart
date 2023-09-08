@@ -41,11 +41,14 @@ class _VideoListState extends State<VideoList> {
             controller: _controllers[index],
             actionsPadding: const EdgeInsets.only(left: 16.0),
             bottomActions: [
-              CurrentPosition(),
+              PositionIndicator(
+                positionValue: PositionIndicatorValue.currentPosition,
+              ),
               const SizedBox(width: 10.0),
               ProgressBar(isExpanded: true),
               const SizedBox(width: 10.0),
-              RemainingDuration(),
+              PositionIndicator(
+                  positionValue: PositionIndicatorValue.remainingPosition),
               FullScreenButton(),
             ],
           );

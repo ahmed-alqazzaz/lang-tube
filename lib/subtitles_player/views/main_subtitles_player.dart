@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/explanation_modal/explanation_modal_constraints_provider.dart';
@@ -84,55 +82,6 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
     );
 
     super.dispose();
-  }
-
-  Widget _headerBuilder() {
-    SubtitleBox mainLine(Subtitle currentSubtitle) {
-      return SubtitleBox(
-        words: currentSubtitle.words,
-        backgroundColor: Colors.transparent,
-        textFontSize: MainSubtitlesPlayer.headerTextFontSize,
-        onTapUp: widget.onTap,
-        defaultTextColor: Colors.white,
-      );
-    }
-
-    SubtitleBox translatedLine(Subtitle currentSubtitle) {
-      return SubtitleBox(
-        words: currentSubtitle.words,
-        backgroundColor: Colors.transparent,
-        textFontSize: MainSubtitlesPlayer.headerTextFontSize,
-        defaultTextColor: Colors.amber,
-      );
-    }
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Container(
-          color: widget.headerBackgroundColor,
-          padding: EdgeInsets.symmetric(
-            vertical: MainSubtitlesPlayer.subtitleBoxVerticalPadding,
-            horizontal: constraints.maxWidth * 0.05,
-          ),
-          child: Consumer(builder: (context, ref, _) {
-            final currentSubtitle =
-                ref.watch(widget.multiSubtitlesPlayerProvider);
-            final mainSubtitle = currentSubtitle.mainSubtitle;
-            final translatedSubtitle = currentSubtitle.translatedSubtitle;
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (mainSubtitle != null) mainLine(mainSubtitle),
-                const SizedBox(
-                    height: MainSubtitlesPlayer.headerlinesDividerHeight),
-                if (translatedSubtitle != null)
-                  translatedLine(translatedSubtitle),
-              ],
-            );
-          }),
-        );
-      },
-    );
   }
 
   Widget _body() {
@@ -239,7 +188,18 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _headerBuilder(),
+            Consumer(
+              builder: (context, ref, _) {
+                final currentSubtitle =
+                    ref.watch(widget.multiSubtitlesPlayerProvider);
+                return headerBuilder(
+                  backgroundColor: widget.headerBackgroundColor,
+                  onTap: widget.onTap,
+                  mainSubtitle: currentSubtitle.mainSubtitle,
+                  translatedSubtitle: currentSubtitle.translatedSubtitle,
+                );
+              },
+            ),
             Expanded(
               child: _body(),
             )
@@ -251,4 +211,53 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+Widget headerBuilder({
+  Subtitle? mainSubtitle,
+  Subtitle? translatedSubtitle,
+  required OnSubtitleTapped onTap,
+  required Color backgroundColor,
+  Color mainLineColor = Colors.white,
+  Color translatedLineColor = Colors.amber,
+}) {
+  SubtitleBox mainLine(Subtitle currentSubtitle) {
+    return SubtitleBox(
+      words: currentSubtitle.words,
+      backgroundColor: Colors.transparent,
+      textFontSize: MainSubtitlesPlayer.headerTextFontSize,
+      onTapUp: onTap,
+      defaultTextColor: mainLineColor,
+    );
+  }
+
+  SubtitleBox translatedLine(Subtitle currentSubtitle) {
+    return SubtitleBox(
+      words: currentSubtitle.words,
+      backgroundColor: Colors.transparent,
+      textFontSize: MainSubtitlesPlayer.headerTextFontSize,
+      defaultTextColor: translatedLineColor,
+    );
+  }
+
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      return Container(
+        color: backgroundColor,
+        padding: EdgeInsets.symmetric(
+          vertical: MainSubtitlesPlayer.subtitleBoxVerticalPadding,
+          horizontal: constraints.maxWidth * 0.05,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (mainSubtitle != null) mainLine(mainSubtitle),
+            const SizedBox(
+                height: MainSubtitlesPlayer.headerlinesDividerHeight),
+            if (translatedSubtitle != null) translatedLine(translatedSubtitle),
+          ],
+        ),
+      );
+    },
+  );
 }

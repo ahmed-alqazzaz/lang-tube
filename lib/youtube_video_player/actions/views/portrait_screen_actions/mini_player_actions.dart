@@ -44,9 +44,9 @@ class MiniPlayerActions extends StatelessWidget {
         return Container(
           alignment: Alignment.center,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              _topActions(),
+              //  _topActions(),
               _bottomActions(),
             ],
           ),

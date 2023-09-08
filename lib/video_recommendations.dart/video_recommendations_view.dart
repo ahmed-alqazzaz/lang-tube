@@ -6,15 +6,15 @@ import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/video_recommendations.dart/providers/youtube_scraper_provider/provider.dart';
-import 'package:lang_tube/video_recommendations.dart/views/videos_list/videos_carousel/videos_carousel.dart';
+import 'package:lang_tube/video_widgets/videos_carousel.dart';
+import 'package:readability/readability.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
-import '../../router/routes.dart';
-import '../../youtube_scraper/data/youtube_video_item.dart';
-import '../../youtube_scraper/youtube_player_scraper.dart';
-import '../data/video_recommendations.dart';
-import '../providers/recommendations_provider/provider.dart';
-import '../providers/tabs_explorer_provider/provider.dart';
-import 'videos_list/videos_carousel/carousel_video_item.dart';
+import '../router/routes.dart';
+import '../utils/cefr.dart';
+import 'data/recommended_video.dart';
+import 'data/video_recommendations.dart';
+import 'providers/recommendations_provider/provider.dart';
+import '../video_widgets/display_video_item.dart';
 
 class VideoRecommendationsView extends ConsumerStatefulWidget {
   const VideoRecommendationsView({super.key});
@@ -35,15 +35,18 @@ class _VideoRecommendationsViewState
       },
     );
   }
-  Iterable<CarouselVideoItem> carouselItemsBuilder({
+  Iterable<DisplayVideoItem> carouselItemsBuilder({
     required List<ObservedVideo> videoItems,
     required BuildContext context,
   }) =>
       videoItems.map(
-        (video) => CarouselVideoItem(
+        (video) => DisplayVideoItem(
+          id: video.id,
           title: video.title,
           thumbnailUrl: video.thumbnailUrl,
-          badges: video.badges..remove("•"), // remove first dot
+          lastWatched: DateTime.now(),
+          duration: video.duration,
+          badges: List.from(video.badges)..remove("•"), // remove first dot
           onPressed: () => YoutubePlayerRoute(id: video.id).push(context),
           onActionsMenuPressed: () {},
         ),
@@ -53,9 +56,10 @@ class _VideoRecommendationsViewState
   Widget build(BuildContext context) {
     final recommendationsNotifier = ref.watch(videoRecommendationsProvider);
     final recommendationsList = recommendationsNotifier.recommendationsList;
+
     log("length ${recommendationsList.firstOrNull?.videos.length}");
     Timer(const Duration(seconds: 5), () {
-      ref.read(videoRecommendationsProvider.notifier).notifyListeners();
+      //  ref.read(videoRecommendationsProvider.notifier).notifyListeners();
     });
 
     return Stack(

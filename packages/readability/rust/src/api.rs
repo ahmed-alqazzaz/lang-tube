@@ -1,14 +1,14 @@
 mod readability;
 use readability::{lix_index,rix_index,flesch_reading_ease,automated_readability_index,coleman_liau_index,syllable_counter};
 
-pub fn calculate_subtitle_complexity(text: String) -> ReadbilityScore {
+pub fn calculate_subtitle_complexity(text: String) -> ReadabilityScore {
     let lix_index = lix_index(&text);
     let rix_index = rix_index(&text);
     let flesch_reading_ease = flesch_reading_ease(&text);
     let automated_readability_index = automated_readability_index(&text);
     let coleman_liau_index = coleman_liau_index(&text);
     
-    ReadbilityScore {
+    ReadabilityScore {
         lix_index,
         rix_index,
         flesch_reading_ease,
@@ -21,7 +21,7 @@ pub fn count_syllables(text: String) -> i64{
     syllable_counter(&text) as i64
 }
 
-pub struct ReadbilityScore {
+pub struct ReadabilityScore {
     pub lix_index: f64,
     pub rix_index: f64,
     pub flesch_reading_ease: f64,
@@ -30,7 +30,7 @@ pub struct ReadbilityScore {
 }
 
 
-impl ReadbilityScore {
+impl ReadabilityScore {
     pub fn indices_list(&self) -> Vec<f64> {
         vec![
             self.lix_index,
@@ -42,7 +42,7 @@ impl ReadbilityScore {
     }
     // return true if the the current object has 
     // a higher number of  lower complexity indices
-    pub fn compare_to(&self, other: ReadbilityScore) -> bool{
+    pub fn compare_to(&self, other: ReadabilityScore) -> bool{
         let self_indices = self.indices_list();
         let other_indices = other.indices_list();
 

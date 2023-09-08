@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ final mutex = Mutex();
 class SubtitlesDbManager {
   const SubtitlesDbManager._(this._db);
   final Database _db;
-  Database get db => _db;
   static Future<SubtitlesDbManager> open(final String dbFilePath) async {
     if (Platform.isWindows) {
       sqfliteFfiInit();
@@ -27,7 +25,6 @@ class SubtitlesDbManager {
         dbFilePath,
         version: 1,
         onCreate: (db, version) => db.execute(createSubtitlesTableCommand),
-
       ),
     );
   }

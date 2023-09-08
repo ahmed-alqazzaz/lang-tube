@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'api.dart';
 
-class ReadbilityScore {
+class ReadabilityScore {
   final double lixIndex;
   final double rixIndex;
   final double fleschReadingEase;
   final double automatedReadabilityIndex;
   final double colemanLiauIndex;
 
-  const ReadbilityScore({
+  const ReadabilityScore({
     required this.lixIndex,
     required this.rixIndex,
     required this.fleschReadingEase,
@@ -17,8 +17,8 @@ class ReadbilityScore {
     required this.colemanLiauIndex,
   });
 
-  Future<bool> compareTo({required ReadbilityScore other, dynamic hint}) =>
-      rustApi.compareToMethodReadbilityScore(
+  Future<bool> compareTo({required ReadabilityScore other, dynamic hint}) =>
+      rustApi.compareToMethodReadabilityScore(
         that: this,
         other: other,
       );
@@ -40,8 +40,8 @@ class ReadbilityScore {
 
   String toJson() => json.encode(toMap());
 
-  factory ReadbilityScore.fromMap(Map<String, dynamic> map) {
-    return ReadbilityScore(
+  factory ReadabilityScore.fromMap(Map<String, dynamic> map) {
+    return ReadabilityScore(
       lixIndex: map['lixIndex'] as double,
       rixIndex: map['rixIndex'] as double,
       fleschReadingEase: map['fleschReadingEase'] as double,
@@ -50,11 +50,11 @@ class ReadbilityScore {
     );
   }
 
-  factory ReadbilityScore.fromJson(String source) =>
-      ReadbilityScore.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ReadabilityScore.fromJson(String source) =>
+      ReadabilityScore.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  bool operator ==(covariant ReadbilityScore other) {
+  bool operator ==(covariant ReadabilityScore other) {
     if (identical(this, other)) return true;
 
     return other.lixIndex == lixIndex &&

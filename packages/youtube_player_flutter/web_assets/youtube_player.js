@@ -1,7 +1,16 @@
-var tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+// Wait for the DOM to be fully loaded
+window.addEventListener('DOMContentLoaded', function () {
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    // Check if firstScriptTag exists before attempting to insert the new script tag
+    if (firstScriptTag) {
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    } else {
+        document.head.appendChild(tag); // Append the tag to the head if no script tag is found
+    }
+});
+
 var player;
 var timerId;
 function onYouTubeIframeAPIReady() {
@@ -25,7 +34,7 @@ function onYouTubeIframeAPIReady() {
         },
         events: {
             onReady: function(event) {
-                hideControls();
+               hideControls();
                 hideHeader();
                 window.flutter_inappwebview.callHandler('Ready'); 
             },
@@ -125,7 +134,7 @@ function hideHeader(){
     let header = iframeDocument.querySelector('.ytp-chrome-top');
     header.style.display = 'none'
 }
-function displayHeader(){
+function showHeader(){
     let iframeDocument = getIFrameDocument();
     let header = iframeDocument.querySelector('.ytp-chrome-top');
     header.style.display = 'block'
