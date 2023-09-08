@@ -1,4 +1,4 @@
-enum WordsSortOptions {
+enum WordsSortOption {
   latest,
   oldest,
   important,

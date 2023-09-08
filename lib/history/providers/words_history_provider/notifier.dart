@@ -3,10 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../words_list/history_word_item.dart';
+import '../../data/history_word_item.dart';
 
 final List<HistoryWordItem> words = [
   HistoryWordItem(
+    originVideoId: 'Itbsnna09MY',
     word: "Habe",
     translation: "have",
     media: Container(
@@ -15,6 +16,7 @@ final List<HistoryWordItem> words = [
     ),
   ),
   HistoryWordItem(
+    originVideoId: 'Itbsnna09MY',
     word: "Milch",
     translation: "Milk",
     media: Container(
@@ -23,6 +25,7 @@ final List<HistoryWordItem> words = [
     ),
   ),
   HistoryWordItem(
+    originVideoId: 'dzJvuswZ5ys',
     word: "will",
     translation: "want",
     media: Container(
@@ -40,9 +43,7 @@ class WordsHistoryNotifier extends StateNotifier<List<HistoryWordItem>> {
   }
   void addItem(HistoryWordItem item) {}
   void removeItem(HistoryWordItem item) {}
-  void filter() {
-    // last month, last day
-  }
+
   void search({required String text}) {
     log(text);
   }

@@ -2,23 +2,26 @@
 import 'package:flutter/widgets.dart';
 
 @immutable
-final class HistoryWordItem {
+class HistoryWordItem {
+  final String originVideoId;
   final String word;
   final String translation;
   final Widget media;
-
   const HistoryWordItem({
+    required this.originVideoId,
     required this.word,
     required this.translation,
     required this.media,
   });
 
   HistoryWordItem copyWith({
+    String? originVideoId,
     String? word,
     String? translation,
     Widget? media,
   }) {
     return HistoryWordItem(
+      originVideoId: originVideoId ?? this.originVideoId,
       word: word ?? this.word,
       translation: translation ?? this.translation,
       media: media ?? this.media,
@@ -26,18 +29,25 @@ final class HistoryWordItem {
   }
 
   @override
-  String toString() =>
-      'HistoryWordItem(word: $word, translation: $translation, media: $media)';
+  String toString() {
+    return 'HistoryWordItem(originVideoId: $originVideoId, word: $word, translation: $translation, media: $media)';
+  }
 
   @override
   bool operator ==(covariant HistoryWordItem other) {
     if (identical(this, other)) return true;
 
-    return other.word == word &&
+    return other.originVideoId == originVideoId &&
+        other.word == word &&
         other.translation == translation &&
         other.media == media;
   }
 
   @override
-  int get hashCode => word.hashCode ^ translation.hashCode ^ media.hashCode;
+  int get hashCode {
+    return originVideoId.hashCode ^
+        word.hashCode ^
+        translation.hashCode ^
+        media.hashCode;
+  }
 }

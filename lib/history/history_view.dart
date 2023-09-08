@@ -8,13 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/history/enums/videos_sort_options.dart';
-import 'package:lang_tube/history/enums/words_sort_seetings.dart';
+import 'package:lang_tube/history/enums/words_sort_options.dart';
 import 'package:lang_tube/history/providers/videos_history_provider/provider.dart';
 import 'package:lang_tube/history/providers/words_history_provider/provider.dart';
-import 'package:lang_tube/history/videos_list/view.dart';
-import 'package:lang_tube/history/words_list/word_list_tile.dart';
-import 'package:lang_tube/history/words_list/words_list_view.dart';
-import 'package:lang_tube/video_widgets/display_video_item.dart';
 import 'package:lang_tube/youtube_video_player/settings/subtitles_settings/settings.dart';
 import 'package:search_app_bar/search_app_bar.dart';
 import 'package:size_utils/size_utils.dart';
@@ -22,7 +18,7 @@ import 'package:sized_button/sized_button.dart';
 
 import '../main.dart';
 import '../video_widgets/videos_list.dart';
-import 'words_list/history_word_item.dart';
+import 'data/history_word_item.dart';
 
 class HistoryView extends ConsumerStatefulWidget {
   const HistoryView({super.key});
@@ -33,119 +29,67 @@ class HistoryView extends ConsumerStatefulWidget {
 
 class _HistoryViewState extends ConsumerState<HistoryView> {
   final _searchAppbarKey = GlobalKey<SearchAppbarState>();
-  late final ValueNotifier<int> _currentPageNotifier;
+  final _wordsHistoryKey = GlobalKey<State<StatefulBuilder>>();
+  final _tabBarKey = GlobalKey<ContainedTabBarViewState>();
+
   late final videosHistoryNotifier = ref.read(videosHistoryProvider.notifier);
   late final wordsHistoryNotifier = ref.read(wordsHistoryProvider.notifier);
   late final _videosSortOptions =
-      VideosSortOptions.values.map((e) => e.name.capitalize()).toList();
-  late final _wordsSortOptions = WordsSortOptions.values.map((e) {
-    if (e == WordsSortOptions.cefr) return 'B1';
+      VideosSortOption.values.map((e) => e.name.capitalize()).toList();
+  late final _wordsSortOptions = WordsSortOption.values.map((e) {
+    if (e == WordsSortOption.cefr) return 'B1';
     return e.name.capitalize();
   }).toList();
 
-  @override
-  void initState() {
-    final videosHistoryNotifier = ref.read(videosHistoryProvider.notifier);
-    final wordsHistoryNotifier = ref.read(wordsHistoryProvider.notifier);
-    _currentPageNotifier = ValueNotifier(0)
-      ..addListener(
-        () => _searchAppbarKey.currentState?.disableSearch(),
-      );
-    super.initState();
-  }
+  String? _videoIdFilter;
 
-  void _searchFieldListener(String value) => _currentPageNotifier.value == 0
-      ? videosHistoryNotifier.search(text: value)
-      : wordsHistoryNotifier.search(text: value);
-
-  @override
-  void dispose() {
-    _currentPageNotifier.dispose();
-    super.dispose();
-  }
-
-  void _disableAppBarSearch() => _searchAppbarKey.currentState?.disableSearch();
+  void _searchFieldListener(String value) =>
+      _tabBarKey.currentState?.currentIndex == 0
+          ? videosHistoryNotifier.search(text: value)
+          : wordsHistoryNotifier.search(text: value);
 
   @override
   Widget build(BuildContext context) {
+    // Timer(Duration(seconds: 5), () {
+    //   _wordsHistoryKey.currentState?.setState(() {
+    //     _videoIdFilter = "Itbsnna09MY";
+    //   });
+    // });
     return Theme(
       data: Theme.of(context).copyWith(
         appBarTheme: Theme.of(context).appBarTheme.copyWith(
-            iconTheme: IconThemeData(color: LangTube.tmp, size: 30),
-            centerTitle: false),
+              iconTheme: IconThemeData(color: LangTube.tmp, size: 30),
+              centerTitle: false,
+            ),
       ),
       child: Scaffold(
         body: Column(
           children: [
-            ValueListenableBuilder(
-              valueListenable: _currentPageNotifier,
-              builder: (context, currentPageIndex, _) {
-                return SearchAppbar(
-                  toolbarHeight: 60,
-                  onChange: _searchFieldListener,
-                  key: _searchAppbarKey,
-                  title: 'History',
-                  searchFieldHint:
-                      currentPageIndex == 0 ? 'Search Videos' : 'Search Words',
-                  leading: const Icon(Icons.menu),
-                  actions: [
-                    CircularInkWell(
-                      child: const Icon(
-                        Icons.filter_list_sharp,
-                      ),
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          //  showDragHandle: true,
-                          builder: (context) {
-                            return Transform.translate(
-                              offset: Offset(0, -00),
-                              child: Scaffold(
-                                backgroundColor: Colors.transparent,
-                                appBar: AppBar(
-                                  backgroundColor: Colors.transparent,
-                                  toolbarHeight: 60,
-                                  title: const Text('Filter by video'),
-                                  automaticallyImplyLeading: false,
-                                  actions: [
-                                    AspectRatio(
-                                      aspectRatio: 1,
-                                      child: CircularInkWell(
-                                        child: const Icon(
-                                            Icons.select_all_rounded),
-                                        onTap: () {},
-                                      ),
-                                    ),
-                                    AspectRatio(
-                                      aspectRatio: 1,
-                                      child: CircularInkWell(
-                                        child: const Icon(
-                                            Icons.select_all_rounded),
-                                        onTap: () {},
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                body: _selectableVideosBuilder(
-                                  onSelectedVideosUpdate: (items) {
-                                    printRed(items.toString());
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    )
-                  ],
-                );
-              },
+            SearchAppbar(
+              toolbarHeight: 60,
+              onChange: _searchFieldListener,
+              key: _searchAppbarKey,
+              title: 'History',
+              searchFieldHint: _searchVideosHint,
+              leading: const Icon(Icons.menu),
+              actions: [
+                CircularInkWell(
+                  child: const Icon(
+                    Icons.filter_list_sharp,
+                  ),
+                  onTap: () {},
+                )
+              ],
             ),
             Expanded(
               child: Listener(
-                onPointerUp: (_) => _disableAppBarSearch(),
+                onPointerUp: (_) =>
+                    _searchAppbarKey.currentState?.disableSearch(),
                 child: ContainedTabBarView(
-                  onChange: (index) => _currentPageNotifier.value = index,
+                  onChange: (index) => _searchAppbarKey.currentState
+                    ?..disableSearch()
+                    ..searchFieldHint =
+                        index == 0 ? _searchVideosHint : _searchWordsHint,
                   tabBarProperties: TabBarProperties(
                     indicatorColor: const Color.fromARGB(255, 190, 40, 216),
                     unselectedLabelColor: LangTube.tmp.withOpacity(0.6),
@@ -176,10 +120,16 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
 
   Widget _videosHistoryBuilder() {
     final height = MediaQuery.of(context).size.height;
+
     return Column(
       children: [
         SizedBox(height: height * 0.01),
-        _sortButtonsBuilder([_videosSortOptions]),
+        _sortButtonsBuilder(
+          buttonsList: [_videosSortOptions],
+          onTap: (selectedIndex) => videosHistoryNotifier.sort(
+            VideosSortOption.values[selectedIndex],
+          ),
+        ),
         Expanded(
           child: Consumer(
             builder: (context, ref, _) {
@@ -204,73 +154,55 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
     );
   }
 
-  Widget _selectableVideosBuilder({
-    required Function(List<DisplayVideoItem> items) onSelectedVideosUpdate,
-  }) {
-    return Consumer(
-      builder: (context, ref, _) {
-        final selectedVideos = <DisplayVideoItem>[];
-        final videos = ref.watch(videosHistoryProvider);
-        return StatefulBuilder(builder: (context, setState) {
-          return VideosListView(
-            videos: videos,
-            onTap: (video) {
-              selectedVideos.contains(video)
-                  ? selectedVideos.remove(video)
-                  : selectedVideos.add(video);
-              setState(() {});
-              onSelectedVideosUpdate(selectedVideos);
-            },
-            itemHeight: 400,
-            verticalPadding: getScreenSize().height * 0.000,
-            trailingBuilder: (video) {
-              final isSelected = selectedVideos.contains(video);
-              return Checkbox(
-                value: isSelected,
-                activeColor: Colors.deepPurple,
-                onChanged: (value) {
-                  if (value == true && !isSelected) {
-                    selectedVideos.add(video);
-                  }
-                  if (value == false && isSelected) {
-                    selectedVideos.remove(video);
-                  }
-                  setState(() {});
-                  onSelectedVideosUpdate(selectedVideos);
+  Widget _wordsHistoryBuilder() {
+    return StatefulBuilder(
+        key: _wordsHistoryKey,
+        builder: (context, setState) {
+          final height = MediaQuery.of(context).size.height;
+          final videoOriginTitle = ref
+              .read(videosHistoryProvider)
+              .where((video) => video.id == _videoIdFilter)
+              .firstOrNull
+              ?.title;
+          final wordItems = (ref.watch(wordsHistoryProvider).where(
+                (wordItem) => _videoIdFilter != null
+                    ? wordItem.originVideoId == _videoIdFilter
+                    : true,
+              )).toList();
+          return Column(
+            children: [
+              SizedBox(height: height * 0.01),
+              _sortButtonsBuilder(
+                buttonsList: [
+                  if (videoOriginTitle != null)
+                    [videoOriginTitle]
+                  else ...[
+                    _wordsSortOptions.sublist(0, 2),
+                    _wordsSortOptions.sublist(2),
+                  ]
+                ],
+                onTap: (selectedIndex) {
+                  printGreen(selectedIndex.toString());
                 },
-              );
-            },
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: wordItems.length,
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      height: 80,
+                      child: _wordListTileBuilder(
+                        item: wordItems[index],
+                        onPressed: () {},
+                        onActionsMenuTapped: () {},
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         });
-      },
-    );
-  }
-
-  Widget _wordsHistoryBuilder() {
-    final height = MediaQuery.of(context).size.height;
-    final wordItems = ref.watch(wordsHistoryProvider);
-    return Column(
-      children: [
-        SizedBox(height: height * 0.01),
-        _sortButtonsBuilder(
-            [_wordsSortOptions.sublist(0, 2), _wordsSortOptions.sublist(2)]),
-        Expanded(
-          child: ListView.builder(
-            itemCount: wordItems.length,
-            itemBuilder: (context, index) {
-              return SizedBox(
-                height: 80,
-                child: _wordListTileBuilder(
-                  item: wordItems[index],
-                  onPressed: () {},
-                  onActionsMenuTapped: () {},
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
   }
 
   Widget _wordListTileBuilder({
@@ -341,51 +273,63 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
     );
   }
 
-  Widget _sortButtonsBuilder(List<List<String>> buttonsList) {
-    final selectabilityProvider = StateProvider.autoDispose((ref) => 0);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: constraints.maxWidth * 0.1),
-          child: Column(
-              children: buttonsList.mapIndexed((buttonsListIndex, buttons) {
-            return Wrap(
-              alignment: WrapAlignment.center,
-              children: buttons.mapIndexed((index, button) {
-                // adjust index to be the index of the super list
-                index = buttonsList.sublist(0, buttonsListIndex).fold(
-                      index,
-                      (previousValue, element) =>
-                          previousValue + element.length,
+  Widget _sortButtonsBuilder({
+    required List<List<String>> buttonsList,
+    required void Function(int selectedIndex) onTap,
+  }) {
+    return Consumer(
+      builder: (context, ref, _) {
+        final selectabilityProvider = StateProvider.autoDispose((ref) => 0);
+        ref.listen(selectabilityProvider, (_, index) => onTap(index));
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: constraints.maxWidth * 0.1),
+              child: Column(
+                  children: buttonsList.mapIndexed((buttonsListIndex, buttons) {
+                return Wrap(
+                  alignment: WrapAlignment.center,
+                  children: buttons.mapIndexed((index, button) {
+                    // adjust index to be the index of the super list
+                    index = buttonsList.sublist(0, buttonsListIndex).fold(
+                          index,
+                          (previousValue, element) =>
+                              previousValue + element.length,
+                        );
+                    return Consumer(
+                      builder: (context, ref, _) {
+                        final isSelected = ref.watch(
+                          selectabilityProvider.select(
+                              (selectedIndex) => selectedIndex == index),
+                        );
+                        final selectabilityNotifier =
+                            ref.read(selectabilityProvider.notifier);
+                        return Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: constraints.maxWidth * 0.01,
+                          ),
+                          child: SizedButton.small(
+                            color: isSelected ? LangTube.tmp : Colors.white,
+                            textColor: isSelected ? Colors.white : LangTube.tmp,
+                            onPressed: () {
+                              selectabilityNotifier.state = index;
+                            },
+                            child: Text(button),
+                          ),
+                        );
+                      },
                     );
-                return Consumer(
-                  builder: (context, ref, _) {
-                    final isSelected = ref.watch(
-                      selectabilityProvider
-                          .select((selectedIndex) => selectedIndex == index),
-                    );
-                    final selectabilityNotifier =
-                        ref.read(selectabilityProvider.notifier);
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: constraints.maxWidth * 0.01,
-                      ),
-                      child: SizedButton.small(
-                        color: isSelected ? LangTube.tmp : Colors.white,
-                        textColor: isSelected ? Colors.white : LangTube.tmp,
-                        onPressed: () {
-                          selectabilityNotifier.state = index;
-                        },
-                        child: Text(button),
-                      ),
-                    );
-                  },
+                  }).toList(),
                 );
-              }).toList(),
+              }).toList()),
             );
-          }).toList()),
+          },
         );
       },
     );
   }
+
+  static const String _searchVideosHint = 'Search Videos';
+  static const String _searchWordsHint = 'Search Words';
 }
