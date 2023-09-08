@@ -70,7 +70,7 @@ class YoutubeInteractionsController {
       .then((value) => value as List<dynamic>);
   Future<String> get selectedTab async => await _controller!
       .evaluateJavascript(source: "getSelectedTab()")
-      .then((value) => (value ?? '') as String);
+      .then((value) => (value ?? 'All') as String);
   Future<void> clickTab({required String tabName}) async {
     await _controller?.evaluateJavascript(
       source: "clickTabByName('$tabName')",
@@ -91,7 +91,7 @@ class YoutubeInteractionsController {
 
   static Future<void> injectJs(InAppWebViewController controller) async {
     return await controller.injectJavascriptFileFromAsset(
-      assetFilePath: 'packages/youtube_Scraper/javascript/youtube_scraper.js',
+      assetFilePath: 'javascript/youtube_scraper.js',
     );
   }
 }

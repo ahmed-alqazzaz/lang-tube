@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:youtube_scraper/src/cookies_storage_manager.dart';
@@ -37,11 +38,11 @@ class YoutubeScraper {
     );
   }
 
-  YoutubeScraper._(
-      {required YoutubeWebViewManager webViewManager,
-      required StreamController<Iterable<ObservedVideo>> videosObserver,
-      required CookiesStorageManager cookieStorageManager})
-      : _webViewManager = webViewManager,
+  YoutubeScraper._({
+    required YoutubeWebViewManager webViewManager,
+    required StreamController<Iterable<ObservedVideo>> videosObserver,
+    required CookiesStorageManager cookieStorageManager,
+  })  : _webViewManager = webViewManager,
         interactions = webViewManager.interactionManager,
         _videosObserver = videosObserver {
     // TODO: remove the timer, when migrating back to healdess webview
@@ -54,6 +55,11 @@ class YoutubeScraper {
             return await interactions.reload();
           },
         );
+      });
+
+      Timer.periodic(Duration(seconds: 20), (_) {
+        printPurple("saving cookies");
+        _cookiesManager.close();
       });
     });
   }
@@ -91,19 +97,15 @@ class YoutubeScraper {
         (observedItems) async {
           final sourceTab = await interactionsManager.selectedTab;
           return observedItems.map(
-            (videoItem) => ObservedVideo(
-              id: videoItem['id'],
-              channelIconUrl: videoItem['channel_icon_url'],
-              thumbnailUrl: videoItem['thumbnail_url'],
-              title: videoItem['title'] as String,
-              sourceTab: sourceTab,
-              badges: (videoItem['badges'] as List)
-                  .map((e) => e as String)
-                  .toList(),
-              onClick: () async => interactionsManager.clickVideoById(
-                videoId: videoItem['id'],
-              ),
-            ),
+            (videoItem) {
+              videoItem = videoItem as Map<String, dynamic>;
+              videoItem['sourceTab'] = sourceTab;
+              return ObservedVideo.fromMap(
+                map: videoItem,
+                videoClicker: (videoId) =>
+                    interactionsManager.clickVideoById(videoId: videoId),
+              );
+            },
           );
         },
       ),

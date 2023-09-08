@@ -13,6 +13,7 @@ class ObservedVideo {
   final String channelIconUrl;
   final String thumbnailUrl;
   final String sourceTab;
+  final String duration;
   final List<String> badges;
   final VoidCallback click;
 
@@ -24,6 +25,7 @@ class ObservedVideo {
     required this.thumbnailUrl,
     required this.sourceTab,
     required this.badges,
+    required this.duration,
   }) : click = onClick;
 
   String get channelName => badges.first;
@@ -34,6 +36,7 @@ class ObservedVideo {
     String? channelIconUrl,
     String? thumbnailUrl,
     String? sourceTab,
+    String? duration,
     List<String>? badges,
     Future<void> Function()? onClick,
   }) {
@@ -44,6 +47,7 @@ class ObservedVideo {
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
       sourceTab: sourceTab ?? this.sourceTab,
       badges: badges ?? this.badges,
+      duration: duration ?? this.duration,
       onClick: onClick ?? click,
     );
   }
@@ -85,6 +89,7 @@ class ObservedVideo {
       'channelIconUrl': channelIconUrl,
       'thumbnailUrl': thumbnailUrl,
       'sourceTab': sourceTab,
+      'duration': duration,
       'badges': badges,
     };
   }
@@ -94,10 +99,11 @@ class ObservedVideo {
     return ObservedVideo(
       id: map['id'] as String,
       title: map['title'] as String,
+      duration: (map['duration'] ?? 'No') as String,
       channelIconUrl: map['channelIconUrl'] as String,
       thumbnailUrl: map['thumbnailUrl'] as String,
       sourceTab: map['sourceTab'] as String,
-      badges: List<String>.from((map['badges'] as List<String>)),
+      badges: List<String>.from((map['badges'] as List<dynamic>)),
       onClick: () => videoClicker(map['id'] as String),
     );
   }

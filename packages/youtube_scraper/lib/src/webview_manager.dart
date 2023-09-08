@@ -7,6 +7,8 @@ import 'package:throttler/throttler.dart';
 
 import 'interactions_controller.dart';
 
+final tbrm = GlobalKey();
+
 @immutable
 class YoutubeWebViewManager {
   factory YoutubeWebViewManager({
@@ -27,6 +29,7 @@ class YoutubeWebViewManager {
     return YoutubeWebViewManager._(
       interactionManager: interactionManager,
       webView: InAppWebView(
+        key: tbrm,
         initialUrlRequest: URLRequest(url: initialRequest),
         initialOptions: InAppWebViewGroupOptions(
           crossPlatform: InAppWebViewOptions(
