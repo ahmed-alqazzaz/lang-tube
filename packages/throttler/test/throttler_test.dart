@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:throttler/throttler.dart';
 
@@ -59,7 +57,9 @@ void main() {
       const rateLimit = CallbackRateLimit(
         maxCount: 3,
         duration: Duration(seconds: 1),
+        breakDuration: Duration(seconds: 1),
       );
+
       final throttler = Throttler(rateLimit: rateLimit);
       final calls = <int>[];
 

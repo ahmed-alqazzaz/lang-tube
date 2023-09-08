@@ -60,7 +60,7 @@ class _CallbackLimitManager {
       return true;
     } else {
       _timer?.cancel();
-      _timer = Timer(rateLimit.duration, () {
+      _timer = Timer(rateLimit.breakDuration, () {
         _count = 0;
         _timer = null;
       });
@@ -75,6 +75,11 @@ class _CallbackLimitManager {
 class CallbackRateLimit {
   final int maxCount;
   final Duration duration;
+  final Duration breakDuration;
 
-  const CallbackRateLimit({required this.maxCount, required this.duration});
+  const CallbackRateLimit({
+    required this.maxCount,
+    required this.duration,
+    required this.breakDuration,
+  });
 }
