@@ -124,7 +124,7 @@ more background and in depth information!</text></transcript>""",
   ),
 ];
 
-final arabicSubtitle = ScrapedSubtitles(
+const arabicSubtitle = ScrapedSubtitles(
   subtitles:
       """<?xml version="1.0" encoding="utf-8" ?><transcript><text start="0.48" dur="7.2">مدينة أوندد تحت الحصار ، يقوم الجنود والشرطة
 بإطلاق النار بلا رحمة على موجات الزومبي التي</text><text start="7.68" dur="6.72">تتدفق من الشوارع المصابة ، في محاولة للهروب

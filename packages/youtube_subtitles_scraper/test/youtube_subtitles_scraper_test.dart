@@ -28,7 +28,8 @@ Future<void> main() async {
       expect(englishSubtitles, kurzgesagt_video2.englishSubtitles);
     });
     test('scrapes auto generated arabic subtitles successfully ', () async {
-      expect(arabicSubtitles.first, kurzgesagt_video2.arabicSubtitle);
+      expect(arabicSubtitles?.first.subtitles,
+          kurzgesagt_video2.arabicSubtitle.subtitles);
     });
   });
 }
