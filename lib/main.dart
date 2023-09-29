@@ -17,6 +17,7 @@ import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
 import 'history/history_view.dart';
 import 'router/routes.dart';
+import 'youtube_video_player/youtube_video_player.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,11 +43,9 @@ class LangTube extends StatelessWidget {
     return ProviderScope(
       child: MaterialApp(
         //  routerConfig: GoRouter(routes: $appRoutes),
-        home: const BrowserWebview(),
+        home: const YoutubeVideoPlayerView(videoId: "9iU_IE6vnJ8"),
         theme: ThemeData(
-          listTileTheme: ListTileThemeData(
-            iconColor: tmp,
-          ),
+          listTileTheme: ListTileThemeData(iconColor: tmp),
           textSelectionTheme: TextSelectionThemeData(
             cursorColor: tmp,
             selectionColor: Colors.deepPurple.withOpacity(0.3),

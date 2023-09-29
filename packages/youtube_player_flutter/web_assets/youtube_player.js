@@ -1,5 +1,14 @@
-// Wait for the DOM to be fully loaded
-window.addEventListener('DOMContentLoaded', function () {
+var player;
+var timerId;
+
+if (document.readyState !== 'loading') {
+    insertSource()
+} else {
+    document.addEventListener('DOMContentLoaded', function () {
+        insertSource();
+    });
+}
+function insertSource(){
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -9,10 +18,7 @@ window.addEventListener('DOMContentLoaded', function () {
     } else {
         document.head.appendChild(tag); // Append the tag to the head if no script tag is found
     }
-});
-
-var player;
-var timerId;
+}
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         height: '100%',
