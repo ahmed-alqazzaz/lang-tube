@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/data/subtitles_bundle.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/data/subtitles_data.dart';
