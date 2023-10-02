@@ -93,8 +93,8 @@ class _YoutubeVideoPlayerViewState
               future: ref.read(subtitlesScraperProvider.future).then(
                     (scraper) => scraper.fetchSubtitlesBundle(
                       youtubeVideoId: widget.videoId,
-                      mainLanguage: Language.english(),
-                      translatedLanguage: Language.arabic(),
+                      mainLanguage: Language.french(),
+                      translatedLanguage: Language.english(),
                     ),
                   ),
               builder: (context, snapshot) {

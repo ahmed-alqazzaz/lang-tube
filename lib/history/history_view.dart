@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:bottom_tabbed_navigator/bottom_tabbed_navigator.dart';
 import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:collection/collection.dart';
 import 'package:colourful_print/colourful_print.dart';
@@ -50,11 +51,6 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
 
   @override
   Widget build(BuildContext context) {
-    // Timer(Duration(seconds: 5), () {
-    //   _wordsHistoryKey.currentState?.setState(() {
-    //     _videoIdFilter = "Itbsnna09MY";
-    //   });
-    // });
     return Theme(
       data: Theme.of(context).copyWith(
         appBarTheme: Theme.of(context).appBarTheme.copyWith(
@@ -85,30 +81,33 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
               child: Listener(
                 onPointerUp: (_) =>
                     _searchAppbarKey.currentState?.disableSearch(),
-                child: ContainedTabBarView(
-                  onChange: (index) => _searchAppbarKey.currentState
-                    ?..disableSearch()
-                    ..searchFieldHint =
-                        index == 0 ? _searchVideosHint : _searchWordsHint,
-                  tabBarProperties: TabBarProperties(
-                    indicatorColor: const Color.fromARGB(255, 190, 40, 216),
-                    unselectedLabelColor: LangTube.tmp.withOpacity(0.6),
-                    unselectedLabelStyle: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                child: NotificationListener(
+                  onNotification: _tabBarNotificationListener,
+                  child: ContainedTabBarView(
+                    onChange: (index) => _searchAppbarKey.currentState
+                      ?..disableSearch()
+                      ..searchFieldHint =
+                          index == 0 ? _searchVideosHint : _searchWordsHint,
+                    tabBarProperties: TabBarProperties(
+                      indicatorColor: const Color.fromARGB(255, 190, 40, 216),
+                      unselectedLabelColor: LangTube.tmp.withOpacity(0.6),
+                      unselectedLabelStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      labelStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      labelColor: LangTube.tmp,
+                      labelPadding: const EdgeInsets.symmetric(vertical: 10),
                     ),
-                    labelStyle: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    labelColor: LangTube.tmp,
-                    labelPadding: const EdgeInsets.symmetric(vertical: 10),
+                    tabs: const [Text(' VIDEOS'), Text('WORDS')],
+                    views: [
+                      _videosHistoryBuilder(),
+                      _wordsHistoryBuilder(),
+                    ],
                   ),
-                  tabs: const [Text(' VIDEOS'), Text('WORDS')],
-                  views: [
-                    _videosHistoryBuilder(),
-                    _wordsHistoryBuilder(),
-                  ],
                 ),
               ),
             ),
@@ -116,6 +115,16 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
         ),
       ),
     );
+  }
+
+  bool _tabBarNotificationListener(Notification notification) {
+    if (notification is OverscrollNotification) {
+      final bottomBarPageController =
+          TabbedNavigatorPageController.of(context)!;
+      bottomBarPageController.jumpTo(
+          bottomBarPageController.position.pixels + notification.overscroll);
+    }
+    return true;
   }
 
   Widget _videosHistoryBuilder() {

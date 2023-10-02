@@ -1,9 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:bottom_tabbed_navigator/bottom_tabbed_navigator.dart';
+import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lang_tube/browser/webview.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/data/lexicon.dart';
@@ -11,9 +16,8 @@ import 'package:lang_tube/explanation_modal/explanation_page/data/lexicon_entry.
 import 'package:lang_tube/explanation_modal/explanation_page/data/web_example.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/data/youtube_example.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/page.dart';
-import 'package:user_agent/user_agent.dart';
-
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
+import 'package:user_agent/user_agent.dart';
 
 import 'history/history_view.dart';
 import 'router/routes.dart';
@@ -43,9 +47,31 @@ class LangTube extends StatelessWidget {
     return ProviderScope(
       child: MaterialApp(
         //  routerConfig: GoRouter(routes: $appRoutes),
-        home: const YoutubeVideoPlayerView(videoId: "9iU_IE6vnJ8"),
+        home: TabbedNavigator(
+          keepAlive: true,
+          items: const [
+            TabNavigationItem(
+              page: BrowserWebview(),
+              bottomNavigationBarItem: BottomNavigationBarItem(
+                icon: Icon(FontAwesomeIcons.chrome),
+                label: "Browser",
+              ),
+            ),
+            TabNavigationItem(
+              page: HistoryView(),
+              bottomNavigationBarItem: BottomNavigationBarItem(
+                icon: Icon(Icons.video_library_rounded),
+                label: "Library",
+              ),
+            ),
+          ],
+        ),
         theme: ThemeData(
-          listTileTheme: ListTileThemeData(iconColor: tmp),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            backgroundColor: backgroundColor,
+            selectedItemColor: tmp,
+          ),
+          listTileTheme: const ListTileThemeData(iconColor: tmp),
           textSelectionTheme: TextSelectionThemeData(
             cursorColor: tmp,
             selectionColor: Colors.deepPurple.withOpacity(0.3),

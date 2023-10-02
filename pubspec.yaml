@@ -95,6 +95,8 @@ dependencies:
     path: packages/oxford_dictionary_scraper
   word_listenable_webview:
     path: packages/word_listenable_webview
+  bottom_tabbed_navigator:
+    path: packages/bottom_tabbed_navigator
 
 
   quiver: ^3.2.1
