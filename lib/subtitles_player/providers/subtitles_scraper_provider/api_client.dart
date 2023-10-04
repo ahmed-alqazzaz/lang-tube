@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio_api_client/dio_api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:user_agent/user_agent.dart';
@@ -15,7 +17,12 @@ final class ScraperApiClient extends SubtitlesScraperApiClient {
   @override
   Future<T> fetchUrl<T>(Uri url) async {
     try {
-      final response = await _client.fetchUri<T>(url);
+      final response = await _client.fetchUri<T>(
+        url,
+        onReceiveProgress: (p0, p1) {
+          log('$p0, $p1');
+        },
+      );
       if (response.statusCode != 200) {
         throw const SubtitlesScraperBlockedRequestException();
       }

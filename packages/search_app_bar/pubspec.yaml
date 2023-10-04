@@ -1,5 +1,6 @@
 name: search_app_bar
 description: A new Flutter package project.
+publish_to: none
 version: 0.0.1
 homepage:
 
@@ -11,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   circular_inkwell:
-    path: "C:/Users/acer/workspace1/langtube/packages/circular_inkwell"
+    path: "../circular_inkwell"
   flutter_keyboard_visibility: ^5.4.1
   
 

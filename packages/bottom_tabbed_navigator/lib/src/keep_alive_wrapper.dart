@@ -22,5 +22,5 @@ class _KeepAliveWrapperState extends State<KeepAliveWrapper>
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => widget.wantToKeepAlive;
 }

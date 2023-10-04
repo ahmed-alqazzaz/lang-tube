@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -17,8 +18,10 @@ class DioApiClient {
       );
     }
   }
-  Future<Response<T>> fetchUri<T>(Uri uri) async {
-    return await _dio.getUri<T>(uri);
+  Future<Response<T>> fetchUri<T>(Uri uri,
+      {void Function(int, int)? onReceiveProgress}) async {
+    return await _dio.getUri<T>(uri,
+        onReceiveProgress: (count, total) => log(count.toString()));
   }
 
   static Future<String> get _cacheDirectory async =>
