@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bottom_tabbed_navigator/src/keep_alive_wrapper.dart';
 import 'package:flutter/material.dart';
 
@@ -18,19 +16,18 @@ class TabbedNavigator extends StatefulWidget {
 class _TabbedNavigatorState extends State<TabbedNavigator> {
   late final ValueNotifier<int> _indexNotifier;
   late final PageController _controller;
+  bool _isUserScrolling = false;
 
   @override
   void initState() {
     _controller = PageController();
     _indexNotifier = ValueNotifier<int>(0)
       ..addListener(
-        () => _controller.animateToPage(
-          _indexNotifier.value,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInCubic,
-        ),
+        () {
+          _isUserScrolling = false;
+          _controller.jumpToPage(_indexNotifier.value);
+        },
       );
-
     super.initState();
   }
 
@@ -46,13 +43,19 @@ class _TabbedNavigatorState extends State<TabbedNavigator> {
     return TabbedNavigatorPageController._(
       pageController: _controller,
       child: Scaffold(
-        body: PageView.builder(
-          controller: _controller,
-          onPageChanged: (index) => _indexNotifier.value = index,
-          itemCount: widget.items.length,
-          itemBuilder: (context, index) => KeepAliveWrapper(
-            wantToKeepAlive: widget.keepAlive,
-            child: widget.items[index].page,
+        body: GestureDetector(
+          onHorizontalDragUpdate: (details) => _isUserScrolling = true,
+          child: PageView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: _controller,
+            onPageChanged: (index) {
+              if (_isUserScrolling) _indexNotifier.value = index;
+            },
+            itemCount: widget.items.length,
+            itemBuilder: (context, index) => KeepAliveWrapper(
+              wantToKeepAlive: widget.keepAlive,
+              child: widget.items[index].page,
+            ),
           ),
         ),
         bottomNavigationBar: ValueListenableBuilder<int>(
@@ -86,20 +89,5 @@ class TabbedNavigatorPageController extends InheritedWidget {
       ?._pageController;
 
   @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    return false;
-  }
-
-  Future<void> animateTo(
-    double offset, {
-    required Duration duration,
-    required Curve curve,
-  }) async {
-    log("executed");
-    await _pageController.animateTo(
-      offset,
-      duration: duration,
-      curve: curve,
-    );
-  }
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;
 }

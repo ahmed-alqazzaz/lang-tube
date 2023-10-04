@@ -118,12 +118,12 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
   }
 
   bool _tabBarNotificationListener(Notification notification) {
-    if (notification is OverscrollNotification) {
-      final bottomBarPageController =
-          TabbedNavigatorPageController.of(context)!;
-      bottomBarPageController.jumpTo(
-          bottomBarPageController.position.pixels + notification.overscroll);
-    }
+    // if (notification is OverscrollNotification) {
+    //   final bottomBarPageController =
+    //       TabbedNavigatorPageController.of(context)!;
+    //   bottomBarPageController.jumpTo(
+    //       bottomBarPageController.position.pixels + notification.overscroll);
+    // }
     return true;
   }
 

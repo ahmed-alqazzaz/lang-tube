@@ -37,17 +37,6 @@ class _YoutubeVideoPlayerViewState
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setPreferredOrientations([]);
-    Timer(const Duration(seconds: 2), () async {
-      await Connectivity().checkConnectivity().then((value) {
-        return ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              value.toString(),
-            ),
-          ),
-        );
-      });
-    });
 
     super.initState();
   }
@@ -93,8 +82,8 @@ class _YoutubeVideoPlayerViewState
               future: ref.read(subtitlesScraperProvider.future).then(
                     (scraper) => scraper.fetchSubtitlesBundle(
                       youtubeVideoId: widget.videoId,
-                      mainLanguage: Language.french(),
-                      translatedLanguage: Language.english(),
+                      mainLanguage: Language.english(),
+                      translatedLanguage: Language.arabic(),
                     ),
                   ),
               builder: (context, snapshot) {

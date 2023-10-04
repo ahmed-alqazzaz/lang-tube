@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:languages/languages.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -61,7 +63,9 @@ final class YoutubeSubtitlesScraper {
     required ClosedCaptionTrackInfo caption,
     required Language language,
   }) async {
+    log("fetching subtitles start");
     final subtitles = await _apiClient.fetchUrl<String>(caption.url);
+    log("fetching subtitles end");
     await _cacheManager.cacheSubtitles(
       subtitles: subtitles,
       language: language.name,

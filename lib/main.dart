@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:receive_sharing_intent/receive_sharing_intent.dart' as x;
 import 'package:bottom_tabbed_navigator/bottom_tabbed_navigator.dart';
 import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +16,11 @@ import 'package:lang_tube/explanation_modal/explanation_page/data/lexicon_entry.
 import 'package:lang_tube/explanation_modal/explanation_page/data/web_example.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/data/youtube_example.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/page.dart';
+import 'package:lang_tube/video_recommendations.dart/video_recommendations_view.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 import 'package:user_agent/user_agent.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import 'history/history_view.dart';
 import 'router/routes.dart';
@@ -34,6 +37,8 @@ Future<void> main() async {
     if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
     return stack;
   };
+  final initialUrl = await ReceiveSharingIntent.getInitialText();
+
   runApp(const LangTube());
 }
 
@@ -45,27 +50,8 @@ class LangTube extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
-      child: MaterialApp(
-        //  routerConfig: GoRouter(routes: $appRoutes),
-        home: TabbedNavigator(
-          keepAlive: true,
-          items: const [
-            TabNavigationItem(
-              page: BrowserWebview(),
-              bottomNavigationBarItem: BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.chrome),
-                label: "Browser",
-              ),
-            ),
-            TabNavigationItem(
-              page: HistoryView(),
-              bottomNavigationBarItem: BottomNavigationBarItem(
-                icon: Icon(Icons.video_library_rounded),
-                label: "Library",
-              ),
-            ),
-          ],
-        ),
+      child: MaterialApp.router(
+        routerConfig: GoRouter(routes: $appRoutes),
         theme: ThemeData(
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
             backgroundColor: backgroundColor,

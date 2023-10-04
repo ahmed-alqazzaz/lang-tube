@@ -1,7 +1,12 @@
+import 'package:bottom_tabbed_navigator/bottom_tabbed_navigator.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lang_tube/browser/webview.dart';
 import 'package:lang_tube/video_recommendations.dart/video_recommendations_view.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
+
+import '../history/history_view.dart';
 part 'routes.g.dart';
 
 @TypedGoRoute<HomeScreenRoute>(path: '/', routes: [
@@ -13,8 +18,32 @@ part 'routes.g.dart';
 class HomeScreenRoute extends GoRouteData {
   const HomeScreenRoute();
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const VideoRecommendationsView();
+  Widget build(BuildContext context, GoRouterState state) => TabbedNavigator(
+        keepAlive: true,
+        items: const [
+          TabNavigationItem(
+            page: VideoRecommendationsView(),
+            bottomNavigationBarItem: BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: "Home",
+            ),
+          ),
+          TabNavigationItem(
+            page: BrowserWebview(),
+            bottomNavigationBarItem: BottomNavigationBarItem(
+              icon: Icon(FontAwesomeIcons.chrome),
+              label: "Browser",
+            ),
+          ),
+          TabNavigationItem(
+            page: HistoryView(),
+            bottomNavigationBarItem: BottomNavigationBarItem(
+              icon: Icon(Icons.video_library_rounded),
+              label: "Library",
+            ),
+          ),
+        ],
+      );
 }
 
 @immutable
