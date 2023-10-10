@@ -11,7 +11,7 @@ class ExplanationModalSheet extends ConsumerWidget {
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
           ..loadRequest(
             Uri.parse(
-                'https://www.oxfordlearnersdictionaries.com/definition/english/$word'),
+                'https://www.linguee.com/english-french/search?source=auto&query=+$word'),
           );
   final WebViewController _controller;
   @override

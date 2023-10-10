@@ -12,6 +12,33 @@ import 'history_manager.dart';
 import 'webview_actions_handle.dart';
 import 'state.dart';
 
+class YoutubeAlgorithmMinpulatorr
+    extends StateNotifier<YoutubeAlgorithmManipulatorState> {
+  static YoutubeAlgorithmMinpulatorr get instance => _instance;
+  static final _instance = YoutubeAlgorithmMinpulatorr._();
+  YoutubeAlgorithmMinpulatorr._()
+      : super(YoutubeAlgorithmManipulatorState.inactive);
+
+  StreamSubscription<Iterable<ObservedVideo>>? _videosObserverSubscription;
+
+  void activate({required Stream<Iterable<ObservedVideo>> observedVideos}) {
+    assert(_videosObserverSubscription == null);
+    _videosObserverSubscription = observedVideos.listen(
+      (videos) {},
+    );
+  }
+
+  void deactivate() {
+    assert(_videosObserverSubscription != null);
+    _videosObserverSubscription!.cancel();
+    _videosObserverSubscription = null;
+  }
+
+  void _listener(Iterable<ObservedVideo> videoItems) {
+    if (videoItems.isEmpty) return;
+  }
+}
+
 class YoutubeAlgorithmMinpulator
     extends StateNotifier<YoutubeAlgorithmManipulatorState> {
   YoutubeAlgorithmMinpulator({
