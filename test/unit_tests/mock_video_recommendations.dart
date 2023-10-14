@@ -3,7 +3,7 @@ import 'package:lang_tube/video_recommendations.dart/data/recommended_video.dart
 import 'package:lang_tube/video_recommendations.dart/data/video_recommendations.dart';
 
 final videoRecommendationsList = [
-  VideoRecommendations(
+  VideoRecommendationsPackage(
     sourceTab: 'All',
     videos: [
       RecommendedVideo(
@@ -69,7 +69,7 @@ final videoRecommendationsList = [
       ),
     ],
   ),
-  VideoRecommendations(
+  VideoRecommendationsPackage(
     sourceTab: 'Kurzgesagt – In a Nutshell',
     videos: [
       RecommendedVideo(

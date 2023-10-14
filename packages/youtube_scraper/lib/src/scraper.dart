@@ -43,7 +43,7 @@ class YoutubeScraper {
     required StreamController<Iterable<ObservedVideo>> videosObserver,
     required CookiesStorageManager cookieStorageManager,
   })  : _webViewManager = webViewManager,
-        interactions = webViewManager.interactionManager,
+        interactionsController = webViewManager.interactionManager,
         _videosObserver = videosObserver {
     // TODO: remove the timer, when migrating back to healdess webview
     Timer(const Duration(seconds: 5), () {
@@ -52,7 +52,7 @@ class YoutubeScraper {
           storageManager: cookieStorageManager,
           youtubeUrl: _youtubeUrl,
           onCookiesInjected: () async {
-            return await interactions.reload();
+            return await interactionsController.reload();
           },
         );
       });
@@ -65,7 +65,7 @@ class YoutubeScraper {
   }
 
   final YoutubeWebViewManager _webViewManager;
-  final YoutubeInteractionsController interactions;
+  final YoutubeInteractionsController interactionsController;
 
   final StreamController<Iterable<ObservedVideo>> _videosObserver;
   Stream<Iterable<ObservedVideo>> get observedVideos => _videosObserver.stream;

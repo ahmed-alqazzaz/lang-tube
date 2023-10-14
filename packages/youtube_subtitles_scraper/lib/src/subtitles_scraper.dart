@@ -63,9 +63,7 @@ final class YoutubeSubtitlesScraper {
     required ClosedCaptionTrackInfo caption,
     required Language language,
   }) async {
-    log("fetching subtitles start");
     final subtitles = await _apiClient.fetchUrl<String>(caption.url);
-    log("fetching subtitles end");
     await _cacheManager.cacheSubtitles(
       subtitles: subtitles,
       language: language.name,

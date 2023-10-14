@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:developer';
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/foundation.dart';
@@ -40,8 +41,8 @@ class RecommendationsNotifier extends ChangeNotifier {
   final RecommendationsStorageManager _storageManager;
   late final StreamSubscription<RecommendedVideo> _observedVideosSubscription;
 
-  final _recommendationsList = <VideoRecommendations>[];
-  List<VideoRecommendations> get recommendationsList =>
+  final _recommendationsList = <VideoRecommendationsPackage>[];
+  List<VideoRecommendationsPackage> get recommendationsList =>
       List.unmodifiable(_recommendationsList);
 
   void fetchMore() {
@@ -75,7 +76,8 @@ class RecommendationsNotifier extends ChangeNotifier {
     } else {
       // create new VideoRecommendation for the tab
       _recommendationsList.add(
-        VideoRecommendations(sourceTab: video.sourceTab, videos: [video]),
+        VideoRecommendationsPackage(
+            sourceTab: video.sourceTab, videos: [video]),
       );
     }
   }
@@ -88,7 +90,7 @@ class RecommendationsNotifier extends ChangeNotifier {
   }
 }
 
-extension on List<VideoRecommendations> {
+extension on List<VideoRecommendationsPackage> {
   bool containsVideo(RecommendedVideo video) {
     for (var recommendations in this) {
       for (var recommendedVideo in recommendations.videos) {

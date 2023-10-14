@@ -11,13 +11,14 @@ class RecommendationsStorageManager {
   final VideoClicker clicker;
 
   Future<void> saveRecommendations({
-    required List<VideoRecommendations> recommendationsList,
+    required List<VideoRecommendationsPackage> recommendationsList,
   }) async =>
       await File(await _recommendationsStoragePath).writeAsString(
         recommendationsList.toJson(),
       );
 
-  Future<Iterable<VideoRecommendations>> retrieveRecommendations() async {
+  Future<Iterable<VideoRecommendationsPackage>>
+      retrieveRecommendations() async {
     final recommendationsFile = File(await _recommendationsStoragePath);
     return recommendationsFile.existsSync()
         ? VideoRecommendationsListJsonifier.fromJson(

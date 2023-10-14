@@ -20,11 +20,7 @@ import 'package:lang_tube/video_recommendations.dart/video_recommendations_view.
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 import 'package:user_agent/user_agent.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
-import 'history/history_view.dart';
 import 'router/routes.dart';
-import 'youtube_video_player/youtube_video_player.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

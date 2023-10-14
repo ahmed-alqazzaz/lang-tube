@@ -17,12 +17,7 @@ final class ScraperApiClient extends SubtitlesScraperApiClient {
   @override
   Future<T> fetchUrl<T>(Uri url) async {
     try {
-      final response = await _client.fetchUri<T>(
-        url,
-        onReceiveProgress: (p0, p1) {
-          log('$p0, $p1');
-        },
-      );
+      final response = await _client.fetchUri<T>(url);
       if (response.statusCode != 200) {
         throw const SubtitlesScraperBlockedRequestException();
       }

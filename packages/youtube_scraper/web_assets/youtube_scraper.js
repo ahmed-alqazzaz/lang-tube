@@ -126,6 +126,8 @@ function getVideoUrl(element){
   }
   console.log(`get video url input must be an Element`);
 }
+// Unhandled Exception: Invalid argument (urlOrUrl): Invalid YouTube video ID or URL: "LBudghsdByQ&pp=ygULa3VyeiBnZXNhZ3Q%3D"
+
 function getVideoId(url) {
   const id = url.split('watch?v=')[1]
   if(id === undefined){
@@ -135,7 +137,6 @@ function getVideoId(url) {
     return id.split('&')[0]; 
   }
   return id;
-  
 }
 
 function getVideoDetails(element) {
