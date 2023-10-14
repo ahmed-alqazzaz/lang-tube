@@ -7,7 +7,7 @@
 import 'dart:ffi';
 import 'dart:io';
 
-import 'bridge.dart';
+import 'package:readability/rust_bridge/bridge.dart';
 
 // Re-export the bridge so it is only necessary to import this file.
 export 'bridge.dart';
@@ -19,12 +19,10 @@ const _base = 'readability';
 // but rather directly **linked** against the binary.
 final _dylibPath = io.Platform.isWindows ? '$_base.dll' : 'lib$_base.so';
 
-const testLib =
-    'C:\\Users\\acer\\workspace1\\langtube\\rust\\target\\debug\\deps\\readability.dll';
-final dylib = Platform.isIOS
+final _dylib = Platform.isIOS
     ? DynamicLibrary.process()
     : Platform.isMacOS
         ? DynamicLibrary.executable()
         : DynamicLibrary.open(_dylibPath);
 
-final rustApi = ReadabilityImpl(dylib);
+final rustApi = ReadabilityImpl(_dylib);

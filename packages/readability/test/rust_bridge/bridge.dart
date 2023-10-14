@@ -10,8 +10,6 @@ import 'package:uuid/uuid.dart';
 
 import 'dart:ffi' as ffi;
 
-import 'readability_score.dart';
-
 abstract class Readability {
   Future<ReadabilityScore> calculateSubtitleComplexity(
       {required String text, dynamic hint});
@@ -34,6 +32,35 @@ abstract class Readability {
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kCompareToMethodReadabilityScoreConstMeta;
+}
+
+class ReadabilityScore {
+  final Readability bridge;
+  final double lixIndex;
+  final double rixIndex;
+  final double fleschReadingEase;
+  final double automatedReadabilityIndex;
+  final double colemanLiauIndex;
+
+  const ReadabilityScore({
+    required this.bridge,
+    required this.lixIndex,
+    required this.rixIndex,
+    required this.fleschReadingEase,
+    required this.automatedReadabilityIndex,
+    required this.colemanLiauIndex,
+  });
+
+  Future<Float64List> indicesList({dynamic hint}) =>
+      bridge.indicesListMethodReadabilityScore(
+        that: this,
+      );
+
+  Future<bool> compareTo({required ReadabilityScore other, dynamic hint}) =>
+      bridge.compareToMethodReadabilityScore(
+        that: this,
+        other: other,
+      );
 }
 
 class ReadabilityImpl implements Readability {
@@ -154,6 +181,7 @@ class ReadabilityImpl implements Readability {
     if (arr.length != 5)
       throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return ReadabilityScore(
+      bridge: this,
       lixIndex: _wire2api_f64(arr[0]),
       rixIndex: _wire2api_f64(arr[1]),
       fleschReadingEase: _wire2api_f64(arr[2]),
