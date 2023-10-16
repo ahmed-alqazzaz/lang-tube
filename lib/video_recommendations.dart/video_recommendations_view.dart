@@ -82,7 +82,7 @@ class _VideoRecommendationsViewState
             body: SafeArea(
           child: YoutubeRecommendationsManager.instance.webView,
         )),
-        if (false && recommendationsList != null)
+        if (recommendationsList != null)
           Scaffold(
             appBar: AppBar(
               leading: const Icon(Icons.arrow_back_outlined),

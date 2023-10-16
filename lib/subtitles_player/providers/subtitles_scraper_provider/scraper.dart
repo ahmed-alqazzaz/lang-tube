@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/data/subtitles_bundle.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/data/subtitles_data.dart';
 import 'package:languages/languages.dart';
+import 'package:subtitles_parser/subtitles_parser.dart';
+import 'package:subtitles_player/subtitles_player.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
-import 'package:subtitles_parser/subtitles_parser.dart' as subtitles_parser;
-import 'package:subtitles_player/subtitles_player.dart' as subtitles_player;
 import '../subtitles_cache_provider/cache_manager.dart';
 import 'api_client.dart';
 import 'data/exceptions.dart';
@@ -101,11 +101,10 @@ final class SubtitlesScraper {
         ));
   }
 
-  static Iterable<subtitles_player.Subtitle> _parseSubtitles(String subtitles) {
-    final List<subtitles_parser.Subtitle> parsedSubtitles =
-        subtitles_parser.parseSubtitles(subtitles);
+  static Iterable<Subtitle> _parseSubtitles(String subtitles) {
+    final List<ParsedSubtitle> parsedSubtitles = parseSubtitles(subtitles);
     return parsedSubtitles.map(
-      (subtitle) => subtitles_player.Subtitle.fromMap(subtitle.toMap()),
+      (subtitle) => Subtitle.fromMap(subtitle.toMap()),
     );
   }
 }
