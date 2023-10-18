@@ -51,42 +51,6 @@ fn wire_count_syllables_impl(port_: MessagePort, text: impl Wire2Api<String> + U
         },
     )
 }
-fn wire_indices_list__method__ReadabilityScore_impl(
-    port_: MessagePort,
-    that: impl Wire2Api<ReadabilityScore> + UnwindSafe,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, Vec<f64>, _>(
-        WrapInfo {
-            debug_name: "indices_list__method__ReadabilityScore",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.wire2api();
-            move |task_callback| Result::<_, ()>::Ok(ReadabilityScore::indices_list(&api_that))
-        },
-    )
-}
-fn wire_compare_to__method__ReadabilityScore_impl(
-    port_: MessagePort,
-    that: impl Wire2Api<ReadabilityScore> + UnwindSafe,
-    other: impl Wire2Api<ReadabilityScore> + UnwindSafe,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, bool, _>(
-        WrapInfo {
-            debug_name: "compare_to__method__ReadabilityScore",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.wire2api();
-            let api_other = other.wire2api();
-            move |task_callback| {
-                Result::<_, ()>::Ok(ReadabilityScore::compare_to(&api_that, api_other))
-            }
-        },
-    )
-}
 // Section: wrapper structs
 
 // Section: static checks
@@ -107,12 +71,6 @@ where
 {
     fn wire2api(self) -> Option<T> {
         (!self.is_null()).then(|| self.wire2api())
-    }
-}
-
-impl Wire2Api<f64> for f64 {
-    fn wire2api(self) -> f64 {
-        self
     }
 }
 

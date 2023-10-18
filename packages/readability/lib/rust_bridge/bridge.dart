@@ -21,19 +21,6 @@ abstract class Readability {
   Future<int> countSyllables({required String text, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kCountSyllablesConstMeta;
-
-  Future<Float64List> indicesListMethodReadabilityScore(
-      {required ReadabilityScore that, dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta
-      get kIndicesListMethodReadabilityScoreConstMeta;
-
-  Future<bool> compareToMethodReadabilityScore(
-      {required ReadabilityScore that,
-      required ReadabilityScore other,
-      dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta get kCompareToMethodReadabilityScoreConstMeta;
 }
 
 class ReadabilityImpl implements Readability {
@@ -51,7 +38,7 @@ class ReadabilityImpl implements Readability {
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) =>
           _platform.inner.wire_calculate_subtitle_complexity(port_, arg0),
-      parseSuccessData: (d) => _wire2api_readability_score(d),
+      parseSuccessData: _wire2api_readability_score,
       parseErrorData: null,
       constMeta: kCalculateSubtitleComplexityConstMeta,
       argValues: [text],
@@ -83,66 +70,13 @@ class ReadabilityImpl implements Readability {
         argNames: ["text"],
       );
 
-  Future<Float64List> indicesListMethodReadabilityScore(
-      {required ReadabilityScore that, dynamic hint}) {
-    var arg0 = _platform.api2wire_box_autoadd_readability_score(that);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_indices_list__method__ReadabilityScore(port_, arg0),
-      parseSuccessData: _wire2api_float_64_list,
-      parseErrorData: null,
-      constMeta: kIndicesListMethodReadabilityScoreConstMeta,
-      argValues: [that],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta
-      get kIndicesListMethodReadabilityScoreConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "indices_list__method__ReadabilityScore",
-            argNames: ["that"],
-          );
-
-  Future<bool> compareToMethodReadabilityScore(
-      {required ReadabilityScore that,
-      required ReadabilityScore other,
-      dynamic hint}) {
-    var arg0 = _platform.api2wire_box_autoadd_readability_score(that);
-    var arg1 = _platform.api2wire_box_autoadd_readability_score(other);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_compare_to__method__ReadabilityScore(port_, arg0, arg1),
-      parseSuccessData: _wire2api_bool,
-      parseErrorData: null,
-      constMeta: kCompareToMethodReadabilityScoreConstMeta,
-      argValues: [that, other],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta
-      get kCompareToMethodReadabilityScoreConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "compare_to__method__ReadabilityScore",
-            argNames: ["that", "other"],
-          );
-
   void dispose() {
     _platform.dispose();
   }
 // Section: wire2api
 
-  bool _wire2api_bool(dynamic raw) {
-    return raw as bool;
-  }
-
   double _wire2api_f64(dynamic raw) {
     return raw as double;
-  }
-
-  Float64List _wire2api_float_64_list(dynamic raw) {
-    return raw as Float64List;
   }
 
   int _wire2api_i64(dynamic raw) {
@@ -166,11 +100,6 @@ class ReadabilityImpl implements Readability {
 // Section: api2wire
 
 @protected
-double api2wire_f64(double raw) {
-  return raw;
-}
-
-@protected
 int api2wire_u8(int raw) {
   return raw;
 }
@@ -188,14 +117,6 @@ class ReadabilityPlatform extends FlutterRustBridgeBase<ReadabilityWire> {
   }
 
   @protected
-  ffi.Pointer<wire_ReadabilityScore> api2wire_box_autoadd_readability_score(
-      ReadabilityScore raw) {
-    final ptr = inner.new_box_autoadd_readability_score_0();
-    _api_fill_to_wire_readability_score(raw, ptr.ref);
-    return ptr;
-  }
-
-  @protected
   ffi.Pointer<wire_uint_8_list> api2wire_uint_8_list(Uint8List raw) {
     final ans = inner.new_uint_8_list_0(raw.length);
     ans.ref.ptr.asTypedList(raw.length).setAll(0, raw);
@@ -204,21 +125,6 @@ class ReadabilityPlatform extends FlutterRustBridgeBase<ReadabilityWire> {
 // Section: finalizer
 
 // Section: api_fill_to_wire
-
-  void _api_fill_to_wire_box_autoadd_readability_score(
-      ReadabilityScore apiObj, ffi.Pointer<wire_ReadabilityScore> wireObj) {
-    _api_fill_to_wire_readability_score(apiObj, wireObj.ref);
-  }
-
-  void _api_fill_to_wire_readability_score(
-      ReadabilityScore apiObj, wire_ReadabilityScore wireObj) {
-    wireObj.lix_index = api2wire_f64(apiObj.lixIndex);
-    wireObj.rix_index = api2wire_f64(apiObj.rixIndex);
-    wireObj.flesch_reading_ease = api2wire_f64(apiObj.fleschReadingEase);
-    wireObj.automated_readability_index =
-        api2wire_f64(apiObj.automatedReadabilityIndex);
-    wireObj.coleman_liau_index = api2wire_f64(apiObj.colemanLiauIndex);
-  }
 }
 
 // ignore_for_file: camel_case_types, non_constant_identifier_names, avoid_positional_boolean_parameters, annotate_overrides, constant_identifier_names
@@ -352,58 +258,6 @@ class ReadabilityWire implements FlutterRustBridgeWireBase {
   late final _wire_count_syllables = _wire_count_syllablesPtr
       .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
 
-  void wire_indices_list__method__ReadabilityScore(
-    int port_,
-    ffi.Pointer<wire_ReadabilityScore> that,
-  ) {
-    return _wire_indices_list__method__ReadabilityScore(
-      port_,
-      that,
-    );
-  }
-
-  late final _wire_indices_list__method__ReadabilityScorePtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64, ffi.Pointer<wire_ReadabilityScore>)>>(
-      'wire_indices_list__method__ReadabilityScore');
-  late final _wire_indices_list__method__ReadabilityScore =
-      _wire_indices_list__method__ReadabilityScorePtr
-          .asFunction<void Function(int, ffi.Pointer<wire_ReadabilityScore>)>();
-
-  void wire_compare_to__method__ReadabilityScore(
-    int port_,
-    ffi.Pointer<wire_ReadabilityScore> that,
-    ffi.Pointer<wire_ReadabilityScore> other,
-  ) {
-    return _wire_compare_to__method__ReadabilityScore(
-      port_,
-      that,
-      other,
-    );
-  }
-
-  late final _wire_compare_to__method__ReadabilityScorePtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_ReadabilityScore>,
-                  ffi.Pointer<wire_ReadabilityScore>)>>(
-      'wire_compare_to__method__ReadabilityScore');
-  late final _wire_compare_to__method__ReadabilityScore =
-      _wire_compare_to__method__ReadabilityScorePtr.asFunction<
-          void Function(int, ffi.Pointer<wire_ReadabilityScore>,
-              ffi.Pointer<wire_ReadabilityScore>)>();
-
-  ffi.Pointer<wire_ReadabilityScore> new_box_autoadd_readability_score_0() {
-    return _new_box_autoadd_readability_score_0();
-  }
-
-  late final _new_box_autoadd_readability_score_0Ptr = _lookup<
-          ffi.NativeFunction<ffi.Pointer<wire_ReadabilityScore> Function()>>(
-      'new_box_autoadd_readability_score_0');
-  late final _new_box_autoadd_readability_score_0 =
-      _new_box_autoadd_readability_score_0Ptr
-          .asFunction<ffi.Pointer<wire_ReadabilityScore> Function()>();
-
   ffi.Pointer<wire_uint_8_list> new_uint_8_list_0(
     int len,
   ) {
@@ -441,23 +295,6 @@ final class wire_uint_8_list extends ffi.Struct {
 
   @ffi.Int32()
   external int len;
-}
-
-final class wire_ReadabilityScore extends ffi.Struct {
-  @ffi.Double()
-  external double lix_index;
-
-  @ffi.Double()
-  external double rix_index;
-
-  @ffi.Double()
-  external double flesch_reading_ease;
-
-  @ffi.Double()
-  external double automated_readability_index;
-
-  @ffi.Double()
-  external double coleman_liau_index;
 }
 
 typedef DartPostCObjectFnType = ffi.Pointer<

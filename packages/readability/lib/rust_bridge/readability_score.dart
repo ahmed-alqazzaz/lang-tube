@@ -17,11 +17,18 @@ class ReadabilityScore {
     required this.colemanLiauIndex,
   });
 
-  Future<bool> compareTo({required ReadabilityScore other, dynamic hint}) =>
-      rustApi.compareToMethodReadabilityScore(
-        that: this,
-        other: other,
-      );
+  bool compareTo({required ReadabilityScore other, dynamic hint}) {
+    final thisScores = _toList();
+    final otherScores = other._toList();
+
+    int count = 0;
+    for (int i = 0; i < thisScores.length; i++) {
+      if (thisScores[i] < otherScores[i]) {
+        count += 1;
+      }
+    }
+    return count > thisScores.length / 2;
+  }
 
   @override
   String toString() {
@@ -39,6 +46,13 @@ class ReadabilityScore {
   }
 
   String toJson() => json.encode(toMap());
+  List<double> _toList() => [
+        lixIndex,
+        rixIndex,
+        fleschReadingEase,
+        automatedReadabilityIndex,
+        colemanLiauIndex
+      ];
 
   factory ReadabilityScore.fromMap(Map<String, dynamic> map) {
     return ReadabilityScore(

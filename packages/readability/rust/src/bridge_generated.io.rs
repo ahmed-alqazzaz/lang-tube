@@ -11,29 +11,7 @@ pub extern "C" fn wire_count_syllables(port_: i64, text: *mut wire_uint_8_list) 
     wire_count_syllables_impl(port_, text)
 }
 
-#[no_mangle]
-pub extern "C" fn wire_indices_list__method__ReadabilityScore(
-    port_: i64,
-    that: *mut wire_ReadabilityScore,
-) {
-    wire_indices_list__method__ReadabilityScore_impl(port_, that)
-}
-
-#[no_mangle]
-pub extern "C" fn wire_compare_to__method__ReadabilityScore(
-    port_: i64,
-    that: *mut wire_ReadabilityScore,
-    other: *mut wire_ReadabilityScore,
-) {
-    wire_compare_to__method__ReadabilityScore_impl(port_, that, other)
-}
-
 // Section: allocate functions
-
-#[no_mangle]
-pub extern "C" fn new_box_autoadd_readability_score_0() -> *mut wire_ReadabilityScore {
-    support::new_leak_box_ptr(wire_ReadabilityScore::new_with_null_ptr())
-}
 
 #[no_mangle]
 pub extern "C" fn new_uint_8_list_0(len: i32) -> *mut wire_uint_8_list {
@@ -54,24 +32,6 @@ impl Wire2Api<String> for *mut wire_uint_8_list {
         String::from_utf8_lossy(&vec).into_owned()
     }
 }
-impl Wire2Api<ReadabilityScore> for *mut wire_ReadabilityScore {
-    fn wire2api(self) -> ReadabilityScore {
-        let wrap = unsafe { support::box_from_leak_ptr(self) };
-        Wire2Api::<ReadabilityScore>::wire2api(*wrap).into()
-    }
-}
-
-impl Wire2Api<ReadabilityScore> for wire_ReadabilityScore {
-    fn wire2api(self) -> ReadabilityScore {
-        ReadabilityScore {
-            lix_index: self.lix_index.wire2api(),
-            rix_index: self.rix_index.wire2api(),
-            flesch_reading_ease: self.flesch_reading_ease.wire2api(),
-            automated_readability_index: self.automated_readability_index.wire2api(),
-            coleman_liau_index: self.coleman_liau_index.wire2api(),
-        }
-    }
-}
 
 impl Wire2Api<Vec<u8>> for *mut wire_uint_8_list {
     fn wire2api(self) -> Vec<u8> {
@@ -82,16 +42,6 @@ impl Wire2Api<Vec<u8>> for *mut wire_uint_8_list {
     }
 }
 // Section: wire structs
-
-#[repr(C)]
-#[derive(Clone)]
-pub struct wire_ReadabilityScore {
-    lix_index: f64,
-    rix_index: f64,
-    flesch_reading_ease: f64,
-    automated_readability_index: f64,
-    coleman_liau_index: f64,
-}
 
 #[repr(C)]
 #[derive(Clone)]
@@ -109,24 +59,6 @@ pub trait NewWithNullPtr {
 impl<T> NewWithNullPtr for *mut T {
     fn new_with_null_ptr() -> Self {
         std::ptr::null_mut()
-    }
-}
-
-impl NewWithNullPtr for wire_ReadabilityScore {
-    fn new_with_null_ptr() -> Self {
-        Self {
-            lix_index: Default::default(),
-            rix_index: Default::default(),
-            flesch_reading_ease: Default::default(),
-            automated_readability_index: Default::default(),
-            coleman_liau_index: Default::default(),
-        }
-    }
-}
-
-impl Default for wire_ReadabilityScore {
-    fn default() -> Self {
-        Self::new_with_null_ptr()
     }
 }
 
