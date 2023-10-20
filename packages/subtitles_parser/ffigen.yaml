@@ -1,0 +1,8 @@
+# Run with `flutter pub run ffigen --config ffigen.yaml`.
+name: SubtitlesParserBindings
+description: |
+  Bindings for `src/subtitles_parser.h`.
+
+  Regenerate bindings with `flutter pub run ffigen --config ffigen.yaml`.
+llvm:
+  path: C:\\Program Files\\LLVM

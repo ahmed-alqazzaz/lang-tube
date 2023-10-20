@@ -1,4 +1,4 @@
-const germanSubtitles = """transcript>
+const germanSubtitles = """<transcript>
 <text start="0" dur="4.529">was wenn moral nur eine fiktion ist die</text>
 <text start="2.79" dur="4.02">von der herde unterlegener menschen</text>
 <text start="4.529" dur="4.551">benutzt wird um die wenigen besseren</text>

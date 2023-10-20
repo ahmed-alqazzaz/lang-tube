@@ -1,4 +1,9 @@
-library subtitles_parser;
+import 'package:subtitles_parser/duration_sanitizer.dart';
 
-export 'src/subtitles_parser/parser.dart';
-export 'src/data/subtitle.dart';
+import 'rust_bridge/api.dart';
+export 'rust_bridge/parsed_subtitle.dart';
+
+Future<List<ParsedSubtitle>> parseSubtitles(String rawSubtitles) async =>
+    rustApi.parseSubtitles(rawSubtitles: rawSubtitles).then(
+          (subtitles) => subtitles.santitizeDurations().toList(),
+        );
