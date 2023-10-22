@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:lang_tube/video_recommendations.dart/data/video_recommendations.dart';
+import 'package:lang_tube/data/video_recommendations/video_recommendations.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
 
 import 'recommended_video.dart';

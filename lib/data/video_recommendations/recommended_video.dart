@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:readability/readability.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
 
-import '../../utils/cefr.dart';
+import '../miscellaneous/cefr.dart';
 
 @immutable
 class RecommendedVideo extends ObservedVideo {
