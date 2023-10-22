@@ -17,14 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.12.0"
-  analyzer_plugin:
-    dependency: transitive
-    description:
-      name: analyzer_plugin
-      sha256: c1d5f167683de03d5ab6c3b53fc9aeefc5d59476e7810ba7bbddff50c6f4392d
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.11.2"
   any_link_preview:
     dependency: "direct main"
     description:
@@ -208,14 +200,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
-  ci:
-    dependency: transitive
-    description:
-      name: ci
-      sha256: "145d095ce05cddac4d797a158bc4cf3b6016d1fe63d8c3d2fbd7212590adca13"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.0"
   circular_inkwell:
     dependency: "direct main"
     description:
@@ -231,14 +215,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  cli_util:
-    dependency: transitive
-    description:
-      name: cli_util
-      sha256: b8db3080e59b2503ca9e7922c3df2072cf13992354d5e944074ffa836fba43b7
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.0"
   clipped_icon:
     dependency: "direct main"
     description:
@@ -356,30 +332,6 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
-  custom_lint:
-    dependency: transitive
-    description:
-      name: custom_lint
-      sha256: "3ce36c04d30c60cde295588c6185b3f9800e6c18f6670a7ffdb3d5eab39bb942"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.0"
-  custom_lint_builder:
-    dependency: transitive
-    description:
-      name: custom_lint_builder
-      sha256: "73d09c9848e9f6d5c3e0a1809eac841a8d7ea123d0849feefa040e1ad60b6d06"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.0"
-  custom_lint_core:
-    dependency: transitive
-    description:
-      name: custom_lint_core
-      sha256: "9170d9db2daf774aa2251a3bc98e4ba903c7702ab07aa438bc83bd3c9a0de57f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.0"
   custom_refresh_indicator:
     dependency: "direct main"
     description:
@@ -431,10 +383,10 @@ packages:
     dependency: transitive
     description:
       name: dio_cache_interceptor
-      sha256: a89166e6fb9c90a4bf2b7f20b5c055087969bc445ced3282e32505543e296e0f
+      sha256: "7c0cb435963f08aa751ae8769b360d462f01160adc1d2d5b80e3b8c450b386e3"
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.2"
+    version: "3.4.4"
   dio_cache_interceptor_hive_store:
     dependency: transitive
     description:
@@ -617,10 +569,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_rust_bridge
-      sha256: a2ff791f96ed03be0d4a8d249130688371ab3612ef95efeddef23600b904a1ef
+      sha256: "2d31289a022f8b0a97e952d553686c50dff2ed5b58ac03628a13bc8cdf5f8ece"
       url: "https://pub.dev"
     source: hosted
-    version: "1.81.0"
+    version: "1.82.3"
   flutter_switch:
     dependency: "direct main"
     description:
@@ -724,14 +676,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.3"
-  hotreloader:
-    dependency: transitive
-    description:
-      name: hotreloader
-      sha256: "728c0613556c1d153f7e7f4a367cffacc3f5a677d7f6497a1c2b35add4e6dacf"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.6"
   html:
     dependency: transitive
     description:
@@ -1102,22 +1046,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.6"
-  riverpod_analyzer_utils:
-    dependency: transitive
-    description:
-      name: riverpod_analyzer_utils
-      sha256: "1b2632a6fc0b659c923a4dcc7cd5da42476f5b3294c70c86c971e63bdd443384"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.1"
-  riverpod_lint:
-    dependency: "direct main"
-    description:
-      name: riverpod_lint
-      sha256: "17ad319914ac6863c64524e598913c0f17e30688aca8f5b7509e96d6e372d493"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.0"
   rx_shared_preferences:
     dependency: "direct main"
     description:
@@ -1319,6 +1247,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
+  sprintf:
+    dependency: transitive
+    description:
+      name: sprintf
+      sha256: "1fc9ffe69d4df602376b52949af107d8f5703b77cda567c4d7d86a0693120f23"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0"
   sqflite:
     dependency: "direct main"
     description:
@@ -1567,10 +1503,10 @@ packages:
     dependency: transitive
     description:
       name: uuid
-      sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"
+      sha256: b715b8d3858b6fa9f68f87d20d98830283628014750c2b09b6f516c1da4af2a7
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.7"
+    version: "4.1.0"
   value_notifier_transformer:
     dependency: "direct main"
     description:

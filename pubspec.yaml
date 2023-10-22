@@ -101,7 +101,6 @@ dependencies:
 
   quiver: ^3.2.1
   mutex: ^3.1.0
-  riverpod_lint: ^1.4.0
   listenable_stream: ^1.1.0
   flutter_switch: ^0.3.2
   collection: ^1.17.1

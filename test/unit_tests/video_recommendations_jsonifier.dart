@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lang_tube/video_recommendations.dart/data/jsonifiers.dart';
+import 'package:lang_tube/data/video_recommendations/jsonifiers.dart';
 import 'package:collection/collection.dart';
-import 'package:lang_tube/video_recommendations.dart/providers/recommendations_provider/storage_manager.dart';
+import 'package:lang_tube/video_recommendations.dart/recommendations_manager/storage_manager.dart';
 
 import 'mock_video_recommendations.dart';
 

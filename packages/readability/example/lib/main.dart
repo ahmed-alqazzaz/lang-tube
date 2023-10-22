@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:readability/readability.dart';
-import 'package:readability/rust_bridge/readability_score.dart';
-import 'package:readability/rust_generated/rust_bridge.dart';
 
 void main() {
   runApp(const ReadabilityExample());

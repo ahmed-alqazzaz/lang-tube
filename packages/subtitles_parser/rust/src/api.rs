@@ -55,5 +55,3 @@ fn strip_html_tags(html: &str) -> String {
     let fragment = Html::parse_document(html);
     fragment.root_element().text().collect::<String>()
 }
-
-

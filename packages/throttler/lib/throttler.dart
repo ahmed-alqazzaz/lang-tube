@@ -69,12 +69,15 @@ class _CallbackLimitManager {
   }
 }
 
-/// A data class that specifies the maximum number of times a callback can be
-/// executed within a certain duration.
 @immutable
-class CallbackRateLimit {
+final class CallbackRateLimit {
+  // specifies the maximum number of times a callback can be executed
   final int maxCount;
+
+  // specifies the duration for the maxCount reset
   final Duration duration;
+
+  // specifies the duration in which the throttler sleeps after maxcount is reached
   final Duration breakDuration;
 
   const CallbackRateLimit({

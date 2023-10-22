@@ -19,10 +19,8 @@ class DioApiClient {
     }
   }
   Future<Response<T>> fetchUri<T>(Uri uri,
-      {void Function(int, int)? onReceiveProgress}) async {
-    return await _dio.getUri<T>(uri,
-        onReceiveProgress: (count, total) => log(count.toString()));
-  }
+          {void Function(int, int)? onReceiveProgress}) async =>
+      await _dio.getUri<T>(uri, onReceiveProgress: onReceiveProgress);
 
   static Future<String> get _cacheDirectory async =>
       await getApplicationDocumentsDirectory().then(

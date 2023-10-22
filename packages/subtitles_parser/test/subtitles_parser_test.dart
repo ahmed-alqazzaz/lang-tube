@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/parser.dart';
-import 'package:subtitles_parser/rust_bridge/duration_sanitizer.dart';
+import 'package:subtitles_parser/duration_sanitizer.dart';
 import 'package:subtitles_parser/subtitles_parser.dart';
 
 import 'subtitles.dart';
