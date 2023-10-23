@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:state_notifier/state_notifier.dart';
 import 'package:subtitles_player/src/data/subtitle.dart';
-import 'package:subtitles_player/src/urils/get_subtitle_by_duration.dart';
+import 'package:subtitles_player/src/utils/get_subtitle_by_duration.dart';
 
 class SubtitlesPlayer extends StateNotifier<Subtitle?> {
   SubtitlesPlayer({
