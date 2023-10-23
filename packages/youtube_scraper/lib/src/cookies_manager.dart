@@ -19,20 +19,37 @@ class YoutubeCookiesManager {
   final Uri _youtubeUrl;
   final VoidCallback _onCookiesInjected;
 
-  bool _areCookiesInjected = false;
-  // executes only when the viewer is created
-  // update cookie and reload webview
+  // update cookie and reload webview in case stored cookies exists, and save browser cookie
   Future<void> synchronizeCookies() async {
-    await _retrieveCookies().then((value) async {
-      // in case the app is not starting for the first time
-      if (value != null) {
-        await _injectCookiesIntoWebView(value);
-        await Future.delayed(cookieInjectionDelay);
-        _onCookiesInjected();
-      }
-      _areCookiesInjected = true;
-      await _saveCookies();
-    });
+    final storedCookies = await _retrieveCookiesStorage();
+    // in case the app is not starting for the first time, and cookies are not inject
+    if (storedCookies != null) {
+      await _injectCookiesIntoWebView(storedCookies);
+      await Future.delayed(cookieInjectionDelay);
+      _onCookiesInjected();
+    }
+    await _saveCookiesIntoStorage();
+  }
+
+  Future<void> _saveCookiesIntoStorage() async {
+    final storedCookies = await _retrieveCookiesStorage();
+    final currentCookies = await _retrieveCookiesFromWebView();
+    if (currentCookies.length < (storedCookies?.length ?? 0)) {
+      printPurple("""cookies length is less than stored cookies""");
+      return synchronizeCookies();
+    }
+    await _storageManager.saveCookies(
+      cookies: jsonEncode(
+        currentCookies.map((cookie) => cookie.toJson()).toList(),
+      ),
+    );
+  }
+
+  Future<List<Cookie>> _retrieveCookiesFromWebView() async =>
+      await CookieManager.instance().getCookies(url: _youtubeUrl);
+  Future<List<dynamic>?> _retrieveCookiesStorage() async {
+    final cookies = await _storageManager.retrieveCookies();
+    return cookies?.isNotEmpty == true ? jsonDecode(cookies!) : null;
   }
 
   Future<void> _injectCookiesIntoWebView(List<dynamic> cookies) async {
@@ -50,33 +67,8 @@ class YoutubeCookiesManager {
     }
   }
 
-  Future<void> _saveCookies() async =>
-      await CookieManager.instance().getCookies(url: _youtubeUrl).then(
-        (cookies) async {
-          if (_areCookiesInjected) {
-            final oldCookies = await _retrieveCookies();
-            if (oldCookies != null && oldCookies.length > cookies.length) {
-              printRed("syncronizing cookies");
-              return synchronizeCookies();
-            }
-            await _storageManager.saveCookies(
-              cookies: jsonEncode(
-                cookies.map((cookie) => cookie.toJson()).toList(),
-              ),
-            );
-          }
-        },
-      );
-  Future<List<dynamic>?> _retrieveCookies() async {
-    final cookies = await _storageManager.retrieveCookies();
-    if (cookies?.isNotEmpty == true) {
-      return jsonDecode(cookies!);
-    }
-    return null;
-  }
-
   @mustCallSuper
-  Future<void> close() async => await _saveCookies();
+  Future<void> close() async => await _saveCookiesIntoStorage();
 
   static const Duration cookieInjectionDelay = Duration(seconds: 10);
 }

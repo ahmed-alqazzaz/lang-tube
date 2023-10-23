@@ -47,12 +47,14 @@ class YoutubeScraper {
         _videosObserver = videosObserver {
     // TODO: remove the timer, when migrating back to healdess webview
     Timer(const Duration(seconds: 5), () {
+      bool hasReloaded = false;
       _webViewManager.interactionManager.clearCache().then((_) {
         _cookiesManager = YoutubeCookiesManager(
           storageManager: cookieStorageManager,
           youtubeUrl: _youtubeUrl,
           onCookiesInjected: () async {
-            return await interactionsController.reload();
+            if (!hasReloaded) await interactionsController.reload();
+            hasReloaded = true;
           },
         );
       });

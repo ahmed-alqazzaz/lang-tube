@@ -133,7 +133,7 @@ function getVideoId(url) {
   if(id === undefined){
     console.log(`anomaly ${url}`);
   }
-  if(!id.includes('&')){   
+  if(id.includes('&')){   
     return id.split('&')[0]; 
   }
   return id;
