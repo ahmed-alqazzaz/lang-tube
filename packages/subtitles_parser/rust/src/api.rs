@@ -1,56 +1,59 @@
 mod data;
+mod regex;
 
-use regex::Regex;
+use ::regex::NoExpand;
 use scraper::Html;
-use lazy_static::lazy_static; 
 use rayon::prelude::*;
 
+use self::regex::*;
 pub use self::data::*;
 
-lazy_static! {
-    static ref LINE_START_REGEX: Regex = Regex::new(r#"start="([\d.]+)""#).unwrap();
-    static ref LINE_DURATION_REGEX: Regex = Regex::new(r#"dur="([\d.]+)""#).unwrap();
-    static ref LINE_CLEANUP_REGEX: Regex = Regex::new(r#"<text[^>]*>|&|<[^>]*>"#).unwrap();
-    static ref FILE_CLEANUP_REGEX: Regex = Regex::new(r#"(?:<\?xml version="1\.0" encoding="utf-8" ?>)?<transcript>|</transcript>"#).unwrap();
-}
+
 
 pub fn parse_subtitles(raw_subtitles: String) -> Vec<ParsedSubtitle> {
-    let cleaned_subtitles = FILE_CLEANUP_REGEX.replace_all(&raw_subtitles, "");
+    let mut cleaned_subtitles = FILE_CLEANUP_REGEX.replace_all(&raw_subtitles, "").to_string();
+    cleaned_subtitles =  APOSTROPHE_REGEX.replace_all(&cleaned_subtitles, "'").to_string();
+    cleaned_subtitles =  LONG_SPACE_REGEX.replace_all(&cleaned_subtitles, " ").to_string();
+    cleaned_subtitles = QUOTE_REGEX.replace_all(&cleaned_subtitles, NoExpand("\"")).to_string();
     cleaned_subtitles.split("</text>")
         .filter(|line| !line.trim().is_empty())
         .collect::<Vec<_>>()
         .par_iter()
-        .map(|line| convert_raw_line_to_subtitle(line))
+        .filter_map(|line| convert_raw_line_to_subtitle(line))
         .collect()
 }
 
-fn convert_raw_line_to_subtitle(line: &str) -> ParsedSubtitle {
-    let start_string = LINE_START_REGEX.captures(line).unwrap().get(1).unwrap().as_str();
-    let duration_string = LINE_DURATION_REGEX.captures(line).unwrap().get(1).unwrap().as_str();
-    let html_text = LINE_CLEANUP_REGEX.replace_all(line, "");
+fn convert_raw_line_to_subtitle(line: &str) -> Option<ParsedSubtitle> {
+    let start_string = LINE_START_REGEX.captures(line)?.get(1)?.as_str();
+    let duration_string = match LINE_DURATION_REGEX.captures(line) {
+        Some(captures) => captures.get(1).unwrap().as_str(),
+        None => "0",
+    };
+    let  html_text = LINE_CLEANUP_REGEX.replace_all(line, "").to_string();
     
-    let start = parse_duration(start_string);
-    let duration = parse_duration(duration_string);
+    
+    let start = parse_duration(start_string)?;
+    let duration = parse_duration(duration_string)?;
     let text = strip_html_tags(&html_text);
 
-    ParsedSubtitle {
+    Some(ParsedSubtitle {
         start,
         end: start + duration,
         text,
-    }
+    })
 }
 
-fn parse_duration(raw_duration: &str) -> RustDuration {
-    let parts: Vec<&str> = raw_duration.split('.').collect();
-    let seconds = parts[0].parse::<u64>().unwrap();
-    let milliseconds = if parts.len() < 2 { 0 } else { parts[1].parse::<u64>().unwrap() };
 
-    RustDuration{
+fn parse_duration(raw_duration: &str) -> Option<RustDuration> {
+    let parts: Vec<&str> = raw_duration.split('.').collect();
+    let seconds = parts.get(0)?.parse::<u64>().ok()?;
+    let milliseconds = if parts.len() < 2 { 0 } else { parts.get(1)?.parse::<u64>().ok()? };
+
+    Some(RustDuration{
         secs: seconds,
         millis: milliseconds,
-    }
+    })
 }
-
 fn strip_html_tags(html: &str) -> String {
     let fragment = Html::parse_document(html);
     fragment.root_element().text().collect::<String>()

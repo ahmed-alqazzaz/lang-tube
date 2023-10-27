@@ -1,3 +1,4 @@
+import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/parser.dart';
 import 'package:subtitles_parser/duration_sanitizer.dart';
@@ -12,9 +13,18 @@ Future<void> main() async {
     lucySubtitles,
     marinaSubtitles,
     rachelSubtitles,
-    germanSubtitles
+    germanSubtitles,
+    unnamedSubtitles,
   ];
 
+  // final timer = Stopwatch()..start();
+  // await Future.wait(List.generate(1000, (index) => index).map((e) async => [
+  //       for (String rawSubtitles in rawSubtitlesList)
+  //         await rustApi.parseSubtitles(rawSubtitles: rawSubtitles).then(
+  //               (subtitles) => subtitles.santitizeDurations().toList(),
+  //             )
+  //     ]));
+  // print('finnished within ${timer.elapsedMilliseconds}');
   final parsedSubtitlesList = [
     for (String rawSubtitles in rawSubtitlesList)
       await rustApi.parseSubtitles(rawSubtitles: rawSubtitles).then(
