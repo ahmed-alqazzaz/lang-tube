@@ -16,3 +16,7 @@ regex = "1.10.1"
 scraper = "0.17.1"
 lazy_static = "1.4.0"
 rayon = "1.8.0"
+
+android_logger =  "0.13.3"
+oslog = { version = "0.2.0", optional = true }
+log = "0.4.20"

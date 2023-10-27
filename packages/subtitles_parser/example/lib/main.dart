@@ -2,8 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
-
-import 'package:subtitles_parserr/subtitles_parser.dart';
+import 'package:subtitles_parser/subtitles_parser.dart';
 
 void main() {
   runApp(const MyApp());

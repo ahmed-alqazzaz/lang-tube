@@ -1,5 +1,6 @@
 mod data;
 mod regex;
+mod logger;
 
 use ::regex::NoExpand;
 use scraper::Html;
@@ -19,9 +20,19 @@ pub fn parse_subtitles(raw_subtitles: String) -> Vec<ParsedSubtitle> {
         .filter(|line| !line.trim().is_empty())
         .collect::<Vec<_>>()
         .par_iter()
-        .filter_map(|line| convert_raw_line_to_subtitle(line))
+        .filter_map(|line| {
+            match convert_raw_line_to_subtitle(line) {
+                Some(subtitle) => Some(subtitle),
+                None => {
+                    logger::log(&format!("Failed to convert line to subtitle: {}", line));
+                    logger::log(&raw_subtitles);
+                    None
+                }
+            }
+        })
         .collect()
 }
+
 
 fn convert_raw_line_to_subtitle(line: &str) -> Option<ParsedSubtitle> {
     let start_string = LINE_START_REGEX.captures(line)?.get(1)?.as_str();

@@ -1,6 +1,6 @@
 import 'dart:ffi';
 
-import 'package:subtitles_parser/rust_bridge/bridge.dart';
+import 'package:subtitles_parser/src/rust_bridge/bridge_generated.dart';
 
 const _testPath =
     'C:\\Users\\acer\\workspace1\\langtube\\packages\\subtitles_parser\\rust\\target\\release\\deps\\subtitles_parser.dll';
