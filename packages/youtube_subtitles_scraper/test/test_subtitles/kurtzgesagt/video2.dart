@@ -1,4 +1,4 @@
-import 'package:youtube_subtitles_scraper/src/scraped_subtitles.dart';
+import 'package:youtube_subtitles_scraper/src/data/scraped_subtitles.dart';
 
 const topic = 'The reason why cancer is so hard to beat';
 const videoId = 'uoJwt9l-XhQ';

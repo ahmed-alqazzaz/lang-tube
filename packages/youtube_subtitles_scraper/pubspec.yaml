@@ -11,12 +11,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  youtube_explode_dart: ^1.12.4
+  youtube_explode_dart: ^2.0.2
   languages:
     path: ../languages
-  http: ^0.13.6
   dio: ^5.3.0
   mutex: ^3.0.1
+  rxdart: ^0.27.7
+  collection: ^1.17.2
+  uuid: ^4.1.0
+  youtube_caption_scraper: ^0.2.0
 
 dev_dependencies:
   flutter_test:
