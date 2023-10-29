@@ -1,14 +1,11 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+import 'dart:developer';
 import 'package:languages/languages.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-import 'package:youtube_subtitles_scraper/src/abstract/api_client.dart';
-import 'package:youtube_subtitles_scraper/src/abstract/cache_manager.dart';
-import 'package:youtube_subtitles_scraper/src/data/scraped_subtitles.dart';
 import 'package:youtube_subtitles_scraper/src/data/source_subtitles.dart';
 import 'package:youtube_subtitles_scraper/src/youtube_explode_manager.dart';
 
-@immutable
+import '../youtube_subtitles_scraper.dart';
+
 final class YoutubeSubtitlesScraper {
   YoutubeSubtitlesScraper({
     required CacheManager cacheManager,
@@ -21,6 +18,7 @@ final class YoutubeSubtitlesScraper {
   final CacheManager _cacheManager;
   final SubtitlesScraperApiClient _apiClient;
   final YoutubeExplodeManager _youtubeExplodeManager;
+  int _recusrsionCount = 0;
 
   // in case translated language is provided,
   // the function will return a translated version
@@ -50,7 +48,21 @@ final class YoutubeSubtitlesScraper {
           language: translatedLanguage ?? language,
         ),
       ),
-    );
+    ).onError((error, stackTrace) async {
+      if (error is SubtitlesScraperBlockedRequestException &&
+          _recusrsionCount < 1) {
+        await _youtubeExplodeManager.deleteCacheById(videoId: youtubeVideoId);
+        _recusrsionCount++;
+        return await scrapeSubtitles(
+          youtubeVideoId: youtubeVideoId,
+          language: language,
+          translatedLanguage: translatedLanguage,
+        ).then((subtitles) => subtitles ?? []);
+      }
+      throw error!;
+    });
+
+    _recusrsionCount = 0;
     return subtitles.isEmpty ? null : subtitles;
   }
 
@@ -65,6 +77,7 @@ final class YoutubeSubtitlesScraper {
     final subtitles = await _apiClient.fetchSubtitles(
       url: sourceCaptions.uri,
     );
+    log("123 source $sourceCaptions lang ${language.name}");
     _cacheManager.cacheSubtitles(
       subtitles: subtitles,
       language: language.name,

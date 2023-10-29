@@ -15,16 +15,16 @@ final class ScraperApiClient extends SubtitlesScraperApiClient {
         );
   final DioApiClient _client;
   @override
-  Future<T> fetchUrl<T>(Uri url) async {
+  Future<T> fetchUrl<T>(Uri url,
+      {void Function(int, int)? onReceiveProgress}) async {
     try {
       log('started');
+      final timer = Stopwatch()..start();
       final response = await _client.fetchUri<T>(
         url,
-        onReceiveProgress: (p0, p1) {
-          log(p0.toString() + 'h');
-        },
+        //  onReceiveProgress: onReceiveProgress,
       );
-      log('finnished');
+      log('finnished4 ${timer.elapsedMilliseconds}');
       if (response.statusCode != 200) {
         throw const SubtitlesScraperBlockedRequestException();
       }
@@ -37,6 +37,7 @@ final class ScraperApiClient extends SubtitlesScraperApiClient {
       } else if (e.error == DioExceptionType.badResponse) {
         throw const SubtitlesScraperBlockedRequestException();
       } else {
+        log(e.toString());
         throw const SubtitlesScraperUnknownException();
       }
     }

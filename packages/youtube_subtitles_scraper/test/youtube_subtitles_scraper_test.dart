@@ -77,6 +77,9 @@ class MockCacheManager extends CacheManager {
       {required String videoId, required String language}) async {
     return null;
   }
+
+  @override
+  Future<void> clearSubtitlesCache() async {}
 }
 
 class MockApiClient extends SubtitlesScraperApiClient {

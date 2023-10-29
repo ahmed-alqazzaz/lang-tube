@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/api_client.dart';
@@ -21,9 +23,13 @@ Future<void> main() async {
   //       ),
   //     )
   // ]);
+  final timer = Stopwatch()..start();
   await scraper.fetchSubtitlesBundle(
-    youtubeVideoId: 'X8ipUgXH6jw',
-    mainLanguage: Language.english(),
-    translatedLanguage: Language.arabic(),
+    youtubeVideoId: '2QcZSVu3CCY',
+    mainLanguage: Language.english,
+    translatedLanguage: Language.arabic,
   );
+  await Future.delayed(Duration(seconds: 1));
+  scraper.close();
+  log('finnished within ${timer.elapsedMilliseconds}');
 }

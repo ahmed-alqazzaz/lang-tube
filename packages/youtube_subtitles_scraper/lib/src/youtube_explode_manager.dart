@@ -20,8 +20,15 @@ final class YoutubeExplodeManager {
 
   Future<Iterable<SourceCaptions>> _fetchAllCaptions(
       {required String youtubeVideoId}) async {
-    // TODO: ensure that cached urls aren't expired
-    return await _scrapeAllCaptions(youtubeVideoId: youtubeVideoId);
+    // final cache = await _cacheManager.retrieveSubtitlesSourceUrls(
+    //     videoId: youtubeVideoId);
+    // if (cache != null) return cache;
+    final captions = await _scrapeAllCaptions(youtubeVideoId: youtubeVideoId);
+    // _cacheManager.cacheSubtitlesSourceCaptions(
+    //   videoId: youtubeVideoId,
+    //   sourceCaptions: captions.toList(),
+    // );
+    return captions;
   }
 
   Future<Iterable<SourceCaptions>> _scrapeAllCaptions(
@@ -37,5 +44,6 @@ final class YoutubeExplodeManager {
         ),
       );
 
+  Future<void> deleteCacheById({required String videoId}) async {}
   void close() => _youtubeExplode.close();
 }
