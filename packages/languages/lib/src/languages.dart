@@ -62,10 +62,7 @@ class Language {
   bool operator ==(covariant Language other) {
     if (identical(this, other)) return true;
 
-    return other.code == code &&
-        other.pattern == pattern &&
-        other.name == name &&
-        other.flag == flag;
+    return other.code == code;
   }
 
   @override

@@ -57,7 +57,7 @@ class SubtitlesSettings extends StatelessWidget {
                     borderRadius: BorderRadius.circular(_flagBorderRadius),
                     child: AspectRatio(
                       aspectRatio: _flagAspectRatio,
-                      child: Language.german().flag,
+                      child: Language.german.flag,
                     ),
                   ),
                 ),

@@ -19,7 +19,7 @@ pub fn log(text: &str) {
                 .with_tag("MyApp") // Set tag
                 .with_filter(FilterBuilder::new().parse("debug,MyApp:trace").build()), // Use filter
         );
-        log::warn!(text);
+        log::warn!("{}", text);
     }
 
     #[cfg(target_os = "ios")]
