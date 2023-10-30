@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:languages/languages.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:youtube_subtitles_scraper/src/abstract/cache_manager.dart';
-import 'package:youtube_subtitles_scraper/src/data/source_subtitles.dart';
+import 'package:youtube_subtitles_scraper/src/data/source_captions.dart';
 
 @immutable
 final class YoutubeExplodeManager {
@@ -13,21 +15,28 @@ final class YoutubeExplodeManager {
   final CacheManager _cacheManager;
 
   Future<Iterable<SourceCaptions>> fetchSourceCaptions(
-          {required String youtubeVideoId, required Language language}) =>
-      _fetchAllCaptions(youtubeVideoId: youtubeVideoId).then(
-        (captions) => captions.where((caption) => caption.language == language),
-      );
+      {required String youtubeVideoId, required Language language}) async {
+    final timer = Stopwatch()..start();
+    log("87 started");
+    final x = await fetchAllCaptions(youtubeVideoId: youtubeVideoId).then(
+      (captions) => captions.where((caption) => caption.language == language),
+    );
+    log("87 finnished within ${timer.elapsedMilliseconds}");
+    return x;
+  }
 
-  Future<Iterable<SourceCaptions>> _fetchAllCaptions(
+  Future<Iterable<SourceCaptions>> fetchAllCaptions(
       {required String youtubeVideoId}) async {
-    // final cache = await _cacheManager.retrieveSubtitlesSourceUrls(
-    //     videoId: youtubeVideoId);
-    // if (cache != null) return cache;
+    final cache = await _cacheManager.retrieveSources(videoId: youtubeVideoId);
+    if (cache != null) return cache;
+    final timer = Stopwatch()..start();
+    log("123 scrape started $youtubeVideoId");
     final captions = await _scrapeAllCaptions(youtubeVideoId: youtubeVideoId);
-    // _cacheManager.cacheSubtitlesSourceCaptions(
-    //   videoId: youtubeVideoId,
-    //   sourceCaptions: captions.toList(),
-    // );
+    log("123 finnished within ${timer.elapsedMilliseconds}");
+    _cacheManager.cacheSources(
+      videoId: youtubeVideoId,
+      sourceCaptions: captions.toList(),
+    );
     return captions;
   }
 
@@ -44,6 +53,9 @@ final class YoutubeExplodeManager {
         ),
       );
 
-  Future<void> deleteCacheById({required String videoId}) async {}
+  Future<void> deleteCacheById({required String videoId}) async {
+    _cacheManager.clearSourcesById(videoId: videoId);
+  }
+
   void close() => _youtubeExplode.close();
 }

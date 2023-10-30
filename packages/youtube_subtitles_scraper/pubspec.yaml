@@ -19,7 +19,8 @@ dependencies:
   rxdart: ^0.27.7
   collection: ^1.17.2
   uuid: ^4.1.0
-  youtube_caption_scraper: ^0.2.0
+  colourful_print:
+    path: ../colourful_print
 
 dev_dependencies:
   flutter_test:

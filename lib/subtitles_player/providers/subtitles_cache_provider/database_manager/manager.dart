@@ -1,13 +1,16 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
+import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/database_manager/data/cached_source_captions.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/database_manager/data/cached_subtitle.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/database_manager/data/constants.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/database_manager/utils/bool_to_int.dart';
 import 'package:mutex/mutex.dart';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 import 'data/exceptions.dart';
 
 @immutable
@@ -33,6 +36,7 @@ class SubtitlesDbManager {
           await db.execute(createVideoIdTableCommand);
           await db.execute(createSubtitlesInfoTableCommand);
           await db.execute(createSubtitlesTableCommand);
+          await db.execute(createSubtitlesSourceTableCommand);
         },
       ),
     );
@@ -123,6 +127,29 @@ class SubtitlesDbManager {
     }
   }
 
+  Future<void> insertSubtitlesSource({
+    required String subtitlesSource,
+    required int subtitlesInfoId,
+  }) async {
+    if (!_db.isOpen) throw const SubtitlesDataBaseIsClosedException();
+    try {
+      await _mutex.acquire();
+
+      // Insert subtitles source into subtitles source table
+      await _db.insert(subtitlesSourceTable, {
+        subtitlesInfoIdColumn: subtitlesInfoId,
+        subtitlesSourceColumn: subtitlesSource,
+      });
+    } on DatabaseException catch (e) {
+      if (e.isUniqueConstraintError()) {
+        throw const SubtitlesAlreadyExistsException();
+      }
+      rethrow;
+    } finally {
+      _mutex.release();
+    }
+  }
+
   Future<Iterable<CachedSubtitles>> retrieveSubtitles({
     required String videoId,
     required String language,
@@ -145,7 +172,33 @@ class SubtitlesDbManager {
     }
   }
 
+  Future<Iterable<CachedSourceCaptions>> retrieveAllSources() async {
+    if (!_db.isOpen) throw const SubtitlesDataBaseIsClosedException();
+    try {
+      await _mutex.acquire();
+
+      // Join the tables to retrieve the subtitles
+      final result = await _db.rawQuery('''
+        SELECT * FROM $subtitlesSourceTable
+        INNER JOIN $subtitlesInfoTable ON $subtitlesSourceTable.$subtitlesInfoIdColumn = $subtitlesInfoTable.$subtitlesInfoIdColumn
+      ''');
+
+      return result.map((cachedSourceCaptions) =>
+          CachedSourceCaptions.fromMap(cachedSourceCaptions));
+    } finally {
+      _mutex.release();
+    }
+  }
+
   Future<void> deleteAllSubtitles() async => await _db.delete(subtitlesTable);
+  Future<void> deleteSubtitlesSources({required String videoId}) async =>
+      _db.rawDelete('''
+            DELETE FROM $subtitlesSourceTable
+            WHERE $subtitlesInfoIdColumn IN (
+              SELECT $subtitlesInfoIdColumn FROM $subtitlesInfoTable
+              WHERE $videoIdColumn = ?
+            )
+     ''', [videoId]);
 
   Future<void> close() async {
     if (!_db.isOpen) throw const SubtitlesDataBaseIsClosedException();
