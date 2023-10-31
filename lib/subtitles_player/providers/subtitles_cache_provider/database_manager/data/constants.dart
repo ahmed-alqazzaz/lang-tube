@@ -34,7 +34,7 @@ const String createSubtitlesTableCommand =
 
 const String createSubtitlesSourceTableCommand =
     '''CREATE TABLE IF NOT EXISTS $subtitlesSourceTable(
-   $subtitlesInfoIdColumn INTEGER NOT NULL,
-   $subtitlesSourceColumn TEXT NOT NULL,
+   $subtitlesInfoIdColumn INTEGER NOT NULL UNIQUE,
+   $subtitlesSourceColumn TEXT NOT NULL UNIQUE,
    FOREIGN KEY ($subtitlesInfoIdColumn) REFERENCES $subtitlesInfoTable($subtitlesInfoIdColumn)
 )''';

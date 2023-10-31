@@ -18,23 +18,20 @@ final class ScraperApiClient extends SubtitlesScraperApiClient {
   Future<T> fetchUrl<T>(Uri url,
       {void Function(int, int)? onReceiveProgress}) async {
     try {
-      log('started');
-      final timer = Stopwatch()..start();
       final response = await _client.fetchUri<T>(
         url,
-        //  onReceiveProgress: onReceiveProgress,
+        onReceiveProgress: onReceiveProgress,
       );
-      log('finnished4 ${timer.elapsedMilliseconds}');
       if (response.statusCode != 200) {
         throw const SubtitlesScraperBlockedRequestException();
       }
       return response.data!;
     } on DioException catch (e) {
-      if (e.error == DioExceptionType.sendTimeout ||
+      if (e.type == DioExceptionType.sendTimeout ||
           e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout) {
         throw const SubtitlesScraperNetworkException();
-      } else if (e.error == DioExceptionType.badResponse) {
+      } else if (e.type == DioExceptionType.badResponse) {
         throw const SubtitlesScraperBlockedRequestException();
       } else {
         log(e.toString());

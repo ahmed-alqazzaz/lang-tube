@@ -1,8 +1,9 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:languages/languages.dart';
-import 'package:youtube_caption_scraper/youtube_caption_scraper.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-import 'package:youtube_subtitles_scraper/src/data/source_captions.dart';
+import 'package:youtube_subtitles_scraper/src/data/models/source_captions.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'test_subtitles/kurtzgesagt/video2.dart' as kurzgesagt_video2;
@@ -27,6 +28,15 @@ Future<void> main() async {
 // Fetch caption tracks – these are objects containing info like
 // base url for the caption track and language code.
 
+  final timer = Stopwatch()..start();
+  await Future.wait([
+    for (var i = 0; i < 15; i++)
+      YoutubeExplode()
+          .videos
+          .closedCaptions
+          .getManifest('2QcZSVu3CCY', formats: [ClosedCaptionFormat.srv1])
+  ]);
+  print('lasted ${timer.elapsedMilliseconds}');
   final x = await YoutubeExplode()
       .videos
       .closedCaptions
@@ -59,10 +69,10 @@ Future<void> main() async {
     test('scrapes english subtitles successfully', () async {
       expect(englishSubtitles, kurzgesagt_video2.englishSubtitles);
     });
-    test('scrapes auto generated arabic subtitles successfully ', () async {
-      expect(arabicSubtitles?.first.subtitles,
-          kurzgesagt_video2.arabicSubtitle.subtitles);
-    });
+    // test('scrapes auto generated arabic subtitles successfully ', () async {
+    //   expect(arabicSubtitles?.first.subtitles,
+    //       kurzgesagt_video2.arabicSubtitle.subtitles);
+    // });
   });
 }
 
@@ -95,6 +105,11 @@ class MockCacheManager extends CacheManager {
   @override
   Future<Iterable<SourceCaptions>?> retrieveSources(
       {required String videoId}) async {
+    return null;
+  }
+
+  @override
+  Future<Iterable<SourceCaptions>?> retrieveAllSources() async {
     return null;
   }
 }

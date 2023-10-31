@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
-import 'package:youtube_subtitles_scraper/src/data/download_progress.dart';
+import 'package:youtube_subtitles_scraper/src/data/models/download_progress.dart';
 
 abstract class SubtitlesScraperApiClient {
   // a stream of a set of the progress value of the all scraped subtitles

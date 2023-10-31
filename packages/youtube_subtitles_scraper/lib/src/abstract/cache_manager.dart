@@ -1,5 +1,5 @@
-import 'package:youtube_subtitles_scraper/src/data/scraped_subtitles.dart';
-import 'package:youtube_subtitles_scraper/src/data/source_captions.dart';
+import 'package:youtube_subtitles_scraper/src/data/models/scraped_subtitles.dart';
+import 'package:youtube_subtitles_scraper/src/data/models/source_captions.dart';
 
 abstract class CacheManager {
   Future<void> cacheSubtitles({

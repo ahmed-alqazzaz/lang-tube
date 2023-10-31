@@ -1,10 +1,12 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:languages/languages.dart';
+import 'package:unique_key_mutex/unique_key_mutex.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-import 'package:youtube_subtitles_scraper/src/abstract/cache_manager.dart';
-import 'package:youtube_subtitles_scraper/src/data/source_captions.dart';
+import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
 @immutable
 final class YoutubeExplodeManager {
@@ -15,29 +17,30 @@ final class YoutubeExplodeManager {
   final CacheManager _cacheManager;
 
   Future<Iterable<SourceCaptions>> fetchSourceCaptions(
-      {required String youtubeVideoId, required Language language}) async {
-    final timer = Stopwatch()..start();
-    log("87 started");
-    final x = await fetchAllCaptions(youtubeVideoId: youtubeVideoId).then(
-      (captions) => captions.where((caption) => caption.language == language),
-    );
-    log("87 finnished within ${timer.elapsedMilliseconds}");
-    return x;
-  }
+          {required String youtubeVideoId, required Language language}) async =>
+      await fetchAllCaptions(youtubeVideoId: youtubeVideoId).then(
+        (captions) => captions.where((caption) => caption.language == language),
+      );
 
   Future<Iterable<SourceCaptions>> fetchAllCaptions(
       {required String youtubeVideoId}) async {
-    final cache = await _cacheManager.retrieveSources(videoId: youtubeVideoId);
-    if (cache != null) return cache;
-    final timer = Stopwatch()..start();
-    log("123 scrape started $youtubeVideoId");
-    final captions = await _scrapeAllCaptions(youtubeVideoId: youtubeVideoId);
-    log("123 finnished within ${timer.elapsedMilliseconds}");
-    _cacheManager.cacheSources(
-      videoId: youtubeVideoId,
-      sourceCaptions: captions.toList(),
-    );
-    return captions;
+    try {
+      await UniqueKeyMutex(key: youtubeVideoId).acquire();
+      final cache =
+          await _cacheManager.retrieveSources(videoId: youtubeVideoId);
+      if (cache != null) return cache;
+      final timer = Stopwatch()..start();
+      log("123 scrape started $youtubeVideoId");
+      final captions = await _scrapeAllCaptions(youtubeVideoId: youtubeVideoId);
+      log("123 finnished within ${timer.elapsedMilliseconds}");
+      await _cacheManager.cacheSources(
+        videoId: youtubeVideoId,
+        sourceCaptions: captions.toList(),
+      );
+      return captions;
+    } finally {
+      UniqueKeyMutex(key: youtubeVideoId).release();
+    }
   }
 
   Future<Iterable<SourceCaptions>> _scrapeAllCaptions(
