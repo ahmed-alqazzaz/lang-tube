@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/database_manager/data/cached_source_captions.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/database_manager/data/cached_subtitle.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/database_manager/data/constants.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/database_manager/utils/bool_to_int.dart';
+import 'package:lang_tube/utils/bool_to_int.dart';
 import 'package:mutex/mutex.dart';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';

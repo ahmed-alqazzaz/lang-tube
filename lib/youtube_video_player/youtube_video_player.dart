@@ -79,12 +79,10 @@ class _YoutubeVideoPlayerViewState
           ),
           builder: (context, player) {
             return FutureBuilder(
-              future: ref.read(subtitlesScraperProvider.future).then(
-                    (scraper) => scraper.fetchSubtitlesBundle(
-                      youtubeVideoId: widget.videoId,
-                      mainLanguage: Language.english,
-                      translatedLanguage: Language.arabic,
-                    ),
+              future: ref.read(subtitlesScraperProvider).fetchSubtitlesBundle(
+                    youtubeVideoId: widget.videoId,
+                    mainLanguage: Language.english,
+                    translatedLanguage: Language.arabic,
                   ),
               builder: (context, snapshot) {
                 final subtitlesBundles = snapshot.data?.toList();

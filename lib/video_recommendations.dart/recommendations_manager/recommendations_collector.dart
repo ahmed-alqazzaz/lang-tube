@@ -2,9 +2,10 @@ import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/provider.dart';
-import 'package:lang_tube/data/miscellaneous/cefr.dart';
-import 'package:lang_tube/data/video_recommendations/recommended_video.dart';
-import 'package:lang_tube/data/video_recommendations/video_recommendations.dart';
+import 'package:lang_tube/models/miscellaneous/cefr.dart';
+import 'package:lang_tube/models/video_recommendations/recommended_video.dart';
+import 'package:lang_tube/models/video_recommendations/video_recommendations.dart';
+import 'package:lang_tube/subtitles_scraper/scraper.dart';
 import 'package:lang_tube/video_recommendations.dart/utils/language_filter.dart';
 import 'package:lang_tube/video_recommendations.dart/utils/ranker.dart';
 import 'package:lang_tube/video_recommendations.dart/utils/subtitles_readability_calculator.dart';
@@ -45,12 +46,10 @@ class YoutubeRecommendationsCollector extends ChangeNotifier {
   Stream<RecommendedVideo> _recommendedVideosMapper(
     Iterable<ObservedVideo> videos,
   ) async* {
-    final subtitlesScraper =
-        await ProviderContainer().read(subtitlesScraperProvider.future);
-
+    ;
     final targetLanguageVideos = videos.toList().filteredByTargetLanguage;
     for (final video in targetLanguageVideos) {
-      final subtitlesData = await subtitlesScraper
+      final subtitlesData = await SubtitlesScraper.instance
           .scrapeSubtitles(
             youtubeVideoId: video.id,
             language: Language.english(),
