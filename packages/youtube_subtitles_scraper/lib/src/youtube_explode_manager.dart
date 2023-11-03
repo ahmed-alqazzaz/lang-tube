@@ -1,6 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:languages/languages.dart';
@@ -29,13 +27,11 @@ final class YoutubeExplodeManager {
       final cache =
           await _cacheManager.retrieveSources(videoId: youtubeVideoId);
       if (cache != null) return cache;
-      final timer = Stopwatch()..start();
-      log("123 scrape started $youtubeVideoId");
       final captions = await _scrapeAllCaptions(youtubeVideoId: youtubeVideoId);
-      log("123 finnished within ${timer.elapsedMilliseconds}");
-      await _cacheManager.cacheSources(
-        videoId: youtubeVideoId,
-        sourceCaptions: captions.toList(),
+      await Future.wait(
+        captions.where((element) => element.language != null).map(
+              _cacheManager.cacheSourceCaptions,
+            ),
       );
       return captions;
     } finally {
@@ -55,10 +51,6 @@ final class YoutubeExplodeManager {
           ),
         ),
       );
-
-  Future<void> deleteCacheById({required String videoId}) async {
-    _cacheManager.clearSourcesById(videoId: videoId);
-  }
 
   void close() => _youtubeExplode.close();
 }

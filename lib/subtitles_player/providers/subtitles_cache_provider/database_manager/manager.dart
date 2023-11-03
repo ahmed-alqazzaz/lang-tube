@@ -179,6 +179,9 @@ class SubtitlesDbManager {
         SELECT * FROM $subtitlesSourceTable
         INNER JOIN $subtitlesInfoTable ON $subtitlesSourceTable.$subtitlesInfoIdColumn = $subtitlesInfoTable.$subtitlesInfoIdColumn
       ''');
+      printPurple((await _db.rawQuery('''
+        SELECT * FROM $subtitlesSourceTable
+        ''')).toString());
       return result.map((cachedSourceCaptions) {
         return CachedSourceCaptions.fromMap(cachedSourceCaptions);
       });
@@ -210,7 +213,7 @@ class SubtitlesDbManager {
     String query = '''
         DELETE FROM $subtitlesSourceTable
         WHERE $subtitlesInfoIdColumn IN (
-          SELECT $subtitlesInfoIdColumn FROM $subtitlesInfoTable 
+          SELECT $subtitlesInfoIdColumn FROM $subtitlesInfoTable
           ${whereClause.isNotEmpty ? 'WHERE $whereClause' : ''}
         )
     ''';
