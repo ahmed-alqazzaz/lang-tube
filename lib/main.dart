@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:lang_tube/subtitles_scraper/scraper.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart' as x;
 import 'package:bottom_tabbed_navigator/bottom_tabbed_navigator.dart';
 import 'package:circular_inkwell/circular_inkwell.dart';
@@ -33,8 +34,8 @@ Future<void> main() async {
     if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
     return stack;
   };
-  final initialUrl = await ReceiveSharingIntent.getInitialText();
-
+  await ReceiveSharingIntent.getInitialText();
+  await SubtitlesScraper.ensureInitalized();
   runApp(const LangTube());
 }
 

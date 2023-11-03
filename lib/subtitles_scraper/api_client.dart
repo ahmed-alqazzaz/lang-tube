@@ -4,7 +4,6 @@ import 'package:dio_api_client/dio_api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:user_agent/user_agent.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
-import 'data/exceptions.dart';
 
 @immutable
 final class ScraperApiClient extends SubtitlesScraperApiClient {

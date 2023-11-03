@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/data/subtitles_bundle.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/data/subtitles_data.dart';
+import 'package:lang_tube/models/subtitles_scraping/subtitles_bundle.dart';
 import 'package:languages/languages.dart';
 import 'package:subtitles_parser/subtitles_parser.dart';
 import 'package:subtitles_player/subtitles_player.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 import '../crud/subtitles_cache_manager/cache_manager.dart';
+import '../models/subtitles_scraping/subtitles_data.dart';
 import 'api_client.dart';
 import 'package:quiver/iterables.dart';
 
@@ -18,8 +18,8 @@ final class SubtitlesScraper {
       _cacheManager ??= await SubtitlesCacheManager.open();
 
   static SubtitlesScraper get instance => _instance;
-  static final _instance = SubtitlesScraper();
-  SubtitlesScraper()
+  static final _instance = SubtitlesScraper._();
+  SubtitlesScraper._()
       : assert(_cacheManager != null,
             'subtitles scraper has not been initialized'),
         _scraper = YoutubeSubtitlesScraper(

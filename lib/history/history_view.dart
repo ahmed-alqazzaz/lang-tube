@@ -31,7 +31,6 @@ class HistoryView extends ConsumerStatefulWidget {
 class _HistoryViewState extends ConsumerState<HistoryView> {
   final _searchAppbarKey = GlobalKey<SearchAppbarState>();
   final _wordsHistoryKey = GlobalKey<State<StatefulBuilder>>();
-  final _tabBarKey = GlobalKey<ContainedTabBarViewState>();
 
   late final videosHistoryNotifier = ref.read(videosHistoryProvider.notifier);
   late final wordsHistoryNotifier = ref.read(wordsHistoryProvider.notifier);
@@ -43,11 +42,12 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
   }).toList();
 
   String? _videoIdFilter;
+  int _tabIndex = 0;
 
-  void _searchFieldListener(String value) =>
-      _tabBarKey.currentState?.currentIndex == 0
-          ? videosHistoryNotifier.search(text: value)
-          : wordsHistoryNotifier.search(text: value);
+  // int get currentIndex => _controller.index;
+  void _searchFieldListener(String value) => _tabIndex == 0
+      ? videosHistoryNotifier.search(text: value)
+      : wordsHistoryNotifier.search(text: value);
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +84,13 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                 child: NotificationListener(
                   onNotification: _tabBarNotificationListener,
                   child: ContainedTabBarView(
-                    onChange: (index) => _searchAppbarKey.currentState
-                      ?..disableSearch()
-                      ..searchFieldHint =
-                          index == 0 ? _searchVideosHint : _searchWordsHint,
+                    onChange: (index) {
+                      _tabIndex = index;
+                      _searchAppbarKey.currentState
+                        ?..disableSearch()
+                        ..searchFieldHint =
+                            index == 0 ? _searchVideosHint : _searchWordsHint;
+                    },
                     tabBarProperties: TabBarProperties(
                       indicatorColor: const Color.fromARGB(255, 190, 40, 216),
                       unselectedLabelColor: LangTube.tmp.withOpacity(0.6),

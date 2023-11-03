@@ -1,6 +1,6 @@
-import 'package:lang_tube/data/miscellaneous/cefr.dart';
-import 'package:lang_tube/data/video_recommendations/recommended_video.dart';
-import 'package:lang_tube/data/video_recommendations/video_recommendations.dart';
+import 'package:lang_tube/models/miscellaneous/cefr.dart';
+import 'package:lang_tube/models/video_recommendations/recommended_video.dart';
+import 'package:lang_tube/models/video_recommendations/video_recommendations.dart';
 
 final videoRecommendationsList = [
   VideoRecommendationsPackage(

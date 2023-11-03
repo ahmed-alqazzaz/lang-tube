@@ -2,17 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/crud/subtitles_cache_manager/cache_manager.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/cache_provider.dart';
-import 'package:lang_tube/subtitles_scraper/api_client.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/provider.dart';
+import 'package:lang_tube/subtitles_scraper/scraper.dart';
 import 'package:languages/languages.dart';
 import 'package:user_agent/user_agent.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserAgentManager().initilize();
-  final scraper = ProviderContainer().read(subtitlesScraperProvider);
+  await SubtitlesScraper.ensureInitalized();
 
   print('started');
   // final apiClient = ScraperApiClient();
@@ -24,18 +21,12 @@ Future<void> main() async {
   //       ),
   //     )
   // ]);
-  final timer = Stopwatch()..start();
   final x = ['2QcZSVu3CCY', 'JOiGEI9pQBs', '9FppammO1zk'];
-  await scraper.fetchSubtitlesBundle(
+  await SubtitlesScraper.instance.fetchSubtitlesBundle(
     youtubeVideoId: x[2],
     mainLanguage: Language.english,
     translatedLanguage: Language.arabic,
   );
-  await scraper.scrapeSubtitles(
-      youtubeVideoId: x[0], language: Language.english);
-  log((await scraper.cacheManager.retrieveSources())?.toList().toString() ??
-      'nothing');
-  await Future.delayed(Duration(seconds: 5));
-  await scraper.close();
-  log("finnished");
+  await SubtitlesScraper.instance
+      .scrapeSubtitles(youtubeVideoId: x[0], language: Language.english);
 }

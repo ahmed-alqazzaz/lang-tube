@@ -1,11 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/database_manager/data/constants.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/database_manager/utils/int_to_bool.dart';
+import 'package:lang_tube/crud/subtitles_cache_manager/constants.dart';
+import 'package:lang_tube/utils/int_to_bool.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
-class CachedSourceCaptions extends SourceCaptions {
+final class CachedSourceCaptions extends SourceCaptions {
   const CachedSourceCaptions({
     required super.uri,
     required super.videoId,

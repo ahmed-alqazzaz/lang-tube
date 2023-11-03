@@ -1,7 +1,7 @@
-class SubtitlesDataBaseIsClosedException implements Exception {
-  const SubtitlesDataBaseIsClosedException();
+final class SubtitlesAlreadyExistsException implements Exception {
+  const SubtitlesAlreadyExistsException();
 }
 
-class SubtitlesAlreadyExistsException implements Exception {
-  const SubtitlesAlreadyExistsException();
+final class SubtitlesSourceAlreadyExistsException implements Exception {
+  const SubtitlesSourceAlreadyExistsException();
 }

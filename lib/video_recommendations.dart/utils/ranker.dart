@@ -1,4 +1,4 @@
-import 'package:lang_tube/data/video_recommendations/recommended_video.dart';
+import 'package:lang_tube/models/video_recommendations/recommended_video.dart';
 
 extension VideosDifficultyRankerr on List<RecommendedVideo> {
   void sortByDifficulty() => sort(

@@ -12,9 +12,9 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
 import '../router/routes.dart';
-import '../data/miscellaneous/cefr.dart';
-import '../data/video_recommendations/recommended_video.dart';
-import '../data/video_recommendations/video_recommendations.dart';
+import '../models/miscellaneous/cefr.dart';
+import '../models/video_recommendations/recommended_video.dart';
+import '../models/video_recommendations/video_recommendations.dart';
 import '../video_widgets/display_video_item.dart';
 
 class VideoRecommendationsView extends ConsumerStatefulWidget {

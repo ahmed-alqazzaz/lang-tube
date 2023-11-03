@@ -1,7 +1,7 @@
 import 'dart:developer';
-
-import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/data/subtitles_data.dart';
 import 'package:readability/readability.dart';
+
+import '../../models/subtitles_scraping/subtitles_data.dart';
 
 extension SubtitleReadbilityCalculator on SubtitlesData {
   Future<ReadabilityScore> get subtitlesComplexity async =>

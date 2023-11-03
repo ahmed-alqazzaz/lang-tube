@@ -4,7 +4,7 @@ import 'package:lang_tube/video_recommendations.dart/recommendations_manager/rec
 import 'package:lang_tube/video_recommendations.dart/recommendations_manager/recommendations_state_notifier.dart';
 import 'package:listenable_stream/listenable_stream.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
-import '../../data/video_recommendations/video_recommendations.dart';
+import '../../models/video_recommendations/video_recommendations.dart';
 import 'youtube_scraper_cookies_storage_manager.dart';
 
 class YoutubeRecommendationsManager {

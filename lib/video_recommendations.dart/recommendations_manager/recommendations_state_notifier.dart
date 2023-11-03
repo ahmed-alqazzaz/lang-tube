@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/data/video_recommendations/recommended_video.dart';
+import 'package:lang_tube/models/video_recommendations/recommended_video.dart';
 import 'package:lang_tube/video_recommendations.dart/utils/language_filter.dart';
 import 'package:lang_tube/video_recommendations.dart/utils/ranker.dart';
 import 'package:lang_tube/video_recommendations.dart/recommendations_manager/recommendations_state.dart';

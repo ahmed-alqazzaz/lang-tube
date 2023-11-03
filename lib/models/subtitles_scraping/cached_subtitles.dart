@@ -2,11 +2,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/database_manager/data/constants.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitles_cache_provider/database_manager/utils/bool_to_int.dart';
+import 'package:lang_tube/crud/subtitles_cache_manager/constants.dart';
+import 'package:lang_tube/utils/bool_to_int.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
-import '../utils/int_to_bool.dart';
+import '../../utils/int_to_bool.dart';
 
 @immutable
 final class CachedSubtitles extends ScrapedSubtitles {

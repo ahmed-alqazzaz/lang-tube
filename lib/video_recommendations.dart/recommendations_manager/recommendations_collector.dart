@@ -1,7 +1,5 @@
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/subtitles_player/providers/subtitles_scraper_provider/provider.dart';
 import 'package:lang_tube/models/miscellaneous/cefr.dart';
 import 'package:lang_tube/models/video_recommendations/recommended_video.dart';
 import 'package:lang_tube/models/video_recommendations/video_recommendations.dart';
@@ -46,13 +44,13 @@ class YoutubeRecommendationsCollector extends ChangeNotifier {
   Stream<RecommendedVideo> _recommendedVideosMapper(
     Iterable<ObservedVideo> videos,
   ) async* {
-    ;
+    
     final targetLanguageVideos = videos.toList().filteredByTargetLanguage;
     for (final video in targetLanguageVideos) {
       final subtitlesData = await SubtitlesScraper.instance
           .scrapeSubtitles(
             youtubeVideoId: video.id,
-            language: Language.english(),
+            language: Language.english,
           )
           .then((value) => value?.first);
 

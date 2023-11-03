@@ -4,10 +4,10 @@ import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart'
     as subtitles_scraper;
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
-import 'database_manager/data/cached_subtitle.dart';
-import 'database_manager/data/cached_source_captions.dart';
-import 'database_manager/data/constants.dart';
-import 'database_manager/manager.dart';
+import '../../models/subtitles_scraping/cached_subtitles.dart';
+import '../../models/subtitles_scraping/cached_source_captions.dart';
+import 'constants.dart';
+import 'db_manager.dart';
 
 @immutable
 final class SubtitlesCacheManager implements subtitles_scraper.CacheManager {

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_player/providers/multi_subtitles_player_provider/provider.dart';
+import 'package:lang_tube/subtitles_scraper/scraper.dart';
 import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/full_screen_youtube_player.dart';
 import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/portrait_youtube_player.dart';
 import 'package:languages/languages.dart';
 import 'package:subtitles_player/subtitles_player.dart';
 import 'package:value_notifier_transformer/value_notifier_transformer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import '../subtitles_player/providers/subtitles_scraper_provider/provider.dart';
 import 'settings/subtitles_settings/selectability_builder.dart';
 
 class YoutubeVideoPlayerView extends ConsumerStatefulWidget {
@@ -79,11 +79,11 @@ class _YoutubeVideoPlayerViewState
           ),
           builder: (context, player) {
             return FutureBuilder(
-              future: ref.read(subtitlesScraperProvider).fetchSubtitlesBundle(
-                    youtubeVideoId: widget.videoId,
-                    mainLanguage: Language.english,
-                    translatedLanguage: Language.arabic,
-                  ),
+              future: SubtitlesScraper.instance.fetchSubtitlesBundle(
+                youtubeVideoId: widget.videoId,
+                mainLanguage: Language.english,
+                translatedLanguage: Language.arabic,
+              ),
               builder: (context, snapshot) {
                 final subtitlesBundles = snapshot.data?.toList();
                 final options = subtitlesBundles?.map((subtitlesBundle) => (

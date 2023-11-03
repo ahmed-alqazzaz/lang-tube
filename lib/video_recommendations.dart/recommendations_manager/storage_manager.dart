@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:lang_tube/data/video_recommendations/jsonifiers.dart';
+import 'package:lang_tube/models/video_recommendations/jsonifiers.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
 
-import '../../data/video_recommendations/video_recommendations.dart';
+import '../../models/video_recommendations/video_recommendations.dart';
 
 class RecommendationsStorageManager {
   RecommendationsStorageManager({required this.clicker});
