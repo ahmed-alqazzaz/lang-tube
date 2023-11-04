@@ -1,12 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/foundation.dart';
+import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
 import 'subtitles_data.dart';
 
 @immutable
 final class SubtitlesBundle {
-  final SubtitlesData mainSubtitlesData;
-  final SubtitlesData translatedSubtitlesData;
+  final ScrapedSubtitles mainSubtitlesData;
+  final ScrapedSubtitles translatedSubtitlesData;
   const SubtitlesBundle({
     required this.mainSubtitlesData,
     required this.translatedSubtitlesData,
@@ -29,13 +30,12 @@ final class SubtitlesBundle {
       mainSubtitlesData.hashCode ^ translatedSubtitlesData.hashCode;
 
   SubtitlesBundle copyWith({
-    SubtitlesData? mainSubtitles,
-    SubtitlesData? translatedSubtitles,
+    ScrapedSubtitles? mainSubtitles,
+    ScrapedSubtitles? translatedSubtitles,
   }) {
     return SubtitlesBundle(
-      mainSubtitlesData: mainSubtitles ?? this.mainSubtitlesData,
-      translatedSubtitlesData:
-          translatedSubtitles ?? this.translatedSubtitlesData,
+      mainSubtitlesData: mainSubtitles ?? mainSubtitlesData,
+      translatedSubtitlesData: translatedSubtitles ?? translatedSubtitlesData,
     );
   }
 }

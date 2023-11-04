@@ -1,7 +1,9 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
 
 @immutable
-final class ParsedSubtitle {
+class ParsedSubtitle {
   final Duration start;
   final Duration end;
   final String text;
@@ -39,9 +41,28 @@ final class ParsedSubtitle {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'start': start,
-      'end': end,
+      'start': start.toJson(),
+      'end': end.toJson(),
       'text': text,
     };
   }
+
+  factory ParsedSubtitle.fromMap(Map<String, dynamic> map) {
+    return ParsedSubtitle(
+      start: DurationJsonifier.fromJson(map['start'] as String),
+      end: DurationJsonifier.fromJson(map['end'] as String),
+      text: map['text'] as String,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ParsedSubtitle.fromJson(String source) =>
+      ParsedSubtitle.fromMap(json.decode(source) as Map<String, dynamic>);
+}
+
+extension DurationJsonifier on Duration {
+  String toJson() => jsonEncode(inMicroseconds);
+  static Duration fromJson(String json) =>
+      Duration(microseconds: jsonDecode(json));
 }

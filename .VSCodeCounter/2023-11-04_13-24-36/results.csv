@@ -1,0 +1,8 @@
+"filename", "language", "Dart", "comment", "blank", "total"
+"c:\Users\acer\workspace1\langtube\packages\subtitles_parser\lib\src\duration_sanitizer.dart", "Dart", 13, 0, 3, 16
+"c:\Users\acer\workspace1\langtube\packages\subtitles_parser\lib\src\parser.dart", "Dart", 14, 0, 4, 18
+"c:\Users\acer\workspace1\langtube\packages\subtitles_parser\lib\src\rust_bridge\api.dart", "Dart", 16, 4, 8, 28
+"c:\Users\acer\workspace1\langtube\packages\subtitles_parser\lib\src\rust_bridge\bridge_generated.dart", "Dart", 225, 19, 54, 298
+"c:\Users\acer\workspace1\langtube\packages\subtitles_parser\lib\src\rust_bridge\duration_converter.dart", "Dart", 4, 0, 2, 6
+"c:\Users\acer\workspace1\langtube\packages\subtitles_parser\lib\src\rust_bridge\parsed_subtitle.dart", "Dart", 39, 0, 9, 48
+"Total", "-", 311, 23, 80, 414

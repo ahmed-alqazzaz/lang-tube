@@ -22,11 +22,20 @@ Future<void> main() async {
   //     )
   // ]);
   final x = ['2QcZSVu3CCY', 'JOiGEI9pQBs', '9FppammO1zk'];
-  await SubtitlesScraper.instance.fetchSubtitlesBundle(
-    youtubeVideoId: x[2],
-    mainLanguage: Language.english,
-    translatedLanguage: Language.arabic,
-  );
-  await SubtitlesScraper.instance
-      .scrapeSubtitles(youtubeVideoId: x[0], language: Language.english);
+  try {
+    final z = await SubtitlesScraper.instance.fetchSubtitlesBundle(
+      youtubeVideoId: x[2],
+      mainLanguage: Language.english,
+      translatedLanguage: Language.arabic,
+    );
+    await SubtitlesScraper.instance
+        .scrapeSubtitles(youtubeVideoId: x[0], language: Language.english);
+    log(z.first.mainSubtitlesData.subtitles.toString());
+  } finally {
+    await Future.delayed(Duration(seconds: 3));
+    await SubtitlesScraper.instance.close();
+    await Future.delayed(Duration(seconds: 3));
+  }
+
+  //await SubtitlesScraper.instance.close();
 }

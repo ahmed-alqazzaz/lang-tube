@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_player/providers/multi_subtitles_player_provider/provider.dart';
 import 'package:lang_tube/subtitles_scraper/scraper.dart';
+import 'package:lang_tube/youtube_video_player/providers/subtitles_provider.dart';
 import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/full_screen_youtube_player.dart';
 import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/portrait_youtube_player.dart';
 import 'package:languages/languages.dart';
@@ -78,13 +79,9 @@ class _YoutubeVideoPlayerViewState
             topActions: const [],
           ),
           builder: (context, player) {
-            return FutureBuilder(
-              future: SubtitlesScraper.instance.fetchSubtitlesBundle(
-                youtubeVideoId: widget.videoId,
-                mainLanguage: Language.english,
-                translatedLanguage: Language.arabic,
-              ),
-              builder: (context, snapshot) {
+            return Consumer(
+              builder: (context, ref, _) {
+                final subtitlesBundle = ref.watch(subtitlesProvider);
                 final subtitlesBundles = snapshot.data?.toList();
                 final options = subtitlesBundles?.map((subtitlesBundle) => (
                       language: Language.english,

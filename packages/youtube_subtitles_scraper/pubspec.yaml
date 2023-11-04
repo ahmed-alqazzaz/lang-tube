@@ -19,6 +19,8 @@ dependencies:
   uuid: ^4.1.0
   unique_key_mutex:
     path: ../unique_key_mutex
+  subtitles_parser:
+    path: ../subtitles_parser
   languages:
     path: ../languages
   colourful_print:

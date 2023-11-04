@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:languages/languages.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-import 'package:youtube_subtitles_scraper/src/data/models/source_captions.dart';
+import 'package:youtube_subtitles_scraper/src/models/source_captions.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'test_subtitles/kurtzgesagt/video2.dart' as kurzgesagt_video2;
