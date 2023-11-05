@@ -2,8 +2,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
-import 'subtitles_data.dart';
-
 @immutable
 final class SubtitlesBundle {
   final ScrapedSubtitles mainSubtitlesData;

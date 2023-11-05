@@ -6,6 +6,7 @@ import 'package:subtitles_parser/subtitles_parser.dart';
 import 'package:unique_key_mutex/unique_key_mutex.dart';
 import 'package:youtube_subtitles_scraper/src/utils/cache_expiration_manager.dart';
 import 'package:youtube_subtitles_scraper/src/utils/cache_redundancy_manager.dart';
+import 'package:youtube_subtitles_scraper/src/utils/sources_count_manager.dart';
 import 'package:youtube_subtitles_scraper/src/youtube_explode_manager.dart';
 
 import '../youtube_subtitles_scraper.dart';
@@ -20,11 +21,12 @@ final class YoutubeSubtitlesScraper {
           cacheManager: cacheManager,
         ),
         _cacheManager = cacheManager {
-    _cacheManager.clearExpiredSources(
-      onSourcesDeleted: _onSourcesDeleted,
-    );
-
-    _cacheManager.deleteUnnecessarySources();
+    _cacheManager
+        .deleteUnnecessarySources()
+        .whenComplete(() => _cacheManager.clearExpiredSources(
+              onSourcesDeleted: _onSourcesDeleted,
+            ))
+        .whenComplete(_cacheManager.deleteUnnecessarySources);
   }
   final CacheManager _cacheManager;
   final SubtitlesScraperApiClient _apiClient;
@@ -88,7 +90,7 @@ final class YoutubeSubtitlesScraper {
       language: language.name,
       videoId: youtubeVideoId,
     );
-    await _cacheManager.cacheSubtitles(scrapedSubtitles);
+    // await _cacheManager.cacheSubtitles(scrapedSubtitles);
     return scrapedSubtitles;
   }
 

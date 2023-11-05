@@ -10,6 +10,7 @@ import 'package:mutex/mutex.dart';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
+import '../../models/subtitles_scraping/cached_subtitles.dart';
 import 'exceptions.dart';
 
 @immutable
@@ -24,10 +25,10 @@ class SubtitlesDbManager {
       databaseFactory = databaseFactoryFfi;
     }
 
-    if (File(dbFilePath).existsSync()) {
-      printGreen("exists");
-      File(dbFilePath).deleteSync();
-    }
+    // if (File(dbFilePath).existsSync()) {
+    //   printGreen("exists");
+    //   File(dbFilePath).deleteSync();
+    // }
     return SubtitlesDbManager._(
       await openDatabase(
         dbFilePath,
@@ -150,7 +151,7 @@ class SubtitlesDbManager {
     }
   }
 
-  Future<Iterable<ScrapedSubtitles>> retrieveSubtitles() async {
+  Future<Iterable<CachedSubtitles>> retrieveSubtitles() async {
     assert(_db.isOpen, 'subtitles database is closed');
     try {
       await _mutex.acquire();
@@ -162,7 +163,7 @@ class SubtitlesDbManager {
        ''');
 
       return result.map(
-        (cachedSubtitle) => ScrapedSubtitlesMapper.fromMap(cachedSubtitle),
+        (cachedSubtitle) => CachedSubtitles.fromMap(cachedSubtitle),
       );
     } finally {
       _mutex.release();
@@ -179,9 +180,7 @@ class SubtitlesDbManager {
         SELECT * FROM $subtitlesSourceTable
         INNER JOIN $subtitlesInfoTable ON $subtitlesSourceTable.$subtitlesInfoIdColumn = $subtitlesInfoTable.$subtitlesInfoIdColumn
       ''');
-      printPurple((await _db.rawQuery('''
-        SELECT * FROM $subtitlesSourceTable
-        ''')).toString());
+
       return result.map((cachedSourceCaptions) {
         return CachedSourceCaptions.fromMap(cachedSourceCaptions);
       });
@@ -222,6 +221,26 @@ class SubtitlesDbManager {
       query,
       whereArgs,
     );
+  }
+
+  Future<DateTime?> getCreatedAtByInfoId(int infoId) async {
+    assert(_db.isOpen, 'subtitles database is closed');
+    try {
+      await _mutex.acquire();
+
+      // Query the subtitlesInfo table for the row with the given infoId
+      final List<Map<String, dynamic>> rows = await _db.query(
+        subtitlesInfoTable,
+        where: '$subtitlesInfoIdColumn = ?',
+        whereArgs: [infoId],
+      );
+
+      final dateTime = rows.firstOrNull?[subtitlesCacheDate] as String?;
+      // If a row was found, parse the created_at column value into a DateTime and return it
+      return dateTime != null ? DateTime.parse(dateTime) : null;
+    } finally {
+      _mutex.release();
+    }
   }
 
   Future<void> close() async {

@@ -30,11 +30,12 @@ Future<void> main() async {
     );
     await SubtitlesScraper.instance
         .scrapeSubtitles(youtubeVideoId: x[0], language: Language.english);
-    log(z.first.mainSubtitlesData.subtitles.toString());
+    // log(z.first.mainSubtitlesData.subtitles.toString());
   } finally {
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 3));
     await SubtitlesScraper.instance.close();
     await Future.delayed(Duration(seconds: 3));
+    log('finnished');
   }
 
   //await SubtitlesScraper.instance.close();
