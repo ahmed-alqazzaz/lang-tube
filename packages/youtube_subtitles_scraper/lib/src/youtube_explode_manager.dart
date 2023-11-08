@@ -14,11 +14,13 @@ final class YoutubeExplodeManager {
   final YoutubeExplode _youtubeExplode;
   final CacheManager _cacheManager;
 
-  Future<Iterable<SourceCaptions>> fetchSourceCaptions(
-          {required String youtubeVideoId, required Language language}) async =>
-      await fetchAllCaptions(youtubeVideoId: youtubeVideoId).then(
-        (captions) => captions.where((caption) => caption.language == language),
-      );
+  Future<List<SourceCaptions>> fetchSourceCaptions(
+      {required String youtubeVideoId, required Language language}) async {
+    return await fetchAllCaptions(youtubeVideoId: youtubeVideoId).then(
+      (captions) =>
+          captions.where((caption) => caption.language == language).toList(),
+    );
+  }
 
   Future<Iterable<SourceCaptions>> fetchAllCaptions(
       {required String youtubeVideoId}) async {
@@ -26,7 +28,7 @@ final class YoutubeExplodeManager {
       await UniqueKeyMutex(key: youtubeVideoId).acquire();
       final cache =
           await _cacheManager.retrieveSources(videoId: youtubeVideoId);
-      if (cache != null) return cache;
+      if (cache.isNotEmpty) return cache;
       final captions = await _scrapeAllCaptions(youtubeVideoId: youtubeVideoId);
       await Future.wait(
         captions.where((element) => element.language != null).map(

@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
+import 'package:collection/collection.dart';
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/foundation.dart';
 import 'package:languages/languages.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:subtitles_parser/subtitles_parser.dart';
 import 'package:unique_key_mutex/unique_key_mutex.dart';
 import 'package:youtube_subtitles_scraper/src/utils/cache_expiration_manager.dart';
@@ -39,50 +42,62 @@ final class YoutubeSubtitlesScraper {
     required String youtubeVideoId,
     required Language language,
     Language? translatedLanguage,
+    void Function(double)? onProgressUpdated,
   }) async {
+    final progressList = <double>[];
     Future<ScrapedSubtitles> scrape(SourceCaptions captions,
         [int recusrsionCount = 0]) async {
       try {
+        final progressIndex = progressList.length;
+        progressList.add(0.25);
         return await _scrapeAndCacheSubtitles(
           youtubeVideoId: youtubeVideoId,
           sourceCaptions: translatedLanguage == null
               ? captions
               : captions.autoTranslate(translatedLanguage),
           language: translatedLanguage ?? language,
+          onProgressUpdated: (progress) {
+            progressList[progressIndex] = 0.25 + progress * 0.75;
+            onProgressUpdated?.call(progressList.average);
+          },
         );
       } on SubtitlesScraperBlockedRequestException {
         printRed('recursively scraping subs');
         if (recusrsionCount == 0) {
-          return scrape(captions, recusrsionCount = recusrsionCount + 1);
+          return scrape(captions, recusrsionCount + 1);
         }
         rethrow;
       }
     }
 
-    // check if cache exists
+    onProgressUpdated?.call(0);
+    //check if cache exists
     final cacheSubtitles = await _cacheManager.retrieveSubtitles(
       videoId: youtubeVideoId,
       language: language.name,
     );
-    if (cacheSubtitles != null) return cacheSubtitles.toList();
+    if (cacheSubtitles.isNotEmpty) {
+      onProgressUpdated?.call(1.0);
+      return cacheSubtitles.toList();
+    }
 
     // in case no cache found
     final sourceCaptions = await _youtubeExplodeManager.fetchSourceCaptions(
         youtubeVideoId: youtubeVideoId, language: language);
+    onProgressUpdated?.call(0.25);
     final subtitles = await Future.wait(sourceCaptions.map(scrape));
+    onProgressUpdated?.call(1.0);
     return subtitles.isEmpty ? null : subtitles;
   }
-
-  // stream of the progress of the currently scraped subtitles where 0.0 < value < 1.0
-  Stream<double> get activeProgress => _apiClient.activeProgress;
 
   Future<ScrapedSubtitles> _scrapeAndCacheSubtitles({
     required String youtubeVideoId,
     required SourceCaptions sourceCaptions,
     required Language language,
+    void Function(double)? onProgressUpdated,
   }) async {
-    final rawSubtitles =
-        await _apiClient.fetchSubtitles(url: sourceCaptions.uri);
+    final rawSubtitles = await _apiClient.fetchSubtitles(
+        url: sourceCaptions.uri, onProgressUpdated: onProgressUpdated);
     final parsedSubtitles = await parseSubtitles(rawSubtitles);
     final scrapedSubtitles = ScrapedSubtitles(
       subtitles: parsedSubtitles,
@@ -90,7 +105,7 @@ final class YoutubeSubtitlesScraper {
       language: language.name,
       videoId: youtubeVideoId,
     );
-    // await _cacheManager.cacheSubtitles(scrapedSubtitles);
+    await _cacheManager.cacheSubtitles(scrapedSubtitles);
     return scrapedSubtitles;
   }
 
@@ -98,16 +113,11 @@ final class YoutubeSubtitlesScraper {
     final mutex = UniqueKeyMutex(key: "Source Deletion Mutex");
     try {
       await mutex.acquire();
-      await Future.delayed(const Duration(seconds: 2));
-      printPurple("text");
       await _youtubeExplodeManager.fetchAllCaptions(youtubeVideoId: videoId);
     } finally {
       mutex.release();
     }
   }
 
-  Future<void> dispose() async {
-    await _apiClient.close();
-    _youtubeExplodeManager.close();
-  }
+  Future<void> dispose() async => _youtubeExplodeManager.close();
 }

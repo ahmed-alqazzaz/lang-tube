@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_scraper/scraper.dart';
@@ -22,14 +23,23 @@ Future<void> main() async {
   //     )
   // ]);
   final x = ['2QcZSVu3CCY', 'JOiGEI9pQBs', '9FppammO1zk'];
+
   try {
     final z = await SubtitlesScraper.instance.fetchSubtitlesBundle(
       youtubeVideoId: x[2],
       mainLanguage: Language.english,
       translatedLanguage: Language.arabic,
+      onProgressUpdated: (p0) {
+        printPurple(p0.toString());
+      },
     );
-    await SubtitlesScraper.instance
-        .scrapeSubtitles(youtubeVideoId: x[0], language: Language.english);
+    // await SubtitlesScraper.instance.fetchSubtitlesBundle(
+    //   youtubeVideoId: x[2],
+    //   mainLanguage: Language.english,
+    //   translatedLanguage: Language.arabic,
+    // );
+    // await SubtitlesScraper.instance
+    //     .scrapeSubtitles(youtubeVideoId: x[0], language: Language.english);
     // log(z.first.mainSubtitlesData.subtitles.toString());
   } finally {
     await Future.delayed(const Duration(seconds: 3));

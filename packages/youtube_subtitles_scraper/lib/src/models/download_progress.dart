@@ -11,7 +11,7 @@ class SubtitlesDownloadProgress {
   const SubtitlesDownloadProgress({
     required this.uuid,
     required this.value,
-  }) : assert(value >= 0.0 && value <= 1.0);
+  });
 
   SubtitlesDownloadProgress copyWith({double? value}) =>
       SubtitlesDownloadProgress(

@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:collection/collection.dart';
-import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
 import 'package:lang_tube/crud/subtitles_cache_manager/utils.dart';
 import 'package:lang_tube/utils/bool_to_int.dart';
@@ -52,7 +49,7 @@ final class SubtitlesCacheManager implements subtitles_scraper.CacheManager {
   }
 
   @override
-  Future<Iterable<ScrapedSubtitles>?> retrieveSubtitles({
+  Future<Iterable<ScrapedSubtitles>> retrieveSubtitles({
     String? videoId,
     String? language,
     bool sortByFirstCacheDate = true,
@@ -65,20 +62,20 @@ final class SubtitlesCacheManager implements subtitles_scraper.CacheManager {
           (subtitles) =>
               language != null ? subtitles.language?.name == language : true,
         );
-        if (sortByFirstCacheDate) {
-          return subtitlesList.sorted(
-            (a, b) => boolToInt(
-              a.cacheCreationDate != null && b.cacheCreationDate != null
-                  ? a.cacheCreationDate!.isAfter(b.cacheCreationDate!)
-                  : false,
-            ),
-          );
-        }
-        return subtitlesList.isNotEmpty ? subtitlesList : null;
+
+        return sortByFirstCacheDate
+            ? subtitlesList.sorted(
+                (a, b) => boolToInt(
+                  a.cacheCreationDate != null && b.cacheCreationDate != null
+                      ? a.cacheCreationDate!.isAfter(b.cacheCreationDate!)
+                      : false,
+                ),
+              )
+            : subtitlesList;
       });
 
   @override
-  Future<Iterable<CachedSourceCaptions>?> retrieveSources({
+  Future<Iterable<CachedSourceCaptions>> retrieveSources({
     String? videoId,
     String? language,
     bool sortByFirstCacheDate = true,
@@ -92,16 +89,16 @@ final class SubtitlesCacheManager implements subtitles_scraper.CacheManager {
             (source) =>
                 language != null ? source.language?.name == language : true,
           );
-          if (sortByFirstCacheDate) {
-            return sources.sorted(
-              (a, b) => boolToInt(
-                a.cacheCreationDate != null && b.cacheCreationDate != null
-                    ? a.cacheCreationDate!.isAfter(b.cacheCreationDate!)
-                    : false,
-              ),
-            );
-          }
-          return sources.isNotEmpty ? sources : null;
+
+          return sortByFirstCacheDate
+              ? sources.sorted(
+                  (a, b) => boolToInt(
+                    a.cacheCreationDate != null && b.cacheCreationDate != null
+                        ? a.cacheCreationDate!.isAfter(b.cacheCreationDate!)
+                        : false,
+                  ),
+                )
+              : sources;
         },
       );
 

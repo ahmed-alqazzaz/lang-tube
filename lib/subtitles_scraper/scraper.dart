@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
 import 'package:lang_tube/models/subtitles_scraping/subtitles_bundle.dart';
@@ -31,40 +32,48 @@ final class SubtitlesScraper {
 
   final YoutubeSubtitlesScraper _scraper;
 
-  Stream<double> get downloadProgress => _scraper.activeProgress;
-
   // Function to fetch and process subtitles for a YouTube video in different languages.
-  Future<Iterable<SubtitlesBundle>> fetchSubtitlesBundle({
-    required String youtubeVideoId,
-    required Language mainLanguage,
-    required Language translatedLanguage,
-  }) async =>
-      await Future.wait<Iterable<ScrapedSubtitles>>(
-        [
-          scrapeSubtitles(
-            youtubeVideoId: youtubeVideoId,
-            language: mainLanguage,
-          ).then((value) =>
-              value ?? (throw SubtitlesScraperNoCaptionsFoundException)),
-          scrapeSubtitles(
-            youtubeVideoId: youtubeVideoId,
-            language: mainLanguage,
-            translatedLanguage: translatedLanguage,
-          ).then((value) =>
-              value ?? (throw SubtitlesScraperNoCaptionsFoundException)),
-        ],
-        eagerError: true,
-      ).then(
-        (subtitlesPair) {
-          // zip the list(of two) returned by future.wait
-          return zip(subtitlesPair).map(
-            (pair) => SubtitlesBundle(
-              mainSubtitlesData: pair.first,
-              translatedSubtitlesData: pair.last,
-            ),
-          );
-        },
-      );
+  Future<Iterable<SubtitlesBundle>> fetchSubtitlesBundle(
+      {required String youtubeVideoId,
+      required Language mainLanguage,
+      required Language translatedLanguage,
+      void Function(double)? onProgressUpdated}) async {
+    final progressList = <double>[0.0, 0.0];
+    return await Future.wait<Iterable<ScrapedSubtitles>>(
+      [
+        scrapeSubtitles(
+          youtubeVideoId: youtubeVideoId,
+          language: mainLanguage,
+          onProgressUpdated: (p0) {
+            progressList[0] = p0;
+            onProgressUpdated?.call(progressList.average);
+          },
+        ).then((value) =>
+            value ?? (throw SubtitlesScraperNoCaptionsFoundException)),
+        scrapeSubtitles(
+          youtubeVideoId: youtubeVideoId,
+          language: mainLanguage,
+          translatedLanguage: translatedLanguage,
+          onProgressUpdated: (p0) {
+            progressList[1] = p0;
+            onProgressUpdated?.call(progressList.average);
+          },
+        ).then((value) =>
+            value ?? (throw SubtitlesScraperNoCaptionsFoundException)),
+      ],
+      eagerError: true,
+    ).then(
+      (subtitlesPair) {
+        // zip the list(of two) returned by future.wait
+        return zip(subtitlesPair).map(
+          (pair) => SubtitlesBundle(
+            mainSubtitlesData: pair.first,
+            translatedSubtitlesData: pair.last,
+          ),
+        );
+      },
+    );
+  }
 
   // in case translated language is provided,
   // the function will return a translated version
@@ -73,13 +82,14 @@ final class SubtitlesScraper {
     required String youtubeVideoId,
     required Language language,
     Language? translatedLanguage,
-  }) async {
-    return await _scraper.scrapeSubtitles(
-      youtubeVideoId: youtubeVideoId,
-      language: language,
-      translatedLanguage: translatedLanguage,
-    );
-  }
+    void Function(double)? onProgressUpdated,
+  }) async =>
+      await _scraper.scrapeSubtitles(
+        youtubeVideoId: youtubeVideoId,
+        language: language,
+        translatedLanguage: translatedLanguage,
+        onProgressUpdated: onProgressUpdated,
+      );
 
   Future<void> close() async => await _cacheManager!.close();
 }

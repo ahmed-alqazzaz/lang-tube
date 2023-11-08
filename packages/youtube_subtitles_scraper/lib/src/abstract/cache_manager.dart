@@ -5,9 +5,9 @@ abstract class CacheManager {
   Future<void> cacheSubtitles(ScrapedSubtitles subtitles);
   Future<void> cacheSourceCaptions(SourceCaptions sourceCaptions);
 
-  Future<Iterable<ScrapedSubtitles>?> retrieveSubtitles(
+  Future<Iterable<ScrapedSubtitles>> retrieveSubtitles(
       {String? videoId, String? language, bool sortByFirstCacheDate = true});
-  Future<Iterable<SourceCaptions>?> retrieveSources(
+  Future<Iterable<SourceCaptions>> retrieveSources(
       {String? videoId, String? language, bool sortByFirstCacheDate = true});
 
   Future<void> clearSubtitlesCache();

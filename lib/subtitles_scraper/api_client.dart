@@ -19,7 +19,7 @@ final class ScraperApiClient extends SubtitlesScraperApiClient {
     try {
       final response = await _client.fetchUri<T>(
         url,
-        //  onReceiveProgress: onReceiveProgress,
+        onReceiveProgress: onReceiveProgress,
       );
       if (response.statusCode != 200) {
         throw const SubtitlesScraperBlockedRequestException();
