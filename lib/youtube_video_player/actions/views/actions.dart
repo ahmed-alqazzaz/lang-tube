@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lang_tube/youtube_video_player/actions/action_providers/loop_providers/custom_loop_provider/loop_provider.dart';
 import 'package:lang_tube/youtube_video_player/actions/action_providers/loop_providers/subtitle_loop_provider.dart/notifier.dart';
-import 'package:lang_tube/youtube_video_player/actions/views/portrait_screen_actions/actions_circular_menu.dart';
+import 'package:lang_tube/youtube_video_player/components/actions_circular_menu.dart';
 import 'package:lang_tube/youtube_video_player/actions/views/portrait_screen_actions/bottom_actions_bar.dart';
 import 'package:lang_tube/youtube_video_player/actions/views/portrait_screen_actions/mini_player_actions.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -18,7 +18,6 @@ class YoutubePlayerActions {
     required Widget subtitlesSettings,
   })  : _youtubePlayerController = youtubePlayerController,
         _customLoopProvider = customLoopProviderFamily(youtubePlayerController),
-        _youtubeHdProvider = youtubeHdProviderFamily(youtubePlayerController),
         _subtitleLoopProvider = subtitleLoopProviderFamily((
           youtubePlayerController: youtubePlayerController,
           currentSubtitleGetter: currentSubtitleGetter,
@@ -28,7 +27,6 @@ class YoutubePlayerActions {
 
   FullScreenPlayerActions fullScreenActions() => FullScreenPlayerActions(
         genericActions: _genericActions,
-        youtubeHdProvider: _youtubeHdProvider,
         subtitleLoopProvider: _subtitleLoopProvider,
       );
   Widget miniPlayerActions() => MiniPlayerActions(actions: _genericActions);
@@ -44,14 +42,12 @@ class YoutubePlayerActions {
         onActionsMenuToggled: onActionsMenuToggled,
         youtubePlayerController: _youtubePlayerController,
         subtitleLoopProvider: _subtitleLoopProvider,
-        youtubeHdProvider: _youtubeHdProvider,
       );
   Widget progressBar() => _genericActions.progressBar();
 
   final YoutubePlayerController _youtubePlayerController;
   final CustomLoopProvider _customLoopProvider;
   final SubtitleLoopProvider _subtitleLoopProvider;
-  final YoutubeHdProvider _youtubeHdProvider;
   final Widget _subtitlesSettings;
 
   late final YoutubePlayerGenericActions _genericActions =

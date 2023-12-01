@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
-import '../action_providers/full_screen_provider/provider.dart';
 import '../action_providers/loop_providers/custom_loop_provider/loop_provider.dart';
 import '../action_providers/loop_providers/custom_loop_provider/setup_provider.dart';
 import '../action_providers/loop_providers/raw_loop_notifier/loop.dart';
@@ -40,31 +38,31 @@ class YoutubePlayerGenericActions {
     );
   }
 
-  Widget toggleFullScreenButton({double? iconSize}) {
-    return Consumer(
-      builder: (context, ref, _) {
-        final isFullScreen =
-            ref.watch(youtubePlayerOrientationProvider).isFullScreen;
-        log("is full screen $isFullScreen");
-        return CircularInkWell(
-          child: Icon(
-            isFullScreen
-                ? Icons.fullscreen_exit_outlined
-                : Icons.fullscreen_sharp,
-            color: Colors.white,
-            size: iconSize,
-          ),
-          onTap: () {
-            final fullScreenNotifier =
-                ref.read(youtubePlayerOrientationProvider.notifier);
-            ref.read(youtubePlayerOrientationProvider).isFullScreen
-                ? fullScreenNotifier.exitFullScreen()
-                : fullScreenNotifier.enableFullScreen();
-          },
-        );
-      },
-    );
-  }
+  // Widget toggleFullScreenButton({double? iconSize}) {
+  //   return Consumer(
+  //     builder: (context, ref, _) {
+  //       final isFullScreen =
+  //           ref.watch(youtubePlayerOrientationProvider).isFullScreen;
+  //       log("is full screen $isFullScreen");
+  //       return CircularInkWell(
+  //         child: Icon(
+  //           isFullScreen
+  //               ? Icons.fullscreen_exit_outlined
+  //               : Icons.fullscreen_sharp,
+  //           color: Colors.white,
+  //           size: iconSize,
+  //         ),
+  //         onTap: () {
+  //           final fullScreenNotifier =
+  //               ref.read(youtubePlayerOrientationProvider.notifier);
+  //           ref.read(youtubePlayerOrientationProvider).isFullScreen
+  //               ? fullScreenNotifier.exitFullScreen()
+  //               : fullScreenNotifier.enableFullScreen();
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 
   Widget progressBar() {
     CustomProgress? customProgressGenerator({

@@ -1,9 +1,18 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final class YoutubePlayerOrientationNotifier
+final deviceOrientationProvider =
+    StateNotifierProvider<DeviceOrientationNotifier, List<DeviceOrientation>>(
+  (ref) => DeviceOrientationNotifier(),
+);
+
+extension IsFullScreen on List<DeviceOrientation> {
+  bool get isFullScreen => contains(DeviceOrientation.landscapeRight);
+}
+
+final class DeviceOrientationNotifier
     extends StateNotifier<List<DeviceOrientation>> {
-  YoutubePlayerOrientationNotifier() : super([DeviceOrientation.portraitUp]) {
+  DeviceOrientationNotifier() : super([DeviceOrientation.portraitUp]) {
     addListener(orientationListener);
   }
 

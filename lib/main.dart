@@ -41,7 +41,7 @@ Future<void> main() async {
   await SubtitlesScraper.ensureInitalized();
   ProviderContainer()
       .read(appStateProvider.notifier)
-      .displayVideoPlayer(videoId: 'QUNrBEhvXWQ');
+      .displayVideoPlayer(videoId: 'fuFlMtZmvY0');
   runApp(const LangTube());
 }
 

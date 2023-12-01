@@ -2,6 +2,8 @@ import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/actions/views/generic_actions.dart';
+import 'package:lang_tube/youtube_video_player/components/hd_button.dart';
+import 'package:lang_tube/youtube_video_player/components/orientation_toggler.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -14,11 +16,8 @@ class FullScreenPlayerActions extends ConsumerWidget {
     super.key,
     required this.genericActions,
     required SubtitleLoopProvider subtitleLoopProvider,
-    required YoutubeHdProvider youtubeHdProvider,
-  })  : _youtubeHdProvider = youtubeHdProvider,
-        _subtitleLoopProvider = subtitleLoopProvider;
+  }) : _subtitleLoopProvider = subtitleLoopProvider;
   final YoutubePlayerGenericActions genericActions;
-  final YoutubeHdProvider _youtubeHdProvider;
   final SubtitleLoopProvider _subtitleLoopProvider;
 
   Widget subtitlesSettingsButton() {
@@ -62,26 +61,26 @@ class FullScreenPlayerActions extends ConsumerWidget {
     );
   }
 
-  Widget _hdButton({required double splashRadius}) {
-    return Consumer(
-      builder: (context, ref, _) {
-        final iconSize = Theme.of(context).iconTheme.size!;
-        final isHd = ref.watch(_youtubeHdProvider);
-        final youtubeHdNotifier = ref.read(_youtubeHdProvider.notifier);
-        return CircularInkWell(
-          splashRadius: splashRadius,
-          child: Icon(
-            Icons.hd_rounded,
-            size: iconSize - 3,
-            color: isHd ? Colors.amber.shade600 : Colors.white,
-          ),
-          onTap: () => isHd
-              ? youtubeHdNotifier.disableHd()
-              : youtubeHdNotifier.forceHd(),
-        );
-      },
-    );
-  }
+  // Widget _hdButton({required double splashRadius}) {
+  //   return Consumer(
+  //     builder: (context, ref, _) {
+  //       final iconSize = Theme.of(context).iconTheme.size!;
+  //       final isHd = ref.watch(_youtubeHdProvider);
+  //       final youtubeHdNotifier = ref.read(_youtubeHdProvider.notifier);
+  //       return CircularInkWell(
+  //         splashRadius: splashRadius,
+  //         child: Icon(
+  //           Icons.hd_rounded,
+  //           size: iconSize - 3,
+  //           color: isHd ? Colors.amber.shade600 : Colors.white,
+  //         ),
+  //         onTap: () => isHd
+  //             ? youtubeHdNotifier.disableHd()
+  //             : youtubeHdNotifier.forceHd(),
+  //       );
+  //     },
+  //   );
+  // }
 
   Widget _subtitlesLoopButton({required double splashRadius}) {
     return Consumer(
@@ -143,7 +142,7 @@ class FullScreenPlayerActions extends ConsumerWidget {
             children: [
               genericActions.currentPositionIndicator(
                   padding: buttonsSplashRadius),
-              genericActions.toggleFullScreenButton(),
+              const YoutubeOrientationToggler(),
             ],
           ),
         ),
@@ -175,7 +174,7 @@ class FullScreenPlayerActions extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Switch(value: true, onChanged: (h) {}),
-        _hdButton(splashRadius: 8),
+        const YoutubeHdButton(),
         subtitlesSettingsButton(),
         settingsButton(),
       ],

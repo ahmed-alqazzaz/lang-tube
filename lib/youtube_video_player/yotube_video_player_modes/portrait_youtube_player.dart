@@ -4,7 +4,7 @@ import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/subtitl
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../subtitles_player/providers/player_pointer_absorbtion_provider.dart';
 import '../actions/views/actions.dart';
-import '../providers/subtitles_player_provider.dart/provider.dart';
+import '../providers/subtitles_player_provider.dart';
 import '../providers/youtube_controller_provider.dart';
 
 class PortraitYoutubePlayer extends ConsumerStatefulWidget {

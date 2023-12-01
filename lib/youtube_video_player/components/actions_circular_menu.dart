@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/actions/action_providers/youtube_hd_provider/provider.dart';
 import 'package:lang_tube/youtube_video_player/actions/action_providers/loop_providers/subtitle_loop_provider.dart/provider.dart';
+import 'package:lang_tube/youtube_video_player/providers/hd_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ActionsCircularMenu extends ConsumerWidget {
@@ -11,16 +12,13 @@ class ActionsCircularMenu extends ConsumerWidget {
     required this.onActionsMenuToggled,
     required YoutubePlayerController youtubePlayerController,
     required SubtitleLoopProvider subtitleLoopProvider,
-    required YoutubeHdProvider youtubeHdProvider,
-  })  : _subtitleLoopProvider = subtitleLoopProvider,
-        _youtubeHdProvider = youtubeHdProvider;
+  }) : _subtitleLoopProvider = subtitleLoopProvider;
   final circularMenuToggleButtonColor = Colors.amber[600];
   static const circularMenuItemBackgroundColor =
       Color.fromARGB(255, 50, 50, 50);
 
   final void Function() onActionsMenuToggled;
   final SubtitleLoopProvider _subtitleLoopProvider;
-  final YoutubeHdProvider _youtubeHdProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -56,8 +54,8 @@ class ActionsCircularMenu extends ConsumerWidget {
   }
 
   CircularMenuItem _circularMenuHdButton(WidgetRef ref) {
-    final isHd = ref.watch(_youtubeHdProvider);
-    final youtubeHdNotifier = ref.read(_youtubeHdProvider.notifier);
+    final isHd = ref.watch(youtubeHdProvider);
+    final youtubeHdNotifier = ref.read(youtubeHdProvider.notifier);
     return _genericCircularMenuItem(
       icon: Icons.hd_rounded,
       iconColor: isHd ? Colors.white : Colors.white30,

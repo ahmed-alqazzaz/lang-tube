@@ -15,9 +15,13 @@ final subtitlesProvider =
     StreamProvider<Iterable<SubtitlesBundle>>((ref) async* {
   final videoIdController = StreamController<String>();
 
-  ref.listen(appStateProvider, (_, state) {
-    if (state is DisplayingVideoPlayer) videoIdController.add(state.videoId);
-  }, fireImmediately: true);
+  ref.listen(
+    appStateProvider,
+    (_, state) => state is DisplayingVideoPlayer
+        ? videoIdController.add(state.videoId)
+        : null,
+    fireImmediately: true,
+  );
   await for (String videoId in videoIdController.stream.distinctUnique()) {
     yield await SubtitlesScraper.instance.fetchSubtitlesBundle(
       youtubeVideoId: videoId,

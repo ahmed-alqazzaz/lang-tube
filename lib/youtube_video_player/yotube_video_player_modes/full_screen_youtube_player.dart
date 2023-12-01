@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/providers/subtitles_player_provider.dart/provider.dart';
 import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import '../providers/subtitles_player_provider.dart';
 import 'subtitles_player_builders.dart';
 import '../actions/views/actions.dart';
 

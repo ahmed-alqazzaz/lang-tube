@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:lang_tube/youtube_video_player/components/orientation_toggler.dart';
 import '../generic_actions.dart';
 
 class MiniPlayerActions extends StatelessWidget {
@@ -12,9 +13,9 @@ class MiniPlayerActions extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         actions.currentPositionIndicator(padding: buttonsPadding),
-        Padding(
-          padding: const EdgeInsets.only(right: 5),
-          child: actions.toggleFullScreenButton(iconSize: 22),
+        const Padding(
+          padding: EdgeInsets.only(right: 5),
+          child: YoutubeOrientationToggler(),
         ),
       ],
     );

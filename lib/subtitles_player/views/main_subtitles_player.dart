@@ -6,15 +6,13 @@ import 'package:lang_tube/explanation_modal/explanation_modal_constraints_provid
 import 'package:lang_tube/subtitles_player/providers/player_pointer_absorbtion_provider.dart';
 
 import 'package:lang_tube/subtitles_player/views/subtitle_box.dart';
-import 'package:lang_tube/youtube_video_player/providers/subtitles_config_provider.dart';
-import 'package:lang_tube/youtube_video_player/providers/subtitles_player_provider.dart/player.dart';
-import 'package:lang_tube/youtube_video_player/providers/subtitles_player_provider.dart/provider.dart';
 import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:subtitles_player/subtitles_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
-import '../../models/subtitles/consumable_subtitles.dart';
+import '../../models/subtitles/subtitles_player_value.dart';
+import '../../youtube_video_player/providers/subtitles_config_provider.dart';
+import '../../youtube_video_player/providers/subtitles_player_provider.dart';
 
 class MainSubtitlesPlayer extends ConsumerStatefulWidget {
   const MainSubtitlesPlayer({
@@ -51,28 +49,6 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
   }
 
   @override
-  void didUpdateWidget(covariant MainSubtitlesPlayer oldWidget) {
-    if (mounted) {
-      _currentSubtitleSubscription?.close();
-      _currentSubtitleSubscription = ref.listenManual<SubtitlesPlayerValue>(
-        subtitlesPlayerProvider,
-        (_, value) {
-          final length = value.subtitles.length;
-          final index = value.index;
-          if (mounted && index != null) {
-            _scrollController.scrollTo(
-              index: length - index,
-              duration: MainSubtitlesPlayer.bodyScrollDuration,
-            );
-          }
-        },
-      );
-    }
-
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   void dispose() {
     _currentSubtitleSubscription?.close();
     WidgetsBinding.instance.addPostFrameCallback(
@@ -88,7 +64,6 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
     final subtitlesPlayerValue = ref.read(subtitlesPlayerProvider);
     final youtubePlayerController = ref.read(youtubeControllerProvider);
     final subtitles = subtitlesPlayerValue.subtitles;
-    printRed("length $subtitles");
     return LayoutBuilder(
       builder: (context, constraints) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -177,6 +152,17 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
     super.build(context);
     final shouldAbsorbPointers =
         ref.watch(mainSubtitlesPlayerPointerAbsorbtionProvider);
+    ref.watch(subtitlesConfigProvider);
+    ref.listen<SubtitlesPlayerValue>(
+      subtitlesPlayerProvider,
+      (_, value) {
+        printRed("scrolling to ${value.subtitles.length} ${value.index}");
+        _scrollController.scrollTo(
+          index: value.subtitles.length - value.index,
+          duration: MainSubtitlesPlayer.bodyScrollDuration,
+        );
+      },
+    );
     // if (MediaQuery.of(context).orientation == Orientation.landscape) {
     //   assert(!shouldAbsorbPointers,
     //       'Main Subtitles player should not absorb pointers while in landscape');
