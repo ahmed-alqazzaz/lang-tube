@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
 import 'package:lang_tube/crud/subtitles_cache_manager/utils.dart';
-import 'package:lang_tube/models/subtitles_scraping/cached_source_captions.dart';
+import 'package:lang_tube/models/subtitles/cached_source_captions.dart';
 import 'package:lang_tube/crud/subtitles_cache_manager/constants.dart';
 import 'package:lang_tube/utils/bool_to_int.dart';
 import 'package:mutex/mutex.dart';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
-import '../../models/subtitles_scraping/cached_subtitles.dart';
+import '../../models/subtitles/cached_subtitles.dart';
 import 'exceptions.dart';
 
 @immutable

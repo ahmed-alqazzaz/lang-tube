@@ -28,13 +28,13 @@ final class YoutubeExplodeManager {
       await UniqueKeyMutex(key: youtubeVideoId).acquire();
       final cache =
           await _cacheManager.retrieveSources(videoId: youtubeVideoId);
-      if (cache.isNotEmpty) return cache;
+      // if (cache.isNotEmpty) return cache;
       final captions = await _scrapeAllCaptions(youtubeVideoId: youtubeVideoId);
-      await Future.wait(
-        captions.where((element) => element.language != null).map(
-              _cacheManager.cacheSourceCaptions,
-            ),
-      );
+      // await Future.wait(
+      //   captions.where((element) => element.language != null).map(
+      //         _cacheManager.cacheSourceCaptions,
+      //       ),
+      // );
       return captions;
     } finally {
       UniqueKeyMutex(key: youtubeVideoId).release();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:lang_tube/utils/capitalization.dart';
 import 'package:languages/languages.dart';
 
 import 'selectability_builder.dart';
@@ -168,10 +169,4 @@ class SubtitlesSettings extends StatelessWidget {
   static const double _flagBorderRadius = 10;
   static const double _checkBoxBorderRadius = 3;
   static const double _optionBorderRadius = 20;
-}
-
-extension StringExtension on String {
-  String capitalize() {
-    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
-  }
 }

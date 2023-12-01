@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_player/views/subtitle_box.dart';
+import 'package:lang_tube/youtube_video_player/providers/subtitles_player_provider.dart/provider.dart';
 
 import '../providers/multi_subtitles_player_provider/provider.dart';
 
 class MiniSubtitlesPlayer extends ConsumerStatefulWidget {
   const MiniSubtitlesPlayer({
     super.key,
-    required this.multiSubtitlesPlayerProvider,
     required this.onTap,
     required this.maxLines,
   });
@@ -15,7 +15,6 @@ class MiniSubtitlesPlayer extends ConsumerStatefulWidget {
   static const Color backgroundColor = Colors.black;
   static const Color defaultTextColor = Colors.white;
   static const double textFontSize = 22;
-  final MultiSubtitlesPlayerProvider multiSubtitlesPlayerProvider;
   final OnSubtitleTapped onTap;
   final int maxLines;
   @override
@@ -26,22 +25,25 @@ class MiniSubtitlesPlayer extends ConsumerStatefulWidget {
 class _MiniSubtitlesPlayerState extends ConsumerState<MiniSubtitlesPlayer> {
   @override
   Widget build(BuildContext context) {
-    final currentSubtitle = ref.watch(widget.multiSubtitlesPlayerProvider);
+    final subtitlesPlayerValue = ref.watch(subtitlesPlayerProvider);
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         SubtitleBox(
-          words: currentSubtitle.mainSubtitle?.words ?? [],
+          words:
+              subtitlesPlayerValue.currentSubtitles.mainSubtitle?.words ?? [],
           backgroundColor: MiniSubtitlesPlayer.backgroundColor,
           onTapUp: widget.onTap,
           textFontSize: MiniSubtitlesPlayer.textFontSize,
           defaultTextColor: MiniSubtitlesPlayer.defaultTextColor,
           maxLines: widget.maxLines,
         ),
-        if (currentSubtitle.translatedSubtitle != null) ...[
+        if (subtitlesPlayerValue.currentSubtitles.translatedSubtitle !=
+            null) ...[
           const SizedBox(height: 5),
           SubtitleBox(
-            words: currentSubtitle.translatedSubtitle!.words,
+            words:
+                subtitlesPlayerValue.currentSubtitles.translatedSubtitle!.words,
             backgroundColor: MiniSubtitlesPlayer.backgroundColor,
             onTapUp: widget.onTap,
             textFontSize: MiniSubtitlesPlayer.textFontSize,

@@ -1,22 +1,24 @@
 import 'dart:async';
+import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/explanation_modal/explanation_modal_constraints_provider.dart';
-import 'package:lang_tube/subtitles_player/providers/multi_subtitles_player_provider/display_subtitles.dart';
 import 'package:lang_tube/subtitles_player/providers/player_pointer_absorbtion_provider.dart';
 
 import 'package:lang_tube/subtitles_player/views/subtitle_box.dart';
+import 'package:lang_tube/youtube_video_player/providers/subtitles_config_provider.dart';
+import 'package:lang_tube/youtube_video_player/providers/subtitles_player_provider.dart/player.dart';
+import 'package:lang_tube/youtube_video_player/providers/subtitles_player_provider.dart/provider.dart';
+import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:subtitles_player/subtitles_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../providers/multi_subtitles_player_provider/provider.dart';
+import '../../models/subtitles/consumable_subtitles.dart';
 
 class MainSubtitlesPlayer extends ConsumerStatefulWidget {
   const MainSubtitlesPlayer({
     super.key,
-    required this.multiSubtitlesPlayerProvider,
-    required this.youtubePlayerController,
     required this.onTap,
     required this.headerBackgroundColor,
   });
@@ -26,9 +28,6 @@ class MainSubtitlesPlayer extends ConsumerStatefulWidget {
   static final Color defaultTextColor = Colors.white.withOpacity(0.5);
   static const double headerlinesDividerHeight = 5;
   static const Duration bodyScrollDuration = Duration(milliseconds: 500);
-
-  final MultiSubtitlesPlayerProvider multiSubtitlesPlayerProvider;
-  final YoutubePlayerController youtubePlayerController;
   final Color headerBackgroundColor;
 
   final OnSubtitleTapped onTap;
@@ -54,16 +53,15 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
   @override
   void didUpdateWidget(covariant MainSubtitlesPlayer oldWidget) {
     if (mounted) {
-      final multiSubtitlesPlayer =
-          ref.read(widget.multiSubtitlesPlayerProvider.notifier);
-      final length = multiSubtitlesPlayer.mainSubtitles.length;
       _currentSubtitleSubscription?.close();
-      _currentSubtitleSubscription = ref.listenManual<DisplaySubtitles>(
-        widget.multiSubtitlesPlayerProvider,
-        (_, subtitle) {
-          if (subtitle.index != null && mounted) {
+      _currentSubtitleSubscription = ref.listenManual<SubtitlesPlayerValue>(
+        subtitlesPlayerProvider,
+        (_, value) {
+          final length = value.subtitles.length;
+          final index = value.index;
+          if (mounted && index != null) {
             _scrollController.scrollTo(
-              index: length - subtitle.index!,
+              index: length - index,
               duration: MainSubtitlesPlayer.bodyScrollDuration,
             );
           }
@@ -87,8 +85,10 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
   Widget _body() {
     final explanationModalConstraintsNotifier =
         ref.read(explanationModalConstraintsProvider);
-    final subtitles =
-        ref.read(widget.multiSubtitlesPlayerProvider.notifier).mainSubtitles;
+    final subtitlesPlayerValue = ref.read(subtitlesPlayerProvider);
+    final youtubePlayerController = ref.read(youtubeControllerProvider);
+    final subtitles = subtitlesPlayerValue.subtitles;
+    printRed("length $subtitles");
     return LayoutBuilder(
       builder: (context, constraints) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -97,24 +97,23 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
         return Listener(
           behavior: HitTestBehavior.opaque,
           onPointerMove: (event) {
-            widget.youtubePlayerController.pause();
+            ref.read(youtubeControllerProvider)?.pause();
           },
           child: ScrollablePositionedList.builder(
             padding: EdgeInsets.only(bottom: constraints.maxHeight),
             itemScrollController: _scrollController,
-            initialScrollIndex:
-                ref.read(widget.multiSubtitlesPlayerProvider).index ??
-                    subtitles.length,
-            itemCount: subtitles.length + 1,
+            initialScrollIndex: subtitlesPlayerValue.index ?? subtitles.length,
+            itemCount: subtitles.length,
             itemBuilder: (context, index) {
               if (index >= subtitles.length) return Container();
-              final subtitle = subtitles.reversed.toList()[index];
+              final subtitle = subtitles.reversed.toList()[index].mainSubtitle!;
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTapUp: (details) {
-                  final controller = widget.youtubePlayerController;
-                  controller.seekTo(subtitle.start);
-                  controller.value.isPlaying ? null : controller.play();
+                  youtubePlayerController?.seekTo(subtitle.start);
+                  youtubePlayerController?.value.isPlaying == true
+                      ? null
+                      : youtubePlayerController?.play();
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -191,7 +190,7 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
             Consumer(
               builder: (context, ref, _) {
                 final currentSubtitle =
-                    ref.watch(widget.multiSubtitlesPlayerProvider);
+                    ref.watch(subtitlesPlayerProvider).currentSubtitles;
                 return headerBuilder(
                   backgroundColor: widget.headerBackgroundColor,
                   onTap: widget.onTap,

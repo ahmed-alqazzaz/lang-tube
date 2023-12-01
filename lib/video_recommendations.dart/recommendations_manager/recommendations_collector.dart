@@ -44,7 +44,6 @@ class YoutubeRecommendationsCollector extends ChangeNotifier {
   Stream<RecommendedVideo> _recommendedVideosMapper(
     Iterable<ObservedVideo> videos,
   ) async* {
-    
     final targetLanguageVideos = videos.toList().filteredByTargetLanguage;
     for (final video in targetLanguageVideos) {
       final subtitlesData = await SubtitlesScraper.instance

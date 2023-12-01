@@ -11,11 +11,9 @@ mixin SubtitlesPlayerBuilders {
     required BuildContext context,
     required int maxLines,
     required YoutubePlayerController controller,
-    required MultiSubtitlesPlayerProvider multiSubtitlesPlayerProvider,
   }) {
     return MiniSubtitlesPlayer(
       maxLines: maxLines,
-      multiSubtitlesPlayerProvider: multiSubtitlesPlayerProvider,
       onTap: ({required Function() onReset, required String word}) {
         controller.pause();
         showModalBottomSheet(
@@ -41,13 +39,10 @@ mixin SubtitlesPlayerBuilders {
 
   MainSubtitlesPlayer mainSubtitlesPlayer({
     required YoutubePlayerController controller,
-    required MultiSubtitlesPlayerProvider multiSubtitlesPlayerProvider,
     required BuildContext context,
   }) {
     return MainSubtitlesPlayer(
-      youtubePlayerController: controller,
       headerBackgroundColor: const Color.fromARGB(255, 20, 20, 20),
-      multiSubtitlesPlayerProvider: multiSubtitlesPlayerProvider,
       onTap: ({required Function() onReset, required String word}) {
         controller.pause();
         showModalBottomSheet(

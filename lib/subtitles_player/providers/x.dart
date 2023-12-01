@@ -25,28 +25,66 @@ Future<void> main() async {
   final x = ['2QcZSVu3CCY', 'JOiGEI9pQBs', '9FppammO1zk'];
 
   try {
-    final z = await SubtitlesScraper.instance.fetchSubtitlesBundle(
-      youtubeVideoId: x[2],
-      mainLanguage: Language.english,
-      translatedLanguage: Language.arabic,
-      onProgressUpdated: (p0) {
-        printPurple(p0.toString());
-      },
-    );
-    // await SubtitlesScraper.instance.fetchSubtitlesBundle(
+    // final z = await SubtitlesScraper.instance.fetchSubtitlesBundle(
     //   youtubeVideoId: x[2],
     //   mainLanguage: Language.english,
     //   translatedLanguage: Language.arabic,
+    //   onProgressUpdated: (p0) {
+    //     printPurple(p0.toString());
+    //   },
     // );
-    // await SubtitlesScraper.instance
-    //     .scrapeSubtitles(youtubeVideoId: x[0], language: Language.english);
-    // log(z.first.mainSubtitlesData.subtitles.toString());
+    runApp(MaterialApp(
+      home: ProgressIndicatorTest(),
+    ));
   } finally {
     await Future.delayed(const Duration(seconds: 3));
-    await SubtitlesScraper.instance.close();
+    //await SubtitlesScraper.instance.close();
     await Future.delayed(Duration(seconds: 3));
     log('finnished');
   }
 
   //await SubtitlesScraper.instance.close();
+}
+
+class ProgressIndicatorTest extends StatefulWidget {
+  const ProgressIndicatorTest({super.key});
+
+  @override
+  State<ProgressIndicatorTest> createState() => _ProgressIndicatorTestState();
+}
+
+class _ProgressIndicatorTestState extends State<ProgressIndicatorTest> {
+  late final _notifer = ValueNotifier(0.0);
+  @override
+  void initState() {
+    SubtitlesScraper.instance.fetchSubtitlesBundle(
+      youtubeVideoId: '2QcZSVu3CCY',
+      mainLanguage: Language.english,
+      translatedLanguage: Language.arabic,
+      onProgressUpdated: (p0) {
+        _notifer.value = p0;
+      },
+    );
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          SizedBox(
+            height: 50,
+          ),
+          ValueListenableBuilder(
+            valueListenable: _notifer,
+            builder: (context, value, _) {
+              return LinearProgressIndicator(value: value != 0 ? value : null);
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }

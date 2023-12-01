@@ -54,12 +54,12 @@ class YoutubePlayerRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) =>
-      YoutubeVideoPlayerView(videoId: id.toString());
+      const YoutubeVideoPlayerView();
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CustomTransitionPage(
-      child: YoutubeVideoPlayerView(videoId: id.toString()),
+      child: const YoutubeVideoPlayerView(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         // Define a Tween that animates from bottom to top and vice versa
         final tween = Tween<Offset>(

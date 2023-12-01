@@ -12,6 +12,7 @@ import 'package:lang_tube/history/enums/videos_sort_options.dart';
 import 'package:lang_tube/history/enums/words_sort_options.dart';
 import 'package:lang_tube/history/providers/videos_history_provider/provider.dart';
 import 'package:lang_tube/history/providers/words_history_provider/provider.dart';
+import 'package:lang_tube/utils/capitalization.dart';
 import 'package:lang_tube/youtube_video_player/settings/subtitles_settings/settings.dart';
 import 'package:search_app_bar/search_app_bar.dart';
 import 'package:size_utils/size_utils.dart';

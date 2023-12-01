@@ -7,7 +7,7 @@ import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart'
     as subtitles_scraper;
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
-import '../../models/subtitles_scraping/cached_source_captions.dart';
+import '../../models/subtitles/cached_source_captions.dart';
 import 'constants.dart';
 import 'db_manager.dart';
 

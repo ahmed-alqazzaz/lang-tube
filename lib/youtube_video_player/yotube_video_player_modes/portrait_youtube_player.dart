@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/subtitles_player_builders.dart';
-import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
-import '../../subtitles_player/providers/multi_subtitles_player_provider/provider.dart';
 import '../../subtitles_player/providers/player_pointer_absorbtion_provider.dart';
 import '../actions/views/actions.dart';
-import '../actions/views/portrait_screen_actions/mini_player_actions.dart';
-import '../settings/subtitles_settings/settings.dart';
+import '../providers/subtitles_player_provider.dart/provider.dart';
+import '../providers/youtube_controller_provider.dart';
 
 class PortraitYoutubePlayer extends ConsumerStatefulWidget {
   const PortraitYoutubePlayer({
     super.key,
     required this.player,
     required this.subtitlesSettings,
-    required this.youtubePlayerController,
-    required this.multiSubtitlesPlayerProvider,
   });
   final Widget player;
   final Widget subtitlesSettings;
-  final YoutubePlayerController youtubePlayerController;
-  final MultiSubtitlesPlayerProvider multiSubtitlesPlayerProvider;
 
   @override
   ConsumerState<PortraitYoutubePlayer> createState() =>
@@ -32,17 +25,17 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
     with SubtitlesPlayerBuilders {
   late YoutubePlayerActions actions = YoutubePlayerActions(
     subtitlesSettings: widget.subtitlesSettings,
-    youtubePlayerController: widget.youtubePlayerController,
+    youtubePlayerController: ref.read(youtubeControllerProvider)!,
     currentSubtitleGetter: () =>
-        ref.read(widget.multiSubtitlesPlayerProvider).mainSubtitle,
+        ref.read(subtitlesPlayerProvider).currentSubtitles.mainSubtitle,
   );
   @override
   void didUpdateWidget(covariant PortraitYoutubePlayer oldWidget) {
     actions = YoutubePlayerActions(
       subtitlesSettings: widget.subtitlesSettings,
-      youtubePlayerController: widget.youtubePlayerController,
+      youtubePlayerController: ref.read(youtubeControllerProvider)!,
       currentSubtitleGetter: () =>
-          ref.read(widget.multiSubtitlesPlayerProvider).mainSubtitle,
+          ref.read(subtitlesPlayerProvider).currentSubtitles.mainSubtitle,
     );
     super.didUpdateWidget(oldWidget);
   }
@@ -61,8 +54,7 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
 
   Widget subtitlesPlayer(BuildContext context) {
     return mainSubtitlesPlayer(
-      controller: widget.youtubePlayerController,
-      multiSubtitlesPlayerProvider: widget.multiSubtitlesPlayerProvider,
+      controller: ref.read(youtubeControllerProvider)!,
       context: context,
     );
   }
