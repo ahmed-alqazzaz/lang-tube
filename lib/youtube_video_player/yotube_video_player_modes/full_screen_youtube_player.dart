@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/youtube_video_player/components/full_screen_player_actions.dart';
 import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../providers/subtitles_player_provider.dart';
 import 'subtitles_player_builders.dart';
-import '../actions/views/actions.dart';
 
 class FullScreenYoutubeVideoPlayer extends ConsumerStatefulWidget {
   const FullScreenYoutubeVideoPlayer({
@@ -21,12 +21,6 @@ class FullScreenYoutubeVideoPlayer extends ConsumerStatefulWidget {
 class _FullScreenYoutubeVideoPlayerState
     extends ConsumerState<FullScreenYoutubeVideoPlayer>
     with SubtitlesPlayerBuilders {
-  late final actions = YoutubePlayerActions(
-    subtitlesSettings: Container(),
-    youtubePlayerController: ref.read(youtubeControllerProvider)!,
-    currentSubtitleGetter: () =>
-        ref.read(subtitlesPlayerProvider).currentSubtitles.mainSubtitle,
-  );
   Widget _youtubePlayerBuilder() {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -44,12 +38,12 @@ class _FullScreenYoutubeVideoPlayerState
                 context: context,
               ),
             ),
-            Positioned(
+            const Positioned(
               right: progressBarHandleRadius,
               left: progressBarHandleRadius,
               top: 0,
               bottom: 0,
-              child: actions.fullScreenActions(),
+              child: FullScreenPlayerActions(),
             ),
           ],
         );

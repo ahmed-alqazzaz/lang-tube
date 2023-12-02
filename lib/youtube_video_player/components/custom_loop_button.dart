@@ -2,7 +2,6 @@ import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:clipped_icon/clipped_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/actions/action_providers/loop_providers/custom_loop_provider/setup_provider.dart';
 import 'package:lang_tube/youtube_video_player/providers/custom_loop_provider.dart';
 import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 
@@ -109,4 +108,10 @@ class _YoutubeCustomLoopButtonState
       ),
     );
   }
+}
+
+enum CustomLoopState {
+  inactive,
+  activating,
+  active,
 }

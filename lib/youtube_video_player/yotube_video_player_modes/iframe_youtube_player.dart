@@ -1,7 +1,8 @@
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/actions/action_providers/loop_providers/custom_loop_provider/loop_provider.dart';
+import 'package:lang_tube/youtube_video_player/providers/custom_loop_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class IframeYoutubePlayer extends ConsumerStatefulWidget {
@@ -24,7 +25,6 @@ class IframeYoutubePlayer extends ConsumerStatefulWidget {
 class _IframeYoutubePlayerState extends ConsumerState<IframeYoutubePlayer>
     with AutomaticKeepAliveClientMixin {
   late final YoutubePlayerController _controller;
-  late final _loopProvider = customLoopProviderFamily(_controller);
   @override
   void initState() {
     _controller = YoutubePlayerController(
@@ -42,10 +42,10 @@ class _IframeYoutubePlayerState extends ConsumerState<IframeYoutubePlayer>
   }
 
   void _onPlay() {
-    final isLoopActive = ref.read(_loopProvider) != null;
+    final isLoopActive = ref.read(customLoopProvider) != null;
 
     if (_controller.value.isPlaying && !isLoopActive) {
-      ref.read(_loopProvider.notifier).activateLoop(
+      ref.read(customLoopProvider.notifier).activateLoop(
             start: widget.start,
             end: widget.end,
           );

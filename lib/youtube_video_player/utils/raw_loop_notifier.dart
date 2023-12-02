@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/models/youtube_player/loop.dart';
+import 'package:lang_tube/models/youtube_player/raw_loop_state.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
-import 'loop.dart';
-import 'raw_loop_state.dart';
 
 class RawLoopNotifier extends StateNotifier<RawLoopState> {
   RawLoopNotifier({required this.youtubePlayerController})

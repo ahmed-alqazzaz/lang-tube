@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:lang_tube/youtube_video_player/components/custom_position_indicator.dart';
 import 'package:lang_tube/youtube_video_player/components/orientation_toggler.dart';
-import '../generic_actions.dart';
 
 class MiniPlayerActions extends StatelessWidget {
-  const MiniPlayerActions({super.key, required this.actions});
-  final YoutubePlayerGenericActions actions;
+  const MiniPlayerActions({super.key});
   static const buttonsPadding = 15.0;
 
   Widget _bottomActions() {
-    return Row(
+    return const Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        actions.currentPositionIndicator(padding: buttonsPadding),
-        const Padding(
+        CustomPositionIndicator(padding: buttonsPadding),
+        Padding(
           padding: EdgeInsets.only(right: 5),
           child: YoutubeOrientationToggler(),
         ),
@@ -28,13 +28,23 @@ class MiniPlayerActions extends StatelessWidget {
       children: [
         Transform.translate(
           offset: const Offset(-buttonsPadding, 0),
-          child: actions.backButton(),
+          child: backButton(),
         ),
         Transform.translate(
           offset: const Offset(buttonsPadding, 0),
-          child: actions.backButton(),
+          child: backButton(),
         ),
       ],
+    );
+  }
+
+  Widget backButton() {
+    return RawMaterialButton(
+      child: const Icon(
+        Icons.keyboard_arrow_down_outlined,
+        color: Colors.white,
+      ),
+      onPressed: () {},
     );
   }
 

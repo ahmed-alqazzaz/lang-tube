@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/models/youtube_player/loop.dart';
 import 'package:lang_tube/youtube_video_player/providers/custom_loop_provider.dart';
 import 'package:lang_tube/youtube_video_player/providers/subtitle_loop_provider.dart';
 import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class CustomProgressBar extends ConsumerStatefulWidget {
@@ -33,8 +36,9 @@ class _CustomProgressBarState extends ConsumerState<CustomProgressBar> {
         ref.read(subtitleLoopProvider.notifier).stream.startWith(null);
     final customLoopStream =
         ref.read(customLoopProvider.notifier).stream.startWith(null);
+
     return ProgressBar(
-      controller: _youtubePlayerController,
+      controller: ref.watch(youtubeControllerProvider),
       customProgress: Rx.combineLatestList([
         subtitlesLoopStream.asyncMap(
           (loop) => loop != null

@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/providers/playback_speed_provider.dart';
 
-class PlaybackSpeedButton extends ConsumerWidget {
-  const PlaybackSpeedButton({super.key});
+class YoutubePlaybackSpeedButton extends ConsumerWidget {
+  const YoutubePlaybackSpeedButton({super.key, this.splashRadius = 8});
 
+  final double splashRadius;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playbackSpeedNotifier =
@@ -38,6 +39,5 @@ class PlaybackSpeedButton extends ConsumerWidget {
         ),
       ),
     );
-    return const Placeholder();
   }
 }

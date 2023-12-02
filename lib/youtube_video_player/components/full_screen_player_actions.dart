@@ -1,23 +1,22 @@
 import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/actions/views/generic_actions.dart';
+import 'package:lang_tube/youtube_video_player/components/custom_loop_button.dart';
+import 'package:lang_tube/youtube_video_player/components/custom_position_indicator.dart';
+import 'package:lang_tube/youtube_video_player/components/custom_progress_bar.dart';
 import 'package:lang_tube/youtube_video_player/components/hd_button.dart';
 import 'package:lang_tube/youtube_video_player/components/orientation_toggler.dart';
+import 'package:lang_tube/youtube_video_player/components/playback_speed_button.dart';
+import 'package:lang_tube/youtube_video_player/providers/subtitle_loop_provider.dart';
+import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../../../../custom/icons/custom_icons.dart';
-import '../../action_providers/loop_providers/subtitle_loop_provider.dart/provider.dart';
-import '../../action_providers/youtube_hd_provider/provider.dart';
+import '../../custom/icons/custom_icons.dart';
 
 class FullScreenPlayerActions extends ConsumerWidget {
   const FullScreenPlayerActions({
     super.key,
-    required this.genericActions,
-    required SubtitleLoopProvider subtitleLoopProvider,
-  }) : _subtitleLoopProvider = subtitleLoopProvider;
-  final YoutubePlayerGenericActions genericActions;
-  final SubtitleLoopProvider _subtitleLoopProvider;
+  });
 
   Widget subtitlesSettingsButton() {
     return CircularInkWell(
@@ -85,8 +84,8 @@ class FullScreenPlayerActions extends ConsumerWidget {
     return Consumer(
       builder: (context, ref, _) {
         final isLoopActive =
-            ref.watch(_subtitleLoopProvider.select((value) => value != null));
-        final subtitleLoopNotifier = ref.read(_subtitleLoopProvider.notifier);
+            ref.watch(subtitleLoopProvider.select((value) => value != null));
+        final subtitleLoopNotifier = ref.read(subtitleLoopProvider.notifier);
         return CircularInkWell(
           splashRadius: splashRadius,
           child: Icon(
@@ -128,24 +127,23 @@ class FullScreenPlayerActions extends ConsumerWidget {
     //   },
     // );
 
-    return Column(
+    return const Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(
+          padding: EdgeInsets.only(
             left: progressBarHandleRadius,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              genericActions.currentPositionIndicator(
-                  padding: buttonsSplashRadius),
-              const YoutubeOrientationToggler(),
+              CustomPositionIndicator(padding: buttonsSplashRadius),
+              YoutubeOrientationToggler(),
             ],
           ),
         ),
-        genericActions.progressBar(),
+        CustomProgressBar(),
       ],
     );
   }
@@ -157,9 +155,9 @@ class FullScreenPlayerActions extends ConsumerWidget {
           SizedBox(width: constraints.maxWidth * 0.02),
           _subtitlesLoopButton(splashRadius: buttonsSplashRadius),
           SizedBox(width: constraints.maxWidth * 0.01),
-          genericActions.customLoopButton(splashRadius: buttonsSplashRadius),
+          const YoutubeCustomLoopButton(splashRadius: buttonsSplashRadius),
           SizedBox(width: constraints.maxWidth * 0.01),
-          genericActions.playbackSpeedButton(splashRadius: buttonsSplashRadius),
+          const YoutubePlaybackSpeedButton(splashRadius: buttonsSplashRadius),
           Expanded(child: Container()),
           youtubeButton(),
           SizedBox(width: constraints.maxWidth * 0.02),

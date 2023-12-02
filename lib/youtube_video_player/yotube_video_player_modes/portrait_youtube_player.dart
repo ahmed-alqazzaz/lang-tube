@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/youtube_video_player/components/actions_circular_menu.dart';
+import 'package:lang_tube/youtube_video_player/components/bottom_actions_bar.dart';
+import 'package:lang_tube/youtube_video_player/components/custom_progress_bar.dart';
+import 'package:lang_tube/youtube_video_player/components/mini_player_actions.dart';
 import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/subtitles_player_builders.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../subtitles_player/providers/player_pointer_absorbtion_provider.dart';
-import '../actions/views/actions.dart';
 import '../providers/subtitles_player_provider.dart';
 import '../providers/youtube_controller_provider.dart';
 
@@ -23,20 +26,8 @@ class PortraitYoutubePlayer extends ConsumerStatefulWidget {
 
 class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
     with SubtitlesPlayerBuilders {
-  late YoutubePlayerActions actions = YoutubePlayerActions(
-    subtitlesSettings: widget.subtitlesSettings,
-    youtubePlayerController: ref.read(youtubeControllerProvider)!,
-    currentSubtitleGetter: () =>
-        ref.read(subtitlesPlayerProvider).currentSubtitles.mainSubtitle,
-  );
   @override
   void didUpdateWidget(covariant PortraitYoutubePlayer oldWidget) {
-    actions = YoutubePlayerActions(
-      subtitlesSettings: widget.subtitlesSettings,
-      youtubePlayerController: ref.read(youtubeControllerProvider)!,
-      currentSubtitleGetter: () =>
-          ref.read(subtitlesPlayerProvider).currentSubtitles.mainSubtitle,
-    );
     super.didUpdateWidget(oldWidget);
   }
 
@@ -45,8 +36,8 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
       fit: StackFit.loose,
       children: [
         widget.player,
-        Positioned.fill(
-          child: actions.miniPlayerActions(),
+        const Positioned.fill(
+          child: MiniPlayerActions(),
         )
       ],
     );
@@ -76,7 +67,7 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
           top: playerHeight - progressBarHandleRadius,
           left: 0,
           right: 0,
-          child: actions.progressBar(),
+          child: const CustomProgressBar(),
         ),
       ],
     );
@@ -104,10 +95,10 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
               left: 0,
               right: 0,
               bottom: 0,
-              child: actions.bottomActionsBarBuilder(),
+              child: BottomActionsBar(),
             ),
             Positioned.fill(
-              child: actions.actionsCircularMenuBuilder(
+              child: ActionsCircularMenu(
                 onActionsMenuToggled: _onActionMenuToggled,
               ),
             ),

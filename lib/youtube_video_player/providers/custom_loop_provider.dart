@@ -1,12 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/actions/action_providers/loop_providers/custom_loop_provider/loop_provider.dart';
-import 'package:lang_tube/youtube_video_player/actions/action_providers/loop_providers/raw_loop_notifier/notifier.dart';
+import 'package:lang_tube/models/youtube_player/loop.dart';
 import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../actions/action_providers/loop_providers/raw_loop_notifier/loop.dart';
+import '../utils/raw_loop_notifier.dart';
 
-final customLoopProvider = StateNotifierProvider(
+final customLoopProvider = StateNotifierProvider<CustomLoopNotifier, Loop?>(
   (ref) => CustomLoopNotifier(
     youtubePlayerController: ref.watch(youtubeControllerProvider)!,
   ),

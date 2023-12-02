@@ -1,24 +1,19 @@
 import 'package:circular_menu/circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/actions/action_providers/youtube_hd_provider/provider.dart';
-import 'package:lang_tube/youtube_video_player/actions/action_providers/loop_providers/subtitle_loop_provider.dart/provider.dart';
 import 'package:lang_tube/youtube_video_player/providers/hd_provider.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:lang_tube/youtube_video_player/providers/subtitle_loop_provider.dart';
 
 class ActionsCircularMenu extends ConsumerWidget {
   ActionsCircularMenu({
     super.key,
     required this.onActionsMenuToggled,
-    required YoutubePlayerController youtubePlayerController,
-    required SubtitleLoopProvider subtitleLoopProvider,
-  }) : _subtitleLoopProvider = subtitleLoopProvider;
+  });
   final circularMenuToggleButtonColor = Colors.amber[600];
   static const circularMenuItemBackgroundColor =
       Color.fromARGB(255, 50, 50, 50);
 
   final void Function() onActionsMenuToggled;
-  final SubtitleLoopProvider _subtitleLoopProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,8 +61,8 @@ class ActionsCircularMenu extends ConsumerWidget {
 
   CircularMenuItem circularMenuSubtitlesLoopButton(WidgetRef ref) {
     final isLoopActive =
-        ref.watch(_subtitleLoopProvider.select((value) => value != null));
-    final subtitleLoopNotifier = ref.read(_subtitleLoopProvider.notifier);
+        ref.watch(subtitleLoopProvider.select((value) => value != null));
+    final subtitleLoopNotifier = ref.read(subtitleLoopProvider.notifier);
 
     return _genericCircularMenuItem(
       icon: Icons.repeat_one,
