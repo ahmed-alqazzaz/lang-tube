@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../explanation_modal/explanation_modal.dart';
-import '../../subtitles_player/providers/multi_subtitles_player_provider/provider.dart';
 import '../../subtitles_player/views/main_subtitles_player.dart';
 import '../../subtitles_player/views/mini_subtitles_player.dart';
 

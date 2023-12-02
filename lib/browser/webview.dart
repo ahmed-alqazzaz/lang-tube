@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:lang_tube/browser/browser_appbar.dart';

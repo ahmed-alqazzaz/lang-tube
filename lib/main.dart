@@ -1,30 +1,20 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'package:lang_tube/providers/app_state_provider/app_state_provider.dart';
 import 'package:lang_tube/subtitles_scraper/scraper.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart' as x;
-import 'package:bottom_tabbed_navigator/bottom_tabbed_navigator.dart';
-import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
-import 'package:lang_tube/browser/webview.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/data/lexicon.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/data/lexicon_entry.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/data/web_example.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/data/youtube_example.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/page.dart';
-import 'package:lang_tube/video_recommendations.dart/video_recommendations_view.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 import 'package:user_agent/user_agent.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'router/routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

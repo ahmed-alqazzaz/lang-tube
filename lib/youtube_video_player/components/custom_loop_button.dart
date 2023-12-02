@@ -3,6 +3,7 @@ import 'package:clipped_icon/clipped_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/actions/action_providers/loop_providers/custom_loop_provider/setup_provider.dart';
+import 'package:lang_tube/youtube_video_player/providers/custom_loop_provider.dart';
 import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 
 class YoutubeCustomLoopButton extends ConsumerStatefulWidget {
@@ -21,6 +22,7 @@ class _YoutubeCustomLoopButtonState
 
   void _onTap() {
     final youtubePlayerController = ref.read(youtubeControllerProvider);
+    final loopNotifier = ref.read(customLoopProvider.notifier);
     switch (state) {
       case CustomLoopState.inactive:
         _loopStart = youtubePlayerController!.value.position;

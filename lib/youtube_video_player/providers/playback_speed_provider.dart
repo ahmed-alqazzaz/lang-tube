@@ -1,5 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+final youtubePlaybackSpeedProvider = StateNotifierProvider(
+  (ref) => YoutubePlaybackSpeedNotifier(
+    youtubePlayerController: ref.watch(youtubeControllerProvider)!,
+  ),
+);
 
 class YoutubePlaybackSpeedNotifier extends StateNotifier<double> {
   YoutubePlaybackSpeedNotifier({

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:value_notifier_transformer/value_notifier_transformer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../enums/position_indicator_value.dart';
 
 /// A widget which displays the position of the video.
 class PositionIndicator extends StatelessWidget {

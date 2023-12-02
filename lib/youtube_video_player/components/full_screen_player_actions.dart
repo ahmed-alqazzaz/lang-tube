@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/actions/views/generic_actions.dart';
 import 'package:lang_tube/youtube_video_player/components/hd_button.dart';
 import 'package:lang_tube/youtube_video_player/components/orientation_toggler.dart';
-import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../../../custom/icons/custom_icons.dart';

@@ -2,10 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lang_tube/subtitles_player/utils/subtitles_parser/subtitles_parser.dart';
 import 'package:lang_tube/models/miscellaneous/cefr.dart';
-import 'package:lang_tube/models/video_recommendations/recommended_video.dart';
 import 'package:lang_tube/video_recommendations.dart/managers/videos_recommendations_manager/videos_difficulty_ranker/ranker.dart';
 import 'package:lang_tube/subtitles_player/utils/subtitles_parser/subtitles_scraper/subtitles_scraper.dart';
-import 'package:lang_tube/youtube_scraper/data/youtube_video_item.dart';
 
 import 'consts.dart';
 

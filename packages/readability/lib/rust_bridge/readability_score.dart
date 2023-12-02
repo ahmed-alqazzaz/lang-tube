@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'api.dart';
 
 class ReadabilityScore {
   final double lixIndex;

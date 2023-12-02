@@ -1,15 +1,12 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:collection/collection.dart';
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/foundation.dart';
 import 'package:languages/languages.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:subtitles_parser/subtitles_parser.dart';
 import 'package:unique_key_mutex/unique_key_mutex.dart';
 import 'package:youtube_subtitles_scraper/src/utils/cache_expiration_manager.dart';
 import 'package:youtube_subtitles_scraper/src/utils/cache_redundancy_manager.dart';
-import 'package:youtube_subtitles_scraper/src/utils/sources_count_manager.dart';
 import 'package:youtube_subtitles_scraper/src/youtube_explode_manager.dart';
 
 import '../youtube_subtitles_scraper.dart';

@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lang_tube/models/video_recommendations/jsonifiers.dart';
 import 'package:collection/collection.dart';
 import 'package:lang_tube/video_recommendations.dart/recommendations_manager/storage_manager.dart';
 

@@ -1,8 +1,6 @@
 import 'dart:developer';
 
-import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/subtitles_scraper/scraper.dart';
 import 'package:languages/languages.dart';
 import 'package:user_agent/user_agent.dart';

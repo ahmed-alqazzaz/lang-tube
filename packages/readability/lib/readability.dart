@@ -1,5 +1,4 @@
 import 'package:readability/rust_bridge/api.dart';
-import 'package:readability/rust_bridge/bridge.dart';
 import 'rust_bridge/readability_score.dart';
 export 'rust_bridge/readability_score.dart';
 

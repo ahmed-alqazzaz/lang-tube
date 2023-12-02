@@ -1,8 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/youtube_video_player/actions/action_providers/loop_providers/custom_loop_provider/loop_provider.dart';
+import 'package:lang_tube/youtube_video_player/actions/action_providers/loop_providers/raw_loop_notifier/notifier.dart';
+import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../raw_loop_notifier/loop.dart';
-import '../raw_loop_notifier/notifier.dart';
+import '../actions/action_providers/loop_providers/raw_loop_notifier/loop.dart';
+
+final customLoopProvider = StateNotifierProvider(
+  (ref) => CustomLoopNotifier(
+    youtubePlayerController: ref.watch(youtubeControllerProvider)!,
+  ),
+);
 
 // creating a a seperate instance of raw
 // loop controller is neccessary to prevent

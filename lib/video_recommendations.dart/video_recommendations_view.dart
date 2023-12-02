@@ -2,18 +2,14 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:circular_inkwell/circular_inkwell.dart';
-import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/video_recommendations.dart/recommendations_manager/manager.dart';
 import 'package:lang_tube/video_widgets/videos_carousel.dart';
-import 'package:readability/readability.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
 import '../router/routes.dart';
-import '../models/miscellaneous/cefr.dart';
-import '../models/video_recommendations/recommended_video.dart';
 import '../models/video_recommendations/video_recommendations.dart';
 import '../video_widgets/display_video_item.dart';
 

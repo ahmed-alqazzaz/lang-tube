@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/models/video_recommendations/recommended_video.dart';

@@ -1,12 +1,23 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/youtube_video_player/actions/action_providers/loop_providers/raw_loop_notifier/notifier.dart';
+import 'package:lang_tube/youtube_video_player/providers/subtitles_player_provider.dart';
+import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:subtitles_player/subtitles_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../raw_loop_notifier/loop.dart';
-import '../raw_loop_notifier/raw_loop_state.dart';
-import '../raw_loop_notifier/notifier.dart';
+import '../actions/action_providers/loop_providers/raw_loop_notifier/loop.dart';
+import '../actions/action_providers/loop_providers/raw_loop_notifier/raw_loop_state.dart';
 
 typedef CurrentSubtitleGetter = Subtitle? Function();
+
+final subtitleLoopProvider = StateNotifierProvider((ref) {
+  return SubtitleLoopNotifier(
+    currentSubtitleGetter: () =>
+        ref.read(subtitlesPlayerProvider).currentSubtitles.mainSubtitle,
+    youtubePlayerController: ref.read(youtubeControllerProvider)!,
+    loopCount: 2,
+  );
+});
 
 final class SubtitleLoopNotifier extends StateNotifier<Loop?> {
   SubtitleLoopNotifier({

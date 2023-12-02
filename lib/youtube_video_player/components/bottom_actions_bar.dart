@@ -1,8 +1,8 @@
-import 'dart:developer';
 import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../generic_actions.dart';
+import 'package:lang_tube/youtube_video_player/components/custom_loop_button.dart';
+import '../actions/views/generic_actions.dart';
 import 'package:curved_bottom_bar/curved_bottom_bar.dart';
 
 class BottomActionsBar extends StatelessWidget {
@@ -64,12 +64,8 @@ class BottomActionsBar extends StatelessWidget {
       backgroundColor: const Color.fromARGB(255, 15, 15, 15),
       actions: [
         subtitlesSettingsButton(),
-        _genericActions.customLoopButton(
-          splashRadius: buttonsSplashRadius,
-        ),
-        _genericActions.playbackSpeedButton(
-          splashRadius: buttonsSplashRadius,
-        ),
+        const YoutubeCustomLoopButton(splashRadius: buttonsSplashRadius),
+        const YoutubePlaybackSpeedButton(splashRadius: buttonsSplashRadius),
         settingsButton()
       ],
     );
