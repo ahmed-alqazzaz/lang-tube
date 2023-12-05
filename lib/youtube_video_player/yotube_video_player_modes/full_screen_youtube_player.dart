@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/components/full_screen_player_actions.dart';
 import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import '../providers/subtitles_player_provider.dart';
 import 'subtitles_player_builders.dart';
 
 class FullScreenYoutubeVideoPlayer extends ConsumerStatefulWidget {

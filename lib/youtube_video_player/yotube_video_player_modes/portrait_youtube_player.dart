@@ -6,18 +6,15 @@ import 'package:lang_tube/youtube_video_player/components/custom_progress_bar.da
 import 'package:lang_tube/youtube_video_player/components/mini_player_actions.dart';
 import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/subtitles_player_builders.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import '../../subtitles_player/providers/player_pointer_absorbtion_provider.dart';
-import '../providers/subtitles_player_provider.dart';
+import '../providers/actions_menu_activity_provider.dart';
 import '../providers/youtube_controller_provider.dart';
 
 class PortraitYoutubePlayer extends ConsumerStatefulWidget {
   const PortraitYoutubePlayer({
     super.key,
     required this.player,
-    required this.subtitlesSettings,
   });
   final Widget player;
-  final Widget subtitlesSettings;
 
   @override
   ConsumerState<PortraitYoutubePlayer> createState() =>
@@ -73,15 +70,9 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
     );
   }
 
-  void _onActionMenuToggled() {
-    final isAbsorbingPointers =
-        ref.read(mainSubtitlesPlayerPointerAbsorbtionProvider);
-    final notifier =
-        ref.read(mainSubtitlesPlayerPointerAbsorbtionProvider.notifier);
-    isAbsorbingPointers
-        ? notifier.neverAbsorbPointers()
-        : notifier.absorbPointers();
-  }
+  void _onActionMenuToggled() =>
+      ref.read(actionsMenuActivityProvider.notifier).state =
+          !ref.read(actionsMenuActivityProvider);
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +81,7 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
         child: Stack(
           children: [
             _bodyBuilder(context),
-            Positioned(
+            const Positioned(
               height: 80,
               left: 0,
               right: 0,

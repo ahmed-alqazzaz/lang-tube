@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 
-extension ValueNotifierTransformer<T> on ValueNotifier<T> {
+extension ValueNotifierTransformer<T> on ValueListenable<T> {
   /// Creates a new ValueNotifier with each data event of this ValueNotifier
   /// asynchronously mapped to a new event.
   ///
@@ -9,7 +9,7 @@ extension ValueNotifierTransformer<T> on ValueNotifier<T> {
   /// and in that case, this method waits for that future to complete before
   /// updating the result ValueNotifier.
 
-  Future<ValueNotifier<R>> asyncMap<R>(
+  Future<ValueListenable<R>> asyncMap<R>(
       FutureOr<R> Function(T event) mapper) async {
     final resultNotifier = ValueNotifier<R>(await mapper(value));
 
@@ -26,7 +26,7 @@ extension ValueNotifierTransformer<T> on ValueNotifier<T> {
     return resultNotifier;
   }
 
-  ValueNotifier<R> syncMap<R>(R Function(T event) mapper) {
+  ValueListenable<R> syncMap<R>(R Function(T event) mapper) {
     final resultNotifier = ValueNotifier<R>(mapper(value));
     Stream.fromIterable([]).asyncMap((event) => null);
     void updateResult(T value) {
@@ -59,7 +59,7 @@ extension ValueNotifierTransformer<T> on ValueNotifier<T> {
     return resultNotifier;
   }
 
-  ValueNotifier<T> get unique {
+  ValueListenable<T> get unique {
     final resultNotifier = ValueNotifier<T>(value);
     T previousValue = value;
 
@@ -78,7 +78,7 @@ extension ValueNotifierTransformer<T> on ValueNotifier<T> {
     return resultNotifier;
   }
 
-  ValueNotifier<T> delayWhen(
+  ValueListenable<T> delayWhen(
       Duration delayDuration, bool Function(T event) shouldDelay) {
     final resultNotifier = ValueNotifier<T>(value);
 
@@ -97,7 +97,7 @@ extension ValueNotifierTransformer<T> on ValueNotifier<T> {
     return resultNotifier;
   }
 
-  ValueNotifier<T> delayFirst(Duration duration) {
+  ValueListenable<T> delayFirst(Duration duration) {
     assert(duration >= Duration.zero, 'Duration must be non-negative.');
 
     final resultNotifier = ValueNotifier<T>(value);

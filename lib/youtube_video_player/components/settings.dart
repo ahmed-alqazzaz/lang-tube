@@ -4,8 +4,9 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:lang_tube/models/subtitles/subtitles_bundle.dart';
 import 'package:lang_tube/utils/capitalization.dart';
 import 'package:lang_tube/youtube_video_player/providers/subtitles_config_provider.dart';
-import 'package:lang_tube/youtube_video_player/providers/subtitles_provider.dart';
 import 'package:languages/languages.dart';
+
+import '../providers/subtitles_provider.dart';
 
 class SubtitlesConfig extends ConsumerStatefulWidget {
   const SubtitlesConfig({super.key});
@@ -152,8 +153,7 @@ class _SubtitlesSettingsState extends ConsumerState<SubtitlesConfig> {
             ),
             body: Consumer(
               builder: (context, ref, _) {
-                final subtitlesBundles =
-                    ref.watch(subtitlesProvider).valueOrNull?.toList();
+                final subtitlesBundles = ref.watch(subtitlesProvider)?.toList();
                 return LayoutBuilder(
                   builder: (context, constraints) {
                     return ListView.separated(

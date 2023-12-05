@@ -8,7 +8,6 @@ import 'package:lang_tube/youtube_video_player/components/hd_button.dart';
 import 'package:lang_tube/youtube_video_player/components/orientation_toggler.dart';
 import 'package:lang_tube/youtube_video_player/components/playback_speed_button.dart';
 import 'package:lang_tube/youtube_video_player/providers/subtitle_loop_provider.dart';
-import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../custom/icons/custom_icons.dart';

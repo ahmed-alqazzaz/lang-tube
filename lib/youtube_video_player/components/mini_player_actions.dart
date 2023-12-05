@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lang_tube/youtube_video_player/components/custom_position_indicator.dart';
 import 'package:lang_tube/youtube_video_player/components/orientation_toggler.dart';

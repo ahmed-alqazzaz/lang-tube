@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../../explanation_modal/explanation_modal.dart';
-import '../../subtitles_player/views/main_subtitles_player.dart';
-import '../../subtitles_player/views/mini_subtitles_player.dart';
+import '../subtitles_player/main_subtitles_player.dart';
+import '../subtitles_player/mini_subtitles_player.dart';
 
 mixin SubtitlesPlayerBuilders {
   MiniSubtitlesPlayer miniSubtitlesPlayer({
@@ -40,26 +39,8 @@ mixin SubtitlesPlayerBuilders {
     required YoutubePlayerController controller,
     required BuildContext context,
   }) {
-    return MainSubtitlesPlayer(
-      headerBackgroundColor: const Color.fromARGB(255, 20, 20, 20),
-      onTap: ({required Function() onReset, required String word}) {
-        controller.pause();
-        showModalBottomSheet(
-            showDragHandle: true,
-            context: context,
-            barrierColor: Colors.black12,
-            isScrollControlled: true,
-            builder: (context) {
-              return ExplanationModalSheet(
-                word: word.replaceAll(RegExp(r'[^a-zA-Z]'), ''),
-              );
-            }).then(
-          (_) {
-            controller.play();
-            onReset();
-          },
-        );
-      },
+    return const MainSubtitlesPlayer(
+      headerBackgroundColor: Color.fromARGB(255, 20, 20, 20),
     );
   }
 }

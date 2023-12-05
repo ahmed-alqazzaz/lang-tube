@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/subtitles_player/views/subtitle_box.dart';
+import 'package:lang_tube/youtube_video_player/components/subtitle_box.dart';
 import 'package:lang_tube/youtube_video_player/providers/subtitles_player_provider.dart';
 
 class MiniSubtitlesPlayer extends ConsumerStatefulWidget {
