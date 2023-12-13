@@ -6,9 +6,7 @@ final subtitlesProvider = Provider<Iterable<SubtitlesBundle>?>(
   (ref) {
     return ref.watch(
       subtitlesNetworkStreamProvider.select(
-        (networkSubtitles) {
-          return networkSubtitles.valueOrNull?.subtitlesBundles;
-        },
+        (networkSubtitles) => networkSubtitles.valueOrNull?.subtitlesBundles,
       ),
     );
   },

@@ -8,7 +8,6 @@ extension CacheExpirationManager on CacheManager {
           onSourcesDeleted}) async {
     final sources = await retrieveSources();
 
-    if (sources == null) return;
     for (var source in sources.unique) {
       if (source.isExpired == true) {
         clearSources(videoId: source.videoId).whenComplete(

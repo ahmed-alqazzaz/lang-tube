@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/components/full_screen_player_actions.dart';
-import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'subtitles_player_builders.dart';
+import '../subtitles_player/main_subtitles_player.dart';
+import '../subtitles_player/mini_subtitles_player.dart';
 
 class FullScreenYoutubeVideoPlayer extends ConsumerStatefulWidget {
   const FullScreenYoutubeVideoPlayer({
@@ -18,8 +18,7 @@ class FullScreenYoutubeVideoPlayer extends ConsumerStatefulWidget {
 }
 
 class _FullScreenYoutubeVideoPlayerState
-    extends ConsumerState<FullScreenYoutubeVideoPlayer>
-    with SubtitlesPlayerBuilders {
+    extends ConsumerState<FullScreenYoutubeVideoPlayer> {
   Widget _youtubePlayerBuilder() {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -27,15 +26,11 @@ class _FullScreenYoutubeVideoPlayerState
           alignment: Alignment.center,
           children: [
             widget.player,
-            Positioned(
+            const Positioned(
               bottom: 70,
               right: 50,
               left: 50,
-              child: miniSubtitlesPlayer(
-                maxLines: 2,
-                controller: ref.read(youtubeControllerProvider)!,
-                context: context,
-              ),
+              child: MiniSubtitlesPlayer(maxLines: 2),
             ),
             const Positioned(
               right: progressBarHandleRadius,
@@ -60,10 +55,7 @@ class _FullScreenYoutubeVideoPlayerState
         scrollDirection: Axis.horizontal,
         child: SizedBox(
           width: size.height,
-          child: mainSubtitlesPlayer(
-            controller: ref.read(youtubeControllerProvider)!,
-            context: context,
-          ),
+          child: const MainSubtitlesPlayer(),
         ),
       ),
     );

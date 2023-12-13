@@ -4,7 +4,10 @@ import 'package:lang_tube/youtube_video_player/providers/subtitles_network_strea
 final subtitlesDownloadProgressProvider = Provider<double?>(
   (ref) => ref.watch(
     subtitlesNetworkStreamProvider.select(
-      (networkSubtitles) => networkSubtitles.valueOrNull?.downloadProgress,
+      (networkSubtitles) {
+        final progress = networkSubtitles.valueOrNull?.downloadProgress;
+        return progress == 1.0 ? null : progress;
+      },
     ),
   ),
 );

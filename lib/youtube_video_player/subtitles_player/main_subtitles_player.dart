@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lang_tube/explanation_modal/explanation_modal_constraints_provider.dart';
 
 import 'package:lang_tube/youtube_video_player/components/subtitle_box.dart';
+import 'package:lang_tube/youtube_video_player/providers/subtitles_download_progress_provider.dart';
 import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:size_observer/size_observer.dart';
@@ -15,17 +18,14 @@ import '../providers/actions_menu_activity_provider.dart';
 import '../providers/subtitles_player_provider.dart';
 
 class MainSubtitlesPlayer extends ConsumerStatefulWidget {
-  const MainSubtitlesPlayer({
-    super.key,
-    required this.headerBackgroundColor,
-  });
+  const MainSubtitlesPlayer({super.key});
   static const double textFontSize = 16;
   static const double headerTextFontSize = 18;
   static const double subtitleBoxVerticalPadding = 20;
   static final Color defaultTextColor = Colors.white.withOpacity(0.5);
   static const double headerlinesDividerHeight = 5;
   static const Duration bodyScrollDuration = Duration(milliseconds: 500);
-  final Color headerBackgroundColor;
+  static const Color headerBackgroundColor = Color.fromARGB(255, 20, 20, 20);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -79,28 +79,23 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
   }
 
   Widget _body() {
-    // final explanationModalConstraintsNotifier =
-    //     ref.read(explanationModalConstraintsProvider);
-    final subtitlesPlayerValue = ref.read(subtitlesPlayerProvider);
+    final subtitlesPlayerValue = ref.watch(subtitlesPlayerProvider);
     final youtubePlayerController = ref.read(youtubeControllerProvider);
     final subtitles = subtitlesPlayerValue.subtitles;
     return LayoutBuilder(
       builder: (context, constraints) {
         return Listener(
           behavior: HitTestBehavior.opaque,
-          onPointerMove: (event) {
-            ref.read(youtubeControllerProvider).pause();
-          },
+          onPointerMove: (event) => ref.read(youtubeControllerProvider).pause(),
           child: SizeObserver(
             onChange: (size) => _bottomSheetHeightNotifier.value = size,
             child: ScrollablePositionedList.builder(
               padding: EdgeInsets.only(bottom: constraints.maxHeight),
               itemScrollController: _scrollController,
-              initialScrollIndex:
-                  subtitlesPlayerValue.index ?? subtitles.length,
+              initialScrollIndex: subtitles.length - subtitlesPlayerValue.index,
               itemCount: subtitles.length,
               itemBuilder: (context, index) {
-                if (index >= subtitles.length) return Container();
+                if (index >= subtitles.length || index < 0) return Container();
                 final subtitle =
                     subtitles.reversed.toList()[index].mainSubtitle!;
                 return GestureDetector(
@@ -169,45 +164,103 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
     );
   }
 
+  Widget headerBuilder() {
+    return Container(
+      color: MainSubtitlesPlayer.headerBackgroundColor,
+      padding: EdgeInsets.symmetric(
+        vertical: MainSubtitlesPlayer.subtitleBoxVerticalPadding,
+        horizontal: MediaQuery.of(context).size.width * 0.05,
+      ),
+      child: AnimatedSize(
+        duration: const Duration(milliseconds: 300),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Consumer(
+              builder: (context, ref, _) {
+                final mainSubtitle = ref.watch(
+                  subtitlesPlayerProvider.select(
+                    (value) => value.currentSubtitles.mainSubtitle,
+                  ),
+                );
+                if (mainSubtitle != null) {
+                  return SubtitleBox(
+                    words: mainSubtitle.words,
+                    backgroundColor: Colors.transparent,
+                    textFontSize: MainSubtitlesPlayer.headerTextFontSize,
+                    onTapUp: _onTap,
+                    defaultTextColor: Colors.white,
+                  );
+                }
+                return Container();
+              },
+            ),
+            const SizedBox(
+                height: MainSubtitlesPlayer.headerlinesDividerHeight),
+            Consumer(
+              builder: (context, ref, _) {
+                final translatedSubtitle = ref.watch(
+                  subtitlesPlayerProvider.select(
+                    (value) => value.currentSubtitles.translatedSubtitle,
+                  ),
+                );
+                if (translatedSubtitle != null) {
+                  return SubtitleBox(
+                    words: translatedSubtitle.words,
+                    backgroundColor: Colors.transparent,
+                    textFontSize: MainSubtitlesPlayer.headerTextFontSize,
+                    defaultTextColor: Colors.amber.shade600,
+                  );
+                }
+                return Container();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _progressIndictorBuilder() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final downloadProgress = ref.watch(subtitlesDownloadProgressProvider);
+        if (downloadProgress != null) {
+          return LinearProgressIndicator(
+            value: downloadProgress == 0.0 ? null : downloadProgress,
+            minHeight: 2.3,
+            backgroundColor: MainSubtitlesPlayer.defaultTextColor,
+            color: Colors.deepPurple.shade800,
+          );
+        }
+        return Container();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final shouldAbsorbPointers = ref.read(actionsMenuActivityProvider);
-
+    final shouldAbsorbPointers = ref.watch(actionsMenuActivityProvider);
     ref.listen<SubtitlesPlayerValue>(
       subtitlesPlayerProvider,
       (_, value) {
-        printRed("scrolling to ${value.subtitles.length} ${value.index}");
         _scrollController.scrollTo(
           index: value.subtitles.length - value.index,
           duration: MainSubtitlesPlayer.bodyScrollDuration,
         );
       },
     );
-    // if (MediaQuery.of(context).orientation == Orientation.landscape) {
-    //   assert(!shouldAbsorbPointers,
-    //       'Main Subtitles player should not absorb pointers while in landscape');
-    // }
+
     return Scaffold(
       body: AbsorbPointer(
         absorbing: shouldAbsorbPointers,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Consumer(
-              builder: (context, ref, _) {
-                final currentSubtitle =
-                    ref.watch(subtitlesPlayerProvider).currentSubtitles;
-                return headerBuilder(
-                  backgroundColor: widget.headerBackgroundColor,
-                  onTap: ({required onReset, required word}) =>
-                      _onTap(word: word, onReset: onReset),
-                  mainSubtitle: currentSubtitle.mainSubtitle,
-                  translatedSubtitle: currentSubtitle.translatedSubtitle,
-                );
-              },
-            ),
-            Expanded(child: _body())
+            headerBuilder(),
+            _progressIndictorBuilder(),
+            Expanded(child: _body()),
           ],
         ),
       ),
@@ -216,53 +269,4 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
 
   @override
   bool get wantKeepAlive => true;
-}
-
-Widget headerBuilder({
-  Subtitle? mainSubtitle,
-  Subtitle? translatedSubtitle,
-  required OnSubtitleTapped onTap,
-  required Color backgroundColor,
-  Color mainLineColor = Colors.white,
-  Color translatedLineColor = Colors.amber,
-}) {
-  SubtitleBox mainLine(Subtitle currentSubtitle) {
-    return SubtitleBox(
-      words: currentSubtitle.words,
-      backgroundColor: Colors.transparent,
-      textFontSize: MainSubtitlesPlayer.headerTextFontSize,
-      onTapUp: onTap,
-      defaultTextColor: mainLineColor,
-    );
-  }
-
-  SubtitleBox translatedLine(Subtitle currentSubtitle) {
-    return SubtitleBox(
-      words: currentSubtitle.words,
-      backgroundColor: Colors.transparent,
-      textFontSize: MainSubtitlesPlayer.headerTextFontSize,
-      defaultTextColor: translatedLineColor,
-    );
-  }
-
-  return LayoutBuilder(
-    builder: (context, constraints) {
-      return Container(
-        color: backgroundColor,
-        padding: EdgeInsets.symmetric(
-          vertical: MainSubtitlesPlayer.subtitleBoxVerticalPadding,
-          horizontal: constraints.maxWidth * 0.05,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (mainSubtitle != null) mainLine(mainSubtitle),
-            const SizedBox(
-                height: MainSubtitlesPlayer.headerlinesDividerHeight),
-            if (translatedSubtitle != null) translatedLine(translatedSubtitle),
-          ],
-        ),
-      );
-    },
-  );
 }

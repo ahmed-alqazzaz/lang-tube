@@ -1,6 +1,7 @@
 // this provider is necessary for obtaining latest emitted video id
 // without returning null when the state changes anything other than  DisplayingVideoPlayer
 
+import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/providers/app_state_provider/app_state_provider.dart';
 import 'package:lang_tube/providers/app_state_provider/states.dart';
@@ -11,14 +12,17 @@ import 'package:lang_tube/providers/app_state_provider/states.dart';
 
 // this provider is necessary for obtaining latest emitted video id,
 // without returning null when the state changes anything
-
 final videoIdProvider = Provider<String>(
   (ref) {
     ref.listen(
       appStateProvider,
-      (_, state) =>
-          state is DisplayingVideoPlayer ? ref.invalidateSelf() : null,
-      fireImmediately: true,
+      (_, state) {
+        if (state is DisplayingVideoPlayer) {
+          printBlue("invalidating video id provider");
+          ref.invalidateSelf();
+        }
+      },
+      fireImmediately: false,
     );
     return ref.read(
       appStateProvider.select((state) {

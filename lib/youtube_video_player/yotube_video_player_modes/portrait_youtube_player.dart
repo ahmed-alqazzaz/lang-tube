@@ -4,10 +4,9 @@ import 'package:lang_tube/youtube_video_player/components/actions_circular_menu.
 import 'package:lang_tube/youtube_video_player/components/bottom_actions_bar.dart';
 import 'package:lang_tube/youtube_video_player/components/custom_progress_bar.dart';
 import 'package:lang_tube/youtube_video_player/components/mini_player_actions.dart';
-import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/subtitles_player_builders.dart';
+import 'package:lang_tube/youtube_video_player/subtitles_player/main_subtitles_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../providers/actions_menu_activity_provider.dart';
-import '../providers/youtube_controller_provider.dart';
 
 class PortraitYoutubePlayer extends ConsumerStatefulWidget {
   const PortraitYoutubePlayer({
@@ -21,8 +20,7 @@ class PortraitYoutubePlayer extends ConsumerStatefulWidget {
       _PortraitYoutubePlayerState();
 }
 
-class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
-    with SubtitlesPlayerBuilders {
+class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer> {
   @override
   void didUpdateWidget(covariant PortraitYoutubePlayer oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -40,13 +38,6 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
     );
   }
 
-  Widget subtitlesPlayer(BuildContext context) {
-    return mainSubtitlesPlayer(
-      controller: ref.read(youtubeControllerProvider)!,
-      context: context,
-    );
-  }
-
   Widget _bodyBuilder(BuildContext context) {
     final playerHeight = MediaQuery.of(context).size.width * 9 / 16;
     return Stack(
@@ -55,9 +46,7 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer>
           mainAxisSize: MainAxisSize.min,
           children: [
             youtubePlayer(),
-            Expanded(
-              child: subtitlesPlayer(context),
-            ),
+            const Expanded(child: MainSubtitlesPlayer()),
           ],
         ),
         Positioned(

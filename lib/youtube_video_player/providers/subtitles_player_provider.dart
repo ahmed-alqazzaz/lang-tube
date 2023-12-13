@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
@@ -15,9 +16,7 @@ final subtitlesPlayerProvider =
   (ref) {
     final youtubePlayerController = ref.watch(youtubeControllerProvider);
     final subtitlesConfig = ref.watch(subtitlesConfigProvider);
-
     final selectedSubtitlesBundle = subtitlesConfig?.selectedBundle;
-
     final mainSubtitles = selectedSubtitlesBundle?.mainSubtitles.subtitles
         .map((e) => e.toSubtitle());
     final translatedSubtitles = selectedSubtitlesBundle
@@ -31,10 +30,9 @@ final subtitlesPlayerProvider =
               : null) ??
           [],
       playbackPosition:
-          youtubePlayerController?.where((event) => !event.isDragging).syncMap(
-                    (value) => value.position,
-                  ) ??
-              ValueNotifier(Duration.zero),
+          youtubePlayerController.where((event) => !event.isDragging).syncMap(
+                (value) => value.position,
+              ),
     );
   },
 );
@@ -64,7 +62,8 @@ class MultiSubtitlesPlayer extends StateNotifier<SubtitlesPlayerValue> {
                 )
             ],
             currentSubtitles: const ConsumableSubtitles(),
-            index: 0,
+            index:
+                mainSubtitles.getClosestIndexByDuration(playbackPosition.value),
           ),
         ) {
     _mainSubtitlesPlayer.addListener(

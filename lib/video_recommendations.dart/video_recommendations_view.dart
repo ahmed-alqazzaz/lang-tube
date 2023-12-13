@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/video_recommendations.dart/recommendations_manager/manager.dart';
 import 'package:lang_tube/video_widgets/videos_carousel.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+// import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
 import '../router/routes.dart';
@@ -32,10 +32,10 @@ class _VideoRecommendationsViewState
   _VideoRecommendationsViewState();
   @override
   void initState() {
-    ReceiveSharingIntent.getInitialText().then((value) => value != null
-        ? YoutubePlayerRoute(id: YoutubePlayer.convertUrlToId(value)!)
-            .push(context)
-        : null);
+    // ReceiveSharingIntent.getInitialText().then((value) => value != null
+    //     ? YoutubePlayerRoute(id: YoutubePlayer.convertUrlToId(value)!)
+    //         .push(context)
+    //     : null);
     // ReceiveSharingIntent.getTextStream().listen((url) {
     //   log(url.toString() + "9");
     //   YoutubePlayerRoute(id: YoutubePlayer.convertUrlToId(url)!).push(context);

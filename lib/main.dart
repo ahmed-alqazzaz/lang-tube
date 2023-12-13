@@ -12,7 +12,7 @@ import 'package:lang_tube/explanation_modal/explanation_page/data/lexicon_entry.
 import 'package:lang_tube/explanation_modal/explanation_page/data/web_example.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/data/youtube_example.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/page.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+//import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 import 'package:user_agent/user_agent.dart';
 
@@ -27,7 +27,7 @@ Future<void> main() async {
     if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
     return stack;
   };
-  await ReceiveSharingIntent.getInitialText();
+  // await ReceiveSharingIntent.getInitialText();
   await SubtitlesScraper.ensureInitalized();
   ProviderContainer()
       .read(appStateProvider.notifier)
