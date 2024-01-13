@@ -8,29 +8,15 @@ import 'package:lang_tube/youtube_video_player/subtitles_player/main_subtitles_p
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../providers/actions_menu_activity_provider.dart';
 
-class PortraitYoutubePlayer extends ConsumerStatefulWidget {
-  const PortraitYoutubePlayer({
-    super.key,
-    required this.player,
-  });
+class PortraitYoutubePlayer extends StatelessWidget {
+  const PortraitYoutubePlayer({super.key, required this.player});
   final Widget player;
-
-  @override
-  ConsumerState<PortraitYoutubePlayer> createState() =>
-      _PortraitYoutubePlayerState();
-}
-
-class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer> {
-  @override
-  void didUpdateWidget(covariant PortraitYoutubePlayer oldWidget) {
-    super.didUpdateWidget(oldWidget);
-  }
 
   Widget youtubePlayer() {
     return Stack(
       fit: StackFit.loose,
       children: [
-        widget.player,
+        player,
         const Positioned.fill(
           child: MiniPlayerActions(),
         )
@@ -59,10 +45,6 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer> {
     );
   }
 
-  void _onActionMenuToggled() =>
-      ref.read(actionsMenuActivityProvider.notifier).state =
-          !ref.read(actionsMenuActivityProvider);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,9 +60,14 @@ class _PortraitYoutubePlayerState extends ConsumerState<PortraitYoutubePlayer> {
               child: BottomActionsBar(),
             ),
             Positioned.fill(
-              child: ActionsCircularMenu(
-                onActionsMenuToggled: _onActionMenuToggled,
-              ),
+              child: Consumer(builder: (context, ref, _) {
+                return ActionsCircularMenu(
+                  onActionsMenuToggled: () {
+                    ref.read(actionsMenuActivityProvider.notifier).state =
+                        !ref.read(actionsMenuActivityProvider);
+                  },
+                );
+              }),
             ),
           ],
         ),

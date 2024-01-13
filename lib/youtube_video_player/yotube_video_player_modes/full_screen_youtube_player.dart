@@ -5,27 +5,17 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../subtitles_player/main_subtitles_player.dart';
 import '../subtitles_player/mini_subtitles_player.dart';
 
-class FullScreenYoutubeVideoPlayer extends ConsumerStatefulWidget {
-  const FullScreenYoutubeVideoPlayer({
-    super.key,
-    required this.player,
-  });
+class FullScreenYoutubePlayer extends StatelessWidget {
+  const FullScreenYoutubePlayer({super.key, required this.player});
   final Widget player;
 
-  @override
-  ConsumerState<FullScreenYoutubeVideoPlayer> createState() =>
-      _FullScreenYoutubeVideoPlayerState();
-}
-
-class _FullScreenYoutubeVideoPlayerState
-    extends ConsumerState<FullScreenYoutubeVideoPlayer> {
   Widget _youtubePlayerBuilder() {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Stack(
           alignment: Alignment.center,
           children: [
-            widget.player,
+            player,
             const Positioned(
               bottom: 70,
               right: 50,

@@ -65,7 +65,7 @@ class _YoutubeVideoPlayerViewState
               builder: (context, orientation) {
                 return orientation == Orientation.portrait
                     ? PortraitYoutubePlayer(player: player)
-                    : FullScreenYoutubeVideoPlayer(player: player);
+                    : FullScreenYoutubePlayer(player: player);
               },
             );
           },

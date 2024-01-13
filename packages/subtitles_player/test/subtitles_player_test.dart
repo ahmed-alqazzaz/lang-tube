@@ -10,13 +10,14 @@ void main() {
         end: Duration(seconds: 3),
         text: "Subtitle 1"),
     Subtitle(
-        start: Duration(seconds: 4),
+        start: Duration(seconds: 5),
         end: Duration(seconds: 6),
         text: "Subtitle 2"),
     Subtitle(
-        start: Duration(seconds: 7),
-        end: Duration(seconds: 10),
-        text: "Subtitle 3"),
+      start: Duration(seconds: 8),
+      end: Duration(seconds: 10),
+      text: "Subtitle 3",
+    ),
   ];
   group('SubtitlePlayer Tests', () {
     test(
