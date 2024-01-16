@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:lang_tube/browser/browser_appbar.dart';
 import 'package:user_agent/user_agent.dart';
@@ -119,7 +118,7 @@ class _BrowserWebviewState extends State<BrowserWebview> {
                     },
                   );
                 },
-                userAgent: UserAgentManager().userAgent,
+                userAgent: UserAgentManager.instance.userAgent,
                 initialRequest: Uri.parse(
                   _currentUrlNotifier.value,
                 ),

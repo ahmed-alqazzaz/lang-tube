@@ -4,7 +4,7 @@ import 'package:fk_user_agent/fk_user_agent.dart';
 import 'popular_user_agents.dart';
 
 final class UserAgentManager {
-  factory UserAgentManager() => _instance;
+  static UserAgentManager get instance => _instance;
   static final _instance = UserAgentManager._sharedInstance();
   UserAgentManager._sharedInstance();
 

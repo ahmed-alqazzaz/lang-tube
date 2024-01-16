@@ -9,7 +9,6 @@ final subtitlesConfigProvider = StateProvider<SubtitlesPlayerConfig?>((ref) {
   final subtitles = ref.watch(subtitlesProvider);
 
   if (subtitles?.isNotEmpty == true) {
-    printRed("updated config");
     return SubtitlesPlayerConfig(
       showTranslations: true,
       selectedBundle: subtitles!.first,

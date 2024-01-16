@@ -8,7 +8,7 @@ import 'package:unique_key_mutex/unique_key_mutex.dart';
 import 'package:youtube_subtitles_scraper/src/utils/cache_expiration_manager.dart';
 import 'package:youtube_subtitles_scraper/src/utils/cache_redundancy_manager.dart';
 import 'package:youtube_subtitles_scraper/src/youtube_explode_manager.dart';
-
+import 'utils/language_filter.dart';
 import '../youtube_subtitles_scraper.dart';
 
 @immutable
@@ -37,7 +37,7 @@ final class YoutubeSubtitlesScraper {
   // the main language subtitle
   Future<List<ScrapedSubtitles>?> scrapeSubtitles({
     required String youtubeVideoId,
-    required Language language,
+    required List<Language> mainLanguages,
     Language? translatedLanguage,
     void Function(double)? onProgressUpdated,
   }) async {
@@ -52,7 +52,7 @@ final class YoutubeSubtitlesScraper {
           sourceCaptions: translatedLanguage == null
               ? captions
               : captions.autoTranslate(translatedLanguage),
-          language: translatedLanguage ?? language,
+          language: translatedLanguage ?? captions.language!,
           onProgressUpdated: (progress) {
             progressList[progressIndex] = 0.25 + progress * 0.75;
             onProgressUpdated?.call(progressList.average);
@@ -79,8 +79,12 @@ final class YoutubeSubtitlesScraper {
     // }
 
     // in case no cache found
-    final sourceCaptions = await _youtubeExplodeManager.fetchSourceCaptions(
-        youtubeVideoId: youtubeVideoId, language: language);
+    final sourceCaptions = await _youtubeExplodeManager
+        .fetchAllCaptions(youtubeVideoId: youtubeVideoId)
+        .then((captions) => captions.filteredByLanguage(mainLanguages));
+    for (var caption in sourceCaptions) {
+      printRed(caption.language.toString());
+    }
     onProgressUpdated?.call(0.25);
     final subtitles = await Future.wait(sourceCaptions.map(scrape));
     onProgressUpdated?.call(1.0);
@@ -93,6 +97,7 @@ final class YoutubeSubtitlesScraper {
     required Language language,
     void Function(double)? onProgressUpdated,
   }) async {
+    printRed("fetching lang ${language}");
     final rawSubtitles = await _apiClient.fetchSubtitles(
         url: sourceCaptions.uri, onProgressUpdated: onProgressUpdated);
     final parsedSubtitles = await parseSubtitles(rawSubtitles);
@@ -102,7 +107,7 @@ final class YoutubeSubtitlesScraper {
       language: language.name,
       videoId: youtubeVideoId,
     );
-    // await _cacheManager.cacheSubtitles(scrapedSubtitles);
+    await _cacheManager.cacheSubtitles(scrapedSubtitles);
     return scrapedSubtitles;
   }
 

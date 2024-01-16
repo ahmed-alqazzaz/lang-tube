@@ -9,7 +9,7 @@ import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 final class ScraperApiClient extends SubtitlesScraperApiClient {
   ScraperApiClient()
       : _client = DioApiClient(
-          userAgent: UserAgentManager().userAgent,
+          userAgent: UserAgentManager.instance.userAgent,
           useCache: false,
         );
   final DioApiClient _client;

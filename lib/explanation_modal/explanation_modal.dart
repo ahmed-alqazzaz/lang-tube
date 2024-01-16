@@ -13,7 +13,7 @@ class ExplanationModalSheet extends StatelessWidget {
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
           ..loadRequest(
             Uri.parse(
-                'https://www.linguee.com/english-french/search?source=auto&query=+$word'),
+                'https://www.linguee.com/english-german/search?source=auto&query=+$word'),
           ),
         _sizeListenable = sizeListenable
             ?.syncMap(

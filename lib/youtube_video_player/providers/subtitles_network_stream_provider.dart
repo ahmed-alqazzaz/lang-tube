@@ -19,8 +19,8 @@ final subtitlesNetworkStreamProvider =
   final subtitlesBundles = scraper
       .fetchSubtitlesBundle(
         youtubeVideoId: videoId,
-        mainLanguage: Language.english,
-        translatedLanguage: Language.arabic,
+        mainLanguage: Language.german,
+        translatedLanguage: Language.english,
         onProgressUpdated: (progress) => progressController.add(progress),
       )
       .whenComplete(() => progressController.add(1.0));
@@ -33,9 +33,8 @@ final subtitlesNetworkStreamProvider =
   }
 
   ref.onDispose(() => progressController.close());
+  printRed(ref.state.hasError.toString());
   ref.listenSelf((_, next) {
-    if (next.hasError) {
-      printRed("network subs provider ${next.error}");
-    }
+    print('network subs provider ${next.error}');
   });
 });

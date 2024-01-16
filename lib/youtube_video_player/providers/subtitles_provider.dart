@@ -6,7 +6,13 @@ final subtitlesProvider = Provider<Iterable<SubtitlesBundle>?>(
   (ref) {
     return ref.watch(
       subtitlesNetworkStreamProvider.select(
-        (networkSubtitles) => networkSubtitles.valueOrNull?.subtitlesBundles,
+        (asyncNetworkSubtitles) {
+          if (asyncNetworkSubtitles.hasError) {
+            throw asyncNetworkSubtitles.error!;
+          }
+
+          return asyncNetworkSubtitles.valueOrNull?.subtitlesBundles;
+        },
       ),
     );
   },

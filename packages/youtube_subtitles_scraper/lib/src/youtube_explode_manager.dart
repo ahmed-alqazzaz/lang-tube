@@ -14,14 +14,6 @@ final class YoutubeExplodeManager {
   final YoutubeExplode _youtubeExplode;
   final CacheManager _cacheManager;
 
-  Future<List<SourceCaptions>> fetchSourceCaptions(
-      {required String youtubeVideoId, required Language language}) async {
-    return await fetchAllCaptions(youtubeVideoId: youtubeVideoId).then(
-      (captions) =>
-          captions.where((caption) => caption.language == language).toList(),
-    );
-  }
-
   Future<Iterable<SourceCaptions>> fetchAllCaptions(
       {required String youtubeVideoId}) async {
     try {

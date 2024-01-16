@@ -5,7 +5,9 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 final youtubeControllerProvider = Provider((ref) {
   final videoId = ref.watch(videoIdProvider);
 
-  final controller = YoutubePlayerController(initialVideoId: videoId);
+  final controller = YoutubePlayerController(
+      initialVideoId: videoId,
+      flags: const YoutubePlayerFlags(enableCaption: false));
   ref.onDispose(() => controller.dispose());
   return controller;
 });

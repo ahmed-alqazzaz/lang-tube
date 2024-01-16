@@ -7,7 +7,7 @@ import 'package:user_agent/user_agent.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await UserAgentManager().initilize();
+  await UserAgentManager.instance.initilize();
   await SubtitlesScraper.ensureInitalized();
 
   print('started');

@@ -18,7 +18,7 @@ import 'package:user_agent/user_agent.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await UserAgentManager().initilize();
+  await UserAgentManager.instance.initilize();
   if (Platform.isAndroid) {
     await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
@@ -29,10 +29,43 @@ Future<void> main() async {
   };
   // await ReceiveSharingIntent.getInitialText();
   await SubtitlesScraper.ensureInitalized();
-  ProviderContainer()
-      .read(appStateProvider.notifier)
-      .displayVideoPlayer(videoId: 'fuFlMtZmvY0');
+
   runApp(const LangTube());
+}
+
+class VideoIdSelector extends ConsumerWidget {
+  VideoIdSelector({super.key});
+  late final _textEditingController = TextEditingController();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextField(
+            controller: _textEditingController,
+          ),
+          const SizedBox(height: 20),
+          TextButton(
+            onPressed: () {
+              void x(_) => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const YoutubeVideoPlayerView(),
+                    ),
+                  );
+              // Y_8VbBOjJJw
+              ref.read(appStateProvider.notifier).displayVideoPlayer(
+                    videoId: _textEditingController.text,
+                  );
+
+              WidgetsBinding.instance.addPostFrameCallback(x);
+            },
+            child: const Text('proceed'),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class LangTube extends StatelessWidget {
@@ -45,7 +78,7 @@ class LangTube extends StatelessWidget {
     return ProviderScope(
       child: MaterialApp(
         //routerConfig: GoRouter(routes: $appRoutes),
-        home: const YoutubeVideoPlayerView(),
+        home: VideoIdSelector(),
         theme: ThemeData(
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
             backgroundColor: backgroundColor,

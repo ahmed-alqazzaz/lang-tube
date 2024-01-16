@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:languages/src/language_flags.dart';
-
 import 'language_codes.dart';
 import 'language_patterns.dart';
+part 'languages/german.dart';
 
 @immutable
 class Language {
@@ -25,12 +25,7 @@ class Language {
         flag: LangaugeFlags.english,
       );
 
-  static Language get german => Language._(
-        code: LanguageCodes.german,
-        name: 'german',
-        pattern: LanguagePatterns.german,
-        flag: LangaugeFlags.german,
-      );
+  static List<Language> get germanVariants => German.variants;
 
   static Language get french => Language._(
         code: LanguageCodes.french,
@@ -50,7 +45,7 @@ class Language {
         Language.arabic,
         Language.english,
         Language.french,
-        Language.german,
+        ...Language.germanVariants,
       ];
 
   @override
