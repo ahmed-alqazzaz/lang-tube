@@ -18,9 +18,9 @@ Future<void> main(List<String> args) async {
   try {
     await SubtitlesScraper.instance
         .fetchSubtitlesBundle(
-      youtubeVideoId: 'Lg5P2w_Ro1c',
-      mainLanguages: Language.germanVariants,
-      translatedLanguage: Language.english,
+      youtubeVideoId: '8fEEbKJoNbU',
+      mainLanguages: [Language.english],
+      translatedLanguage: Language.germanVariants.first,
       onProgressUpdated: print,
     )
         .then((value) {
@@ -103,6 +103,13 @@ final class SubtitlesScraper {
       },
     );
   }
+
+  Future<List<ScrapedSubtitles>?> Function({
+    required String youtubeVideoId,
+    required List<Language> mainLanguages,
+    Language? translatedLanguage,
+    void Function(double)? onProgressUpdated,
+  }) get scrapeSubtitles => _scraper.scrapeSubtitles;
 
   Future<void> close() async => await _cacheManager!.close();
 }

@@ -50,8 +50,9 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
     _currentSubtitleSubscription?.close();
     _bottomSheetHeightNotifier.dispose();
     WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) =>
-          ref.read(actionsMenuActivityProvider.notifier).state = false,
+      (timeStamp) => ProviderContainer()
+          .read(actionsMenuActivityProvider.notifier)
+          .deactivate(),
     );
 
     super.dispose();

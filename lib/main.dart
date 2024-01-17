@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:lang_tube/providers/app_state_provider/app_state_provider.dart';
 import 'package:lang_tube/subtitles_scraper/scraper.dart';
+import 'package:lang_tube/youtube_video_player/providers/video_id_provider.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -29,8 +30,10 @@ Future<void> main() async {
   };
   // await ReceiveSharingIntent.getInitialText();
   await SubtitlesScraper.ensureInitalized();
-
-  runApp(const LangTube());
+  ProviderContainer().read(appStateProvider.notifier).displayVideoPlayer(
+        videoId: 'hLoatpfE7VM',
+      );
+  runApp(const ProviderScope(child: LangTube()));
 }
 
 class VideoIdSelector extends ConsumerWidget {
@@ -42,9 +45,7 @@ class VideoIdSelector extends ConsumerWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextField(
-            controller: _textEditingController,
-          ),
+          TextField(controller: _textEditingController),
           const SizedBox(height: 20),
           TextButton(
             onPressed: () {
@@ -75,67 +76,65 @@ class LangTube extends StatelessWidget {
   static const backgroundColor = Color.fromARGB(255, 242, 244, 249);
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      child: MaterialApp(
-        //routerConfig: GoRouter(routes: $appRoutes),
-        home: VideoIdSelector(),
-        theme: ThemeData(
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            backgroundColor: backgroundColor,
-            selectedItemColor: tmp,
-          ),
-          listTileTheme: const ListTileThemeData(iconColor: tmp),
-          textSelectionTheme: TextSelectionThemeData(
-            cursorColor: tmp,
-            selectionColor: Colors.deepPurple.withOpacity(0.3),
-            selectionHandleColor: tmp,
-          ),
-          splashColor: LangTube.tmp.withOpacity(0.1),
-          highlightColor: LangTube.tmp.withOpacity(0.1),
-          bottomSheetTheme:
-              const BottomSheetThemeData(backgroundColor: backgroundColor),
-          checkboxTheme: CheckboxThemeData(
-            side: BorderSide(color: tmp.withOpacity(0.2), width: 2),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(3),
-            ),
-          ),
-          scaffoldBackgroundColor: backgroundColor,
-          splashFactory: InkRipple.splashFactory,
-          iconTheme: const IconThemeData(
-            color: tmp,
-            size: 38,
-          ),
-          inputDecorationTheme: InputDecorationTheme(
-            hintStyle: TextStyle(
-              color: const Color.fromARGB(255, 27, 4, 40).withOpacity(0.5),
-            ),
-            focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: tmp, width: 1),
-            ),
-          ),
-          appBarTheme: const AppBarTheme(
-            toolbarHeight: 70,
-            backgroundColor: backgroundColor,
-            elevation: 0.0,
-            centerTitle: true,
-            actionsIconTheme: IconThemeData(
-              color: tmp,
-              size: 30,
-            ),
-            titleTextStyle: TextStyle(
-              fontSize: 21,
-              fontWeight: FontWeight.w500,
-              color: tmp,
-            ),
-            iconTheme: IconThemeData(
-              color: tmp,
-              size: 30,
-            ),
+    return MaterialApp(
+      //routerConfig: GoRouter(routes: $appRoutes),
+      home: const YoutubeVideoPlayerView(),
+      theme: ThemeData(
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: backgroundColor,
+          selectedItemColor: tmp,
+        ),
+        listTileTheme: const ListTileThemeData(iconColor: tmp),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: tmp,
+          selectionColor: Colors.deepPurple.withOpacity(0.3),
+          selectionHandleColor: tmp,
+        ),
+        splashColor: LangTube.tmp.withOpacity(0.1),
+        highlightColor: LangTube.tmp.withOpacity(0.1),
+        bottomSheetTheme:
+            const BottomSheetThemeData(backgroundColor: backgroundColor),
+        checkboxTheme: CheckboxThemeData(
+          side: BorderSide(color: tmp.withOpacity(0.2), width: 2),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(3),
           ),
         ),
-        debugShowCheckedModeBanner: false,
+        scaffoldBackgroundColor: backgroundColor,
+        splashFactory: InkRipple.splashFactory,
+        iconTheme: const IconThemeData(
+          color: tmp,
+          size: 38,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          hintStyle: TextStyle(
+            color: const Color.fromARGB(255, 27, 4, 40).withOpacity(0.5),
+          ),
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: tmp, width: 1),
+          ),
+        ),
+        appBarTheme: const AppBarTheme(
+          toolbarHeight: 70,
+          backgroundColor: backgroundColor,
+          elevation: 0.0,
+          centerTitle: true,
+          actionsIconTheme: IconThemeData(
+            color: tmp,
+            size: 30,
+          ),
+          titleTextStyle: TextStyle(
+            fontSize: 21,
+            fontWeight: FontWeight.w500,
+            color: tmp,
+          ),
+          iconTheme: IconThemeData(
+            color: tmp,
+            size: 30,
+          ),
+        ),
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -8,7 +8,7 @@ if (document.readyState !== 'loading') {
         insertSource();
     });
 }
-function insertSource(){
+function insertSource() {
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -39,15 +39,15 @@ function onYouTubeIframeAPIReady() {
             'end': 'END',
         },
         events: {
-            onReady: function(event) {
-               hideControls();
+            onReady: function (event) {
+                hideControls();
                 hideHeader();
-                window.flutter_inappwebview.callHandler('Ready'); 
+                window.flutter_inappwebview.callHandler('Ready');
             },
-            onStateChange: function(event) { sendPlayerStateChange(event.data); },
-            onPlaybackQualityChange: function(event) { window.flutter_inappwebview.callHandler('PlaybackQualityChange', event.data); },
-            onPlaybackRateChange: function(event) { window.flutter_inappwebview.callHandler('PlaybackRateChange', event.data); },
-            onError: function(error) { window.flutter_inappwebview.callHandler('Errors', error.data); }
+            onStateChange: function (event) { sendPlayerStateChange(event.data); },
+            onPlaybackQualityChange: function (event) { window.flutter_inappwebview.callHandler('PlaybackQualityChange', event.data); },
+            onPlaybackRateChange: function (event) { window.flutter_inappwebview.callHandler('PlaybackRateChange', event.data); },
+            onError: function (error) { window.flutter_inappwebview.callHandler('Errors', error.data); }
         },
     });
 }
@@ -114,7 +114,7 @@ function seekTo(position, seekAhead) {
     return '';
 }
 function setSize(width, height) {
-    player.setSize(width , height);
+    player.setSize(width, height);
     return '';
 }
 function setPlaybackRate(rate) {
@@ -130,17 +130,17 @@ function hideControls() {
     let controlsBar = iframeDocument.querySelector('.ytp-chrome-bottom')
     controlsBar.style.display = 'none'
 }
-function showControls(){
+function showControls() {
     let iframeDocument = getIFrameDocument();
     let controlsBar = iframeDocument.querySelector('.ytp-chrome-bottom')
     controlsBar.style.display = 'block'
 }
-function hideHeader(){
+function hideHeader() {
     let iframeDocument = getIFrameDocument();
     let header = iframeDocument.querySelector('.ytp-chrome-top');
     header.style.display = 'none'
 }
-function showHeader(){
+function showHeader() {
     let iframeDocument = getIFrameDocument();
     let header = iframeDocument.querySelector('.ytp-chrome-top');
     header.style.display = 'block'
@@ -154,7 +154,7 @@ function setVideoQuality(quality) {
         settingsButton.click();
         settingsMenu.style.display = 'none';
         console.assert(clickMenuItem('Quality'), "unable to locate 'Quality' setting button")
-        if(!clickMenuItem(quality)) console.error(`Quality unavailable ${quality}`)   
+        if (!clickMenuItem(quality)) console.error(`Quality unavailable ${quality}`)
     } finally {
         setTimeout(() => {
             if (JSON.parse(settingsButton.ariaExpanded)) {

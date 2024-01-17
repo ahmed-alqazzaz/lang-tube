@@ -83,7 +83,7 @@ final class YoutubeSubtitlesScraper {
         .fetchAllCaptions(youtubeVideoId: youtubeVideoId)
         .then((captions) => captions.filteredByLanguage(mainLanguages));
     for (var caption in sourceCaptions) {
-      printRed(caption.language.toString());
+      printRed(caption.uri.toString());
     }
     onProgressUpdated?.call(0.25);
     final subtitles = await Future.wait(sourceCaptions.map(scrape));
@@ -107,7 +107,7 @@ final class YoutubeSubtitlesScraper {
       language: language.name,
       videoId: youtubeVideoId,
     );
-    await _cacheManager.cacheSubtitles(scrapedSubtitles);
+    //await _cacheManager.cacheSubtitles(scrapedSubtitles);
     return scrapedSubtitles;
   }
 

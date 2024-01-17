@@ -16,6 +16,7 @@ class SubtitleBox extends StatefulWidget {
     this.onTapUp,
     this.selectable = false,
     this.maxLines = 3,
+    this.margin = EdgeInsets.zero,
     this.fontWeight = FontWeight.normal,
   });
 
@@ -24,7 +25,7 @@ class SubtitleBox extends StatefulWidget {
   final Color defaultTextColor;
   final double textFontSize;
   final FontWeight fontWeight;
-
+  final EdgeInsets margin;
   final OnSubtitleTapped? onTapUp;
   final bool selectable;
   final List<String> words;
@@ -51,6 +52,7 @@ class _SubtitleBoxState extends State<SubtitleBox> {
   Widget build(BuildContext context) {
     return Container(
       color: widget.backgroundColor,
+      padding: widget.margin,
       child: RichText(
         overflow: TextOverflow.ellipsis,
         maxLines: widget.maxLines,

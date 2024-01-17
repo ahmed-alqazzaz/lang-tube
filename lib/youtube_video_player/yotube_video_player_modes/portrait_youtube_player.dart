@@ -60,14 +60,14 @@ class PortraitYoutubePlayer extends StatelessWidget {
               child: BottomActionsBar(),
             ),
             Positioned.fill(
-              child: Consumer(builder: (context, ref, _) {
-                return ActionsCircularMenu(
-                  onActionsMenuToggled: () {
-                    ref.read(actionsMenuActivityProvider.notifier).state =
-                        !ref.read(actionsMenuActivityProvider);
-                  },
-                );
-              }),
+              child: Consumer(
+                builder: (context, ref, _) {
+                  return ActionsCircularMenu(
+                    onActionsMenuToggled:
+                        ref.read(actionsMenuActivityProvider.notifier).toggle,
+                  );
+                },
+              ),
             ),
           ],
         ),

@@ -22,7 +22,9 @@ final subtitlesPlayerProvider =
     final translatedSubtitles = selectedSubtitlesBundle
         ?.translatedSubtitles.subtitles
         .map((e) => e.toSubtitle());
-
+    if (mainSubtitles != null) {
+      printRed("player started");
+    }
     return MultiSubtitlesPlayer(
       mainSubtitles: mainSubtitles?.toList() ?? [],
       translatedSubtitles: (subtitlesConfig?.showTranslations == true

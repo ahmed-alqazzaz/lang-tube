@@ -45,6 +45,8 @@ class _MiniSubtitlesPlayerState extends ConsumerState<MiniSubtitlesPlayer> {
   @override
   Widget build(BuildContext context) {
     final subtitlesPlayerValue = ref.watch(subtitlesPlayerProvider);
+    final isMultiLine =
+        subtitlesPlayerValue.currentSubtitles.translatedSubtitle != null;
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -56,10 +58,9 @@ class _MiniSubtitlesPlayerState extends ConsumerState<MiniSubtitlesPlayer> {
           textFontSize: MiniSubtitlesPlayer.textFontSize,
           defaultTextColor: MiniSubtitlesPlayer.defaultTextColor,
           maxLines: widget.maxLines,
+          margin: EdgeInsets.only(bottom: isMultiLine ? 8 : 0),
         ),
-        if (subtitlesPlayerValue.currentSubtitles.translatedSubtitle !=
-            null) ...[
-          const SizedBox(height: 5),
+        if (isMultiLine)
           SubtitleBox(
             words:
                 subtitlesPlayerValue.currentSubtitles.translatedSubtitle!.words,
@@ -68,8 +69,8 @@ class _MiniSubtitlesPlayerState extends ConsumerState<MiniSubtitlesPlayer> {
             textFontSize: MiniSubtitlesPlayer.textFontSize,
             defaultTextColor: Colors.amber.shade600,
             maxLines: widget.maxLines,
+            margin: EdgeInsets.only(top: isMultiLine ? 2 : 0),
           ),
-        ]
       ],
     );
   }

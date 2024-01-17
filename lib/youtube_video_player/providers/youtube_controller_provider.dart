@@ -6,8 +6,9 @@ final youtubeControllerProvider = Provider((ref) {
   final videoId = ref.watch(videoIdProvider);
 
   final controller = YoutubePlayerController(
-      initialVideoId: videoId,
-      flags: const YoutubePlayerFlags(enableCaption: false));
+    initialVideoId: videoId,
+    flags: const YoutubePlayerFlags(enableCaption: false),
+  );
   ref.onDispose(() => controller.dispose());
   return controller;
 });

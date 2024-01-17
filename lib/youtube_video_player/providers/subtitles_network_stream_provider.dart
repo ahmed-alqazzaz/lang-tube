@@ -19,7 +19,7 @@ final subtitlesNetworkStreamProvider =
   final subtitlesBundles = scraper
       .fetchSubtitlesBundle(
         youtubeVideoId: videoId,
-        mainLanguage: Language.german,
+        mainLanguages: Language.germanVariants,
         translatedLanguage: Language.english,
         onProgressUpdated: (progress) => progressController.add(progress),
       )

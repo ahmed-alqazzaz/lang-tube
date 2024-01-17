@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/youtube_video_player/components/full_screen_player_actions.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../subtitles_player/main_subtitles_player.dart';
@@ -35,19 +34,22 @@ class FullScreenYoutubePlayer extends StatelessWidget {
     );
   }
 
-  Widget drawerSubtitlesPlayer(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 500),
-      height: size.height,
-      width: true ? size.height : 0,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: SizedBox(
-          width: size.height,
-          child: const MainSubtitlesPlayer(),
-        ),
-      ),
+  Widget drawerSubtitlesPlayer() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 500),
+          height: constraints.maxHeight,
+          width: true ? constraints.maxHeight : 0,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: constraints.maxHeight,
+              child: const MainSubtitlesPlayer(),
+            ),
+          ),
+        );
+      },
     );
   }
 

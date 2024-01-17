@@ -157,16 +157,15 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
   }
 
   Future<void> injectJavaScript(InAppWebViewController webController) async {
-    final jsAssetPath =
+    const jsAssetPath =
         'packages/youtube_player_flutter/web_assets/youtube_player.js';
     await webController.evaluateJavascript(
       source: await rootBundle.loadString(jsAssetPath).then(
             (jsString) => jsString
-                .replaceAll('VIDEO_ID', '${controller!.initialVideoId}')
+                .replaceAll('VIDEO_ID', controller!.initialVideoId)
                 .replaceAll("'CC_LOAD_POLICY'",
                     boolean(value: controller!.flags.enableCaption))
-                .replaceAll(
-                    'CC_LANG_PREF', '${controller!.flags.captionLanguage}')
+                .replaceAll('CC_LANG_PREF', controller!.flags.captionLanguage)
                 .replaceAll(
                     "'AUTOPLAY'", boolean(value: controller!.flags.autoPlay))
                 .replaceAll("'START'", controller!.flags.startAt.toString())
@@ -294,8 +293,7 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
       );
   }
 
-  String get player =>
-      '''
+  String get player => '''
     <!DOCTYPE html>
     <html>
     <head>

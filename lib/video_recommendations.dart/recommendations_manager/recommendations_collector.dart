@@ -46,12 +46,10 @@ class YoutubeRecommendationsCollector extends ChangeNotifier {
   ) async* {
     final targetLanguageVideos = videos.toList().filteredByTargetLanguage;
     for (final video in targetLanguageVideos) {
-      final subtitlesData = await SubtitlesScraper.instance
-          .scrapeSubtitles(
-            youtubeVideoId: video.id,
-            language: Language.english,
-          )
-          .then((value) => value?.first);
+      final subtitlesData = await SubtitlesScraper.instance.scrapeSubtitles(
+        youtubeVideoId: video.id,
+        mainLanguages: [Language.english],
+      ).then((value) => value?.first);
 
       if (subtitlesData != null) {
         yield RecommendedVideo.fromObservedVideo(
