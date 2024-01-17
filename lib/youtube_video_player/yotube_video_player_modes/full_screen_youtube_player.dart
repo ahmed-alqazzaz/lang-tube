@@ -57,10 +57,8 @@ class FullScreenYoutubePlayer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        //drawerSubtitlesPlayer(context),
-        Expanded(
-          child: _youtubePlayerBuilder(),
-        ),
+        drawerSubtitlesPlayer(),
+        Expanded(child: _youtubePlayerBuilder()),
       ],
     );
   }

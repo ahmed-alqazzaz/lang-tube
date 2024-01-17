@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:aligned_bottom_sheet/aligned_bottom_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
@@ -61,8 +62,10 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
   void _onTap({required String word, required VoidCallback onReset}) {
     final controller = ref.read(youtubeControllerProvider);
     controller.pause();
-    showModalBottomSheet(
-        showDragHandle: true,
+
+    showAlignedModalBottomSheet(
+        useRootNavigator: true,
+        showDragHandle: MediaQuery.of(context).size.height > 600,
         context: context,
         barrierColor: Colors.black12,
         isScrollControlled: true,

@@ -82,7 +82,8 @@ dependencies:
     path: packages/word_listenable_webview
   bottom_tabbed_navigator:
     path: packages/bottom_tabbed_navigator
-
+  aligned_bottom_sheet:
+    path: packages/aligned_bottom_sheet
 
   quiver: ^3.2.1
   mutex: ^3.1.0

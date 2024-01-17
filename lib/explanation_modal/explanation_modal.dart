@@ -30,6 +30,7 @@ class ExplanationModalSheet extends StatelessWidget {
     return ValueListenableBuilder<Size?>(
       valueListenable: _sizeListenable ?? ValueNotifier(null),
       builder: (context, size, _) {
+        print("width1 ${size}");
         return AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           width: size?.width,
