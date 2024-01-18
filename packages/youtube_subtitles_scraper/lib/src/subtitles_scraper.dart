@@ -68,23 +68,26 @@ final class YoutubeSubtitlesScraper {
     }
 
     onProgressUpdated?.call(0);
-    //check if cache exists
-    // final cacheSubtitles = await _cacheManager.retrieveSubtitles(
-    //   videoId: youtubeVideoId,
-    //   language: language.name,
-    // );
-    // if (cacheSubtitles.isNotEmpty) {
-    //   onProgressUpdated?.call(1.0);
-    //   return cacheSubtitles.toList();
-    // }
+    // check if cache exists
+    final cacheSubtitles = <ScrapedSubtitles>[];
+    for (var i = 0;
+        i < (translatedLanguage != null ? 1 : mainLanguages.length);
+        i++) {
+      cacheSubtitles.addAll(await _cacheManager.retrieveSubtitles(
+        videoId: youtubeVideoId,
+        language: (translatedLanguage ?? mainLanguages[i]).name,
+      ));
+    }
+
+    if (cacheSubtitles.isNotEmpty) {
+      onProgressUpdated?.call(1.0);
+      return cacheSubtitles;
+    }
 
     // in case no cache found
     final sourceCaptions = await _youtubeExplodeManager
         .fetchAllCaptions(youtubeVideoId: youtubeVideoId)
         .then((captions) => captions.filteredByLanguage(mainLanguages));
-    for (var caption in sourceCaptions) {
-      printRed(caption.uri.toString());
-    }
     onProgressUpdated?.call(0.25);
     final subtitles = await Future.wait(sourceCaptions.map(scrape));
     onProgressUpdated?.call(1.0);
