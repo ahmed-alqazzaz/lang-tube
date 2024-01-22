@@ -2,8 +2,8 @@ use super::*;
 // Section: wire functions
 
 #[no_mangle]
-pub extern "C" fn wire_calculate_subtitle_complexity(port_: i64, text: *mut wire_uint_8_list) {
-    wire_calculate_subtitle_complexity_impl(port_, text)
+pub extern "C" fn wire_calculate_text_complexity(port_: i64, text: *mut wire_uint_8_list) {
+    wire_calculate_text_complexity_impl(port_, text)
 }
 
 #[no_mangle]

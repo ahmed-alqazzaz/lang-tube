@@ -1,7 +1,6 @@
 name: readability
 description: A new Flutter FFI plugin project.
 version: 0.0.1
-homepage:
 
 environment:
   sdk: '>=3.0.1 <4.0.0'
@@ -11,15 +10,15 @@ dependencies:
   ffi: ^2.1.0
   flutter:
     sdk: flutter
-  flutter_rust_bridge: ^1.82.3
+  flutter_rust_bridge: ^1.82.6
   freezed_annotation: ^2.4.1
   plugin_platform_interface: ^2.0.2
 
 dev_dependencies:
-  ffigen: ^9.0.1
+  ffigen: ^9.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
   build_runner: ^2.4.6
 
 # For information on the generic Dart part of this file, see the

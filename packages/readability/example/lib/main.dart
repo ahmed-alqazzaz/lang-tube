@@ -13,8 +13,8 @@ class ReadabilityExample extends StatefulWidget {
 }
 
 class _ReadabilityExampleState extends State<ReadabilityExample> {
-  int sylablesCount = 0;
-  ReadabilityScore? score;
+  String sylablesCount = '';
+  String? score;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,14 +25,14 @@ class _ReadabilityExampleState extends State<ReadabilityExample> {
             TextField(
               onChanged: (value) async {
                 sylablesCount = await countSyllables(text: value);
-                print(await score?.compareTo(
-                    other: await calculateTextReadability(text: value)));
-                score = await calculateTextReadability(text: value);
+
+                // score =
+                //     (await calculateTextReadability(text: value)).toString();
                 setState(() {});
               },
             ),
             SizedBox(height: 100),
-            Text(score.toString()),
+            Text(score ?? '0'),
             Text(sylablesCount.toString()),
           ],
         ),

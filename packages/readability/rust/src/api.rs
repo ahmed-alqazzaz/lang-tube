@@ -1,31 +1,22 @@
-mod readability;
-use readability::{lix_index,rix_index,flesch_reading_ease,automated_readability_index,coleman_liau_index,syllable_counter};
+pub use std::collections::HashMap;
 
-pub fn calculate_subtitle_complexity(text: String) -> ReadabilityScore {
-    let lix_index = lix_index(&text);
-    let rix_index = rix_index(&text);
-    let flesch_reading_ease = flesch_reading_ease(&text);
-    let automated_readability_index = automated_readability_index(&text);
-    let coleman_liau_index = coleman_liau_index(&text);
-    
-    ReadabilityScore {
-        lix_index,
-        rix_index,
-        flesch_reading_ease,
-        automated_readability_index,
-        coleman_liau_index,
-    }
+pub use self::readability_score::ReadabilityScore;
+pub use self::readability_score::text_metrics::TextMetrics;
+use self::readability_score::lazy_static::SYLLABLE_COUNTER;
+
+use serde_json::json;
+pub mod readability_score;
+
+pub fn calculate_text_complexity(text: String) -> u32 {
+    let map = ReadabilityScore::new(&text).to_map();
+    json!(map).to_string();
+    8
 }
 
-pub fn count_syllables(text: String) -> i64{
-    syllable_counter(&text) as i64
+pub fn count_syllables(text: String) -> String{
+    let map = ReadabilityScore::new(&text).to_map();
+    json!(map).to_string()
 }
 
-pub struct ReadabilityScore {
-    pub lix_index: f64,
-    pub rix_index: f64,
-    pub flesch_reading_ease: f64,
-    pub automated_readability_index: f64,
-    pub coleman_liau_index: f64,
-}
+
 

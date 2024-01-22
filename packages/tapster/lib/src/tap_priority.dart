@@ -1,0 +1,4 @@
+enum TapPriority {
+  outsideEvents,
+  insideEvents,
+}
