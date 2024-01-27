@@ -1,0 +1,9 @@
+the text relocations problem was fixed when I ran cargo ndk -t arm64-v8a build  in terminal.
+I suspect that .cargo/config wasn't previously working
+
+size optimization using 
+[profile.release]
+opt-level = "s"
+
+
+or removing debug symobols resulted in horrible performance (worse by 300 folds)

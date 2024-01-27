@@ -25,6 +25,11 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['app/src/main/jniLibs']
+        }
+    }
     // Bumping the plugin compileSdkVersion requires all clients of this plugin
     // to bump the version in their app.
     compileSdkVersion 31
@@ -44,33 +49,33 @@ android {
 }
 
 
-[
-    ['Debug', ''],
-    ['Profile', ''],
-    ['Release', '']
-].each {
-    def taskPostfix = it[0]
-    def profileMode = it[1]
-    tasks.whenTaskAdded { task ->
-        if (task.name == "javaPreCompile$taskPostfix") {
-            task.dependsOn "cargoBuild$taskPostfix"
-        }
-    }
-    tasks.register("cargoBuild$taskPostfix", Exec) {
-        // Until https://github.com/bbqsrc/cargo-ndk/pull/13 is merged,
-        // this workaround is necessary.
+// [
+//     ['Debug', ''],
+//     ['Profile', ''],
+//     ['Release', '']
+// ].each {
+//     def taskPostfix = it[0]
+//     def profileMode = it[1]
+//     tasks.whenTaskAdded { task ->
+//         if (task.name == "javaPreCompile$taskPostfix") {
+//             task.dependsOn "cargoBuild$taskPostfix"
+//         }
+//     }
+//     tasks.register("cargoBuild$taskPostfix", Exec) {
+//         // Until https://github.com/bbqsrc/cargo-ndk/pull/13 is merged,
+//         // this workaround is necessary.
 
-        def ndk_command = """cargo ndk \
-            -t arm64-v8a \
-            -o ../android/app/src/main/jniLibs build $profileMode"""
+//         def ndk_command = """cargo ndk \
+//             -t arm64-v8a \
+//             -o ../android/app/src/main/jniLibs build $profileMode"""
 
-        workingDir "../rust"
-        environment "RUSTFLAGS", "-C relocation-model=pic -C link-arg=-Wl,-z,notext"
-        environment "ANDROID_NDK_HOME", "$ANDROID_NDK"
-        if (org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.currentOperatingSystem.isWindows()) {
-            commandLine 'cmd', '/C', ndk_command
-        } else {
-            commandLine 'sh', '-c', ndk_command
-        }
-    }
-}
+//         workingDir "../rust"
+//         environment "RUSTFLAGS", "-C relocation-model=pic -C link-arg=-Wl,-z,notext -C link-arg=-fuse-ld=lld -Z relro-level=full"
+//         environment "ANDROID_NDK_HOME", "$ANDROID_NDK"
+//         if (org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.currentOperatingSystem.isWindows()) {
+//             commandLine 'cmd', '/C', ndk_command
+//         } else {
+//             commandLine 'sh', '-c', ndk_command
+//         }
+//     }
+// }

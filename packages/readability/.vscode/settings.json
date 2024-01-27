@@ -1,0 +1,6 @@
+{
+    "rust-analyzer.linkedProjects": [
+        ".\\rust\\libs\\wtpsplit\\nnsplit\\Cargo.toml",
+        ".\\rust\\libs\\wtpsplit\\nnsplit\\Cargo.toml"
+    ]
+}

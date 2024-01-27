@@ -25,8 +25,10 @@ use std::sync::Arc;
 fn wire_calculate_text_complexity_impl(
     port_: MessagePort,
     text: impl Wire2Api<String> + UnwindSafe,
+    language: impl Wire2Api<String> + UnwindSafe,
+    cache_dir: impl Wire2Api<Option<String>> + UnwindSafe,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, u32, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
         WrapInfo {
             debug_name: "calculate_text_complexity",
             port: Some(port_),
@@ -34,12 +36,14 @@ fn wire_calculate_text_complexity_impl(
         },
         move || {
             let api_text = text.wire2api();
-            move |task_callback| Result::<_, ()>::Ok(calculate_text_complexity(api_text))
+            let api_language = language.wire2api();
+            let api_cache_dir = cache_dir.wire2api();
+            move |task_callback| calculate_text_complexity(api_text, api_language, api_cache_dir)
         },
     )
 }
 fn wire_count_syllables_impl(port_: MessagePort, text: impl Wire2Api<String> + UnwindSafe) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, u32, _>(
         WrapInfo {
             debug_name: "count_syllables",
             port: Some(port_),

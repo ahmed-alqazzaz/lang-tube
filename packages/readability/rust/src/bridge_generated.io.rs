@@ -2,8 +2,13 @@ use super::*;
 // Section: wire functions
 
 #[no_mangle]
-pub extern "C" fn wire_calculate_text_complexity(port_: i64, text: *mut wire_uint_8_list) {
-    wire_calculate_text_complexity_impl(port_, text)
+pub extern "C" fn wire_calculate_text_complexity(
+    port_: i64,
+    text: *mut wire_uint_8_list,
+    language: *mut wire_uint_8_list,
+    cache_dir: *mut wire_uint_8_list,
+) {
+    wire_calculate_text_complexity_impl(port_, text, language, cache_dir)
 }
 
 #[no_mangle]
