@@ -23,7 +23,6 @@ public class PosTaggerPlugin implements FlutterPlugin, MethodCallHandler {
   private MethodChannel channel;
 
   // Create a PosTagger object
-  private final PosTagger posTagger = PosTagger.getInstance();
 
 
   @Override
@@ -34,20 +33,11 @@ public class PosTaggerPlugin implements FlutterPlugin, MethodCallHandler {
 
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-    if (call.method.equals("getPlatformVersion")) {
-      result.success("Android " + android.os.Build.VERSION.RELEASE);
-    } else if (call.method.equals("splitter")) {
-      String input = call.argument("input");
-      if (input != null) {
-        List<String> output = new ArrayList<>(Arrays.asList(input.split("")));
-        result.success(output);
-      } else {
-        result.error("INVALID_INPUT", "Input is null", null);
-      }
-    } else if (call.method.equals("posTag")) {
-      String input = call.argument("input");
-      if (input != null) {
-        posTagger.evaluate(input);
+    if (call.method.equals("posTag")) {
+      String text = call.argument("text");
+      String langCode = call.argument("langCode");
+      if (text != null) {
+        PosTagger.getInstance("en").evaluate(text);
         result.success("POS tagging completed");
       } else {
         result.error("INVALID_INPUT", "Input is null", null);
