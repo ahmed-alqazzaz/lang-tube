@@ -21,6 +21,7 @@ public class PosTaggerPluginTest {
 
     Map<String, Object> args = new HashMap<>();
     args.put("text", "hello world");
+    args.put("modelPath", "/Users/snonosystems/Projects/lang-tube/packages/pos_tagger/android/src/main/java/com/example/pos_tagger/en.bin");
     // Test for posTag method
     final MethodCall call3 = new MethodCall("posTag", args);
     MethodChannel.Result mockResult3 = mock(MethodChannel.Result.class);

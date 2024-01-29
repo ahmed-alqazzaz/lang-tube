@@ -1,5 +1,8 @@
 package com.example.pos_tagger;
 
+import android.content.Context;
+import android.os.StrictMode;
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -21,7 +24,7 @@ public class PosTaggerPlugin implements FlutterPlugin, MethodCallHandler {
   /// and unregister it
   /// when the Flutter Engine is detached from the Activity
   private MethodChannel channel;
-
+  //private Context context;
   // Create a PosTagger object
 
 
@@ -35,10 +38,14 @@ public class PosTaggerPlugin implements FlutterPlugin, MethodCallHandler {
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
     if (call.method.equals("posTag")) {
       String text = call.argument("text");
-      String langCode = call.argument("langCode");
+      String modelPath = call.argument("modelPath");
+      //String cacheDir = context.getFilesDir().getPath();
       if (text != null) {
-        PosTagger.getInstance("en").evaluate(text);
-        result.success("POS tagging completed");
+        String[] tags  =  PosTagger.getInstance(modelPath).evaluate(text);
+        String tagsString = Arrays.toString(tags);
+
+        result.success(tagsString);
+        result.success(tags);
       } else {
         result.error("INVALID_INPUT", "Input is null", null);
       }

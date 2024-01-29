@@ -38,7 +38,8 @@ android {
     }
 
     dependencies {
-        implementation 'org.apache.opennlp:opennlp-tools:1.9.3'
+        implementation 'org.apache.opennlp:opennlp-tools:2.2.0'
+        implementation 'org.osgi:org.osgi.core:6.0.0' 
         testImplementation 'junit:junit:4.13.2'
         testImplementation 'org.mockito:mockito-core:5.0.0'
     }
