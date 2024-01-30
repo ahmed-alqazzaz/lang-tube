@@ -1,11 +1,11 @@
 name: pos_tagger
 description: "A new Flutter plugin project."
 version: 0.0.1
-homepage:
+publish_to: none
 
 environment:
-  sdk: '>=3.2.4 <4.0.0'
-  flutter: '>=3.3.0'
+  sdk: ">=3.2.4 <4.0.0"
+  flutter: ">=3.3.0"
 
 dependencies:
   dio: ^5.4.0

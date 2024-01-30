@@ -5,9 +5,13 @@ import android.os.StrictMode;
 
 import androidx.annotation.NonNull;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
@@ -17,16 +21,7 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 /** PosTaggerPlugin */
 public class PosTaggerPlugin implements FlutterPlugin, MethodCallHandler {
-  /// The MethodChannel that will the communication between Flutter and native
-  /// Android
-  ///
-  /// This local reference serves to register the plugin with the Flutter Engine
-  /// and unregister it
-  /// when the Flutter Engine is detached from the Activity
   private MethodChannel channel;
-  //private Context context;
-  // Create a PosTagger object
-
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -36,22 +31,21 @@ public class PosTaggerPlugin implements FlutterPlugin, MethodCallHandler {
 
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-    if (call.method.equals("posTag")) {
-      String text = call.argument("text");
-      String modelPath = call.argument("modelPath");
-      //String cacheDir = context.getFilesDir().getPath();
-      if (text != null) {
-        String[] tags  =  PosTagger.getInstance(modelPath).evaluate(text);
-        String tagsString = Arrays.toString(tags);
-
-        result.success(tagsString);
-        result.success(tags);
-      } else {
-        result.error("INVALID_INPUT", "Input is null", null);
-      }
-    } else {
+    if (!call.method.equals("posTag")) {
       result.notImplemented();
     }
+    String text = call.argument("text");
+    String modelPath = call.argument("modelPath");
+    if (text == null || modelPath == null) {
+      result.error("INVALID_INPUT", "Input is null", null);
+    }
+    List<List<String>>  tags = PosTagger.getInstance(modelPath).evaluate(text);
+    JSONArray jsonArray = new JSONArray();
+    for (List<String> tag : tags) {
+      jsonArray.put(new JSONArray(tag));
+    }
+
+    result.success(jsonArray.toString());
   }
 
   @Override

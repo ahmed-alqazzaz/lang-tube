@@ -5,6 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
@@ -39,66 +44,18 @@ public class PosTaggerImpl extends PosTagger {
     }
 
     @Override
-    public String[] evaluate(String sentence) {
+    public List<List<String>> evaluate(String sentence) {
         POSTaggerME posTagger = new POSTaggerME(posModel);
         String[] tokens = WhitespaceTokenizer.INSTANCE.tokenize(sentence);
-        return posTagger.tag(tokens);
-    }
-}
+        String[] tags = posTagger.tag(tokens);
 
-//public class PosTaggerImpl extends PosTagger {
-//    protected static final Map<String, String> MODEL_URLS = new HashMap<String, String>() {
-//        {
-//            put("en",
-//                    "https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin");
-//        }
-//    };
-//    protected POSModel posModel;
-//    private boolean isModelLoaded = false;
-//
-//    protected PosTaggerImpl(String langCode, String cacheDirPath) {
-//        super(langCode);
-//        try {
-//            loadModel(cacheDirPath);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private void loadModel(String cacheDirPath) throws IOException {
-//        assert MODEL_URLS.containsKey(langCode) : "The language code does not exist in the model URLs.";
-//        assert !isModelLoaded : "The model has already been loaded.";
-//
-//        File cacheDir = new File(cacheDirPath);
-//        File modelFile = new File(cacheDir, langCode + "2" + ".bin");
-//
-//        if (!modelFile.exists()) {
-//            URL modelUrl = new URL(MODEL_URLS.get(langCode));
-//            try (InputStream modelInputStream = modelUrl.openStream();
-//                    ReadableByteChannel readableByteChannel = Channels.newChannel(modelInputStream);
-//                    FileOutputStream fileOutputStream = new FileOutputStream(modelFile)) {
-//
-//                fileOutputStream.getChannel().transferFrom(readableByteChannel, 0,
-//                        Long.MAX_VALUE);
-//            }
-//        }
-//
-//        try (InputStream modelInputStream = new FileInputStream(modelFile)) {
-//            posModel = new POSModel(modelInputStream);
-//        }
-//
-//        isModelLoaded = true;
-//    }
-//
-//    @Override
-//    public void evaluate(String sentence) {
-//        POSTaggerME posTagger = new POSTaggerME(posModel);
-//        String[] tokens = WhitespaceTokenizer.INSTANCE.tokenize(sentence);
-//        String[] tags = posTagger.tag(tokens);
-//
-//        // Print the tokens and their tags
-//        for (int i = 0; i < tokens.length; i++) {
-//            Log.i("Tag: ", tokens[i] + "/ " + tags[i] + "/n");
-//        }
-//    }
-//}
+        List<List<String>> wordTagList = new ArrayList<>();
+        for (int i = 0; i < tokens.length; i++) {
+            System.out.print("putting " + tokens[i] + "  " + tags[i] + "\n");
+            wordTagList.add(Arrays.asList(tokens[i], tags[i]));
+        }
+
+        return wordTagList;
+    }
+
+}

@@ -1,14 +1,13 @@
 package com.example.pos_tagger;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class PosTagger {
     private static final Map<String, PosTagger> instances = new HashMap<>();
 
-
-
-    public abstract String[] evaluate(String sentence);
+    public abstract List<List<String>>  evaluate(String sentence);
 
     public static synchronized PosTagger getInstance(String modelPath) {
         if (!instances.containsKey(modelPath)) {
@@ -18,5 +17,3 @@ public abstract class PosTagger {
         return instances.get(modelPath);
     }
 }
-
-

@@ -20,7 +20,7 @@ public class PosTaggerPluginTest {
     PosTaggerPlugin plugin = new PosTaggerPlugin();
 
     Map<String, Object> args = new HashMap<>();
-    args.put("text", "hello world");
+    args.put("text", "I enjoy playing football");
     args.put("modelPath", "/Users/snonosystems/Projects/lang-tube/packages/pos_tagger/android/src/main/java/com/example/pos_tagger/en.bin");
     // Test for posTag method
     final MethodCall call3 = new MethodCall("posTag", args);

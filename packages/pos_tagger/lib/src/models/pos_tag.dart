@@ -1,0 +1,17 @@
+enum PosTag {
+  personalPronoun,
+  preposition,
+  verbGerund,
+  noun,
+  pluralNoun,
+  verbBaseForm,
+  verbPastTense,
+  verbNonThirdPersonSingularPresent,
+  verbThirdPersonSingularPresent,
+  verbPastParticiple,
+  adjective,
+  adverb,
+  conjunction,
+  interjection,
+  determiner,
+}
