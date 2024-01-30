@@ -51,7 +51,7 @@ public class PosTaggerImpl extends PosTagger {
 
         List<List<String>> wordTagList = new ArrayList<>();
         for (int i = 0; i < tokens.length; i++) {
-            System.out.print("putting " + tokens[i] + "  " + tags[i] + "\n");
+            // System.out.print("putting " + tokens[i] + " " + tags[i] + "\n");
             wordTagList.add(Arrays.asList(tokens[i], tags[i]));
         }
 

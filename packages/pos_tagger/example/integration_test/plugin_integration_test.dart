@@ -5,10 +5,10 @@ import 'package:pos_tagger/pos_tagger.dart';
 
 Future<void> main() async {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  final PosTagger plugin = await PosTagger.acquireEnglishModel();
+  final PosTagger tagger = await PosTagger.acquireEnglishModel();
   group('POS Tagger tests', () {
     testWidgets('Test sentence 1', (WidgetTester tester) async {
-      final List<PosTagEntry> tags = await plugin.posTag("hello world");
+      final List<PosTagEntry> tags = await tagger.posTag("hello world");
 
       // Check that the tags list is not empty
       expect(tags, isNotEmpty);
@@ -23,7 +23,7 @@ Future<void> main() async {
     });
 
     testWidgets('Test sentence 2', (WidgetTester tester) async {
-      final List<PosTagEntry> tags = await plugin.posTag("I am running");
+      final List<PosTagEntry> tags = await tagger.posTag("I am running");
 
       // Check that the tags list is not empty
       expect(tags, isNotEmpty);
@@ -42,7 +42,7 @@ Future<void> main() async {
     });
 
     testWidgets('Test complex sentence', (WidgetTester tester) async {
-      final List<PosTagEntry> tags = await plugin
+      final List<PosTagEntry> tags = await tagger
           .posTag("Despite the heavy rains the game continued as scheduled.");
       print(tags);
       // Check that the tags list is not empty
