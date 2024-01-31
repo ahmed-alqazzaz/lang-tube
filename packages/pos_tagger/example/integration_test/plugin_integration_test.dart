@@ -6,10 +6,16 @@ import 'package:pos_tagger/pos_tagger.dart';
 Future<void> main() async {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   final PosTagger tagger = await PosTagger.acquireEnglishModel();
+
   group('POS Tagger tests', () {
     testWidgets('Test sentence 1', (WidgetTester tester) async {
       final List<PosTagEntry> tags = await tagger.posTag("hello world");
-
+      final List<PosTagEntry> tagss =
+          await tagger.posTag("I like to run in the park.");
+      print("1: " + tagss.toString());
+      final List<PosTagEntry> tagsss =
+          await tagger.posTag("This is a run of five consecutive numbers");
+      print("2: " + tagsss.toString());
       // Check that the tags list is not empty
       expect(tags, isNotEmpty);
 

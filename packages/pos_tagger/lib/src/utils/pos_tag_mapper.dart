@@ -33,6 +33,8 @@ extension PosTagMapper on PosTag {
         return PosTag.determiner;
       case "NNS":
         return PosTag.pluralNoun;
+      case "TO":
+        return PosTag.preposition;
       default:
         throw UnimplementedError(tag);
     }
