@@ -48,11 +48,12 @@ public class PosTaggerImpl extends PosTagger {
         POSTaggerME posTagger = new POSTaggerME(posModel);
         String[] tokens = WhitespaceTokenizer.INSTANCE.tokenize(sentence);
         String[] tags = posTagger.tag(tokens);
+        double[] probabilities = posTagger.probs();
 
         List<List<String>> wordTagList = new ArrayList<>();
         for (int i = 0; i < tokens.length; i++) {
-            // System.out.print("putting " + tokens[i] + " " + tags[i] + "\n");
-            wordTagList.add(Arrays.asList(tokens[i], tags[i]));
+            // System.out.print("putting " + tokens[i] + " " + tags[i] + " " + probabilities[i]+ "\n");
+            wordTagList.add(Arrays.asList(tokens[i], tags[i], String.valueOf(probabilities[i])));
         }
 
         return wordTagList;

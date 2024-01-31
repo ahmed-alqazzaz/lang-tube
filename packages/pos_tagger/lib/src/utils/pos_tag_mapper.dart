@@ -35,6 +35,28 @@ extension PosTagMapper on PosTag {
         return PosTag.pluralNoun;
       case "TO":
         return PosTag.preposition;
+      case "CD":
+        return PosTag.cardinalNumber;
+      case "POS":
+        return PosTag.possessiveEnding;
+      case "WDT":
+        return PosTag.whDeterminer;
+      case "WP":
+        return PosTag.whPronoun;
+      case "FW":
+        return PosTag.foreignWord;
+      case "NNP":
+        return PosTag.properNounSingular;
+      case "NNPS":
+        return PosTag.properNounPlural;
+      case "MD":
+        return PosTag.modal;
+      case "LS":
+        return PosTag.listItemMarker;
+      case "PDT":
+        return PosTag.predeterminer;
+      case "SYM":
+        return PosTag.symbol;
       default:
         throw UnimplementedError(tag);
     }

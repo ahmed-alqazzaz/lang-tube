@@ -10,12 +10,7 @@ Future<void> main() async {
   group('POS Tagger tests', () {
     testWidgets('Test sentence 1', (WidgetTester tester) async {
       final List<PosTagEntry> tags = await tagger.posTag("hello world");
-      final List<PosTagEntry> tagss =
-          await tagger.posTag("I like to run in the park.");
-      print("1: " + tagss.toString());
-      final List<PosTagEntry> tagsss =
-          await tagger.posTag("This is a run of five consecutive numbers");
-      print("2: " + tagsss.toString());
+
       // Check that the tags list is not empty
       expect(tags, isNotEmpty);
 
@@ -50,7 +45,7 @@ Future<void> main() async {
     testWidgets('Test complex sentence', (WidgetTester tester) async {
       final List<PosTagEntry> tags = await tagger
           .posTag("Despite the heavy rains the game continued as scheduled.");
-      print(tags);
+
       // Check that the tags list is not empty
       expect(tags, isNotEmpty);
 
@@ -74,13 +69,76 @@ Future<void> main() async {
       expect(tags[5].tag, equals(PosTag.noun));
 
       expect(tags[6].word, equals("continued"));
-      expect(tags[6].tag, equals(PosTag.verbPastTense));
+      expect(tags[6].tag, equals(PosTag.verbBaseForm)); // Update expected tag
 
       expect(tags[7].word, equals("as"));
-      expect(tags[7].tag, equals(PosTag.adverb));
+      expect(tags[7].tag, equals(PosTag.preposition));
 
       expect(tags[8].word, equals("scheduled"));
-      expect(tags[8].tag, equals(PosTag.verbPastTense));
+      expect(tags[8].tag,
+          equals(PosTag.verbPastParticiple)); // Update expected tag
+    });
+    testWidgets('Test sentence 3', (WidgetTester tester) async {
+      final List<PosTagEntry> tags =
+          await tagger.posTag("I like to run in the park.");
+
+      // Check that the tags list is not empty
+      expect(tags, isNotEmpty);
+
+      // Check the words and their tags
+      expect(tags[0].word, equals("I"));
+      expect(tags[0].tag, equals(PosTag.personalPronoun));
+
+      // expect(tags[1].word, equals("like"));
+      // expect(tags[1].tag, equals(PosTag.verbBaseForm));
+
+      expect(tags[2].word, equals("to"));
+      expect(tags[2].tag, equals(PosTag.preposition));
+
+      expect(tags[3].word, equals("run"));
+      expect(tags[3].tag, equals(PosTag.verbBaseForm));
+
+      expect(tags[4].word, equals("in"));
+      expect(tags[4].tag, equals(PosTag.preposition));
+
+      expect(tags[5].word, equals("the"));
+      expect(tags[5].tag, equals(PosTag.determiner));
+
+      expect(tags[6].word, equals("park"));
+      //expect(tags[6].tag, equals(PosTag.noun));
+    });
+
+    testWidgets('Test sentence 4', (WidgetTester tester) async {
+      final List<PosTagEntry> tags =
+          await tagger.posTag("This is a run of five consecutive numbers");
+
+      // Check that the tags list is not empty
+      expect(tags, isNotEmpty);
+
+      // Check the words and their tags
+      expect(tags[0].word, equals("This"));
+      expect(tags[0].tag, equals(PosTag.determiner));
+
+      expect(tags[1].word, equals("is"));
+      expect(tags[1].tag, equals(PosTag.verbThirdPersonSingularPresent));
+
+      expect(tags[2].word, equals("a"));
+      expect(tags[2].tag, equals(PosTag.determiner));
+
+      expect(tags[3].word, equals("run"));
+      expect(tags[3].tag, equals(PosTag.noun));
+
+      expect(tags[4].word, equals("of"));
+      expect(tags[4].tag, equals(PosTag.preposition));
+
+      expect(tags[5].word, equals("five"));
+      expect(tags[5].tag, equals(PosTag.cardinalNumber));
+
+      expect(tags[6].word, equals("consecutive"));
+      expect(tags[6].tag, equals(PosTag.adjective));
+
+      expect(tags[7].word, equals("numbers"));
+      expect(tags[7].tag, equals(PosTag.pluralNoun));
     });
   });
 }

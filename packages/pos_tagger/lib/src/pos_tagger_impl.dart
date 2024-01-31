@@ -28,9 +28,9 @@ class PosTaggerImpl extends PosTagger {
     for (var entry in rawTags) {
       tagEntries.add(
         PosTagEntry(
-          tag: PosTagMapper.fromRawTag(entry[1]),
-          word: entry[0],
-        ),
+            word: entry[0],
+            tag: PosTagMapper.fromRawTag(entry[1]),
+            probability: double.parse(entry[2])),
       );
     }
     return tagEntries;

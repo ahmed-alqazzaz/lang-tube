@@ -14,4 +14,16 @@ enum PosTag {
   conjunction,
   interjection,
   determiner,
+  cardinalNumber, // Add more tags as needed
+  possessiveEnding,
+  whDeterminer,
+  whPronoun,
+  possessiveWhPronoun,
+  foreignWord,
+  properNounSingular,
+  properNounPlural,
+  modal,
+  listItemMarker,
+  predeterminer,
+  symbol,
 }
