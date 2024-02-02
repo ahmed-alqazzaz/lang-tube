@@ -1,7 +1,7 @@
-
 import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:collection/collection.dart';
 import 'package:colourful_print/colourful_print.dart';
+import 'package:core_utils/core_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +9,6 @@ import 'package:lang_tube/history/enums/videos_sort_options.dart';
 import 'package:lang_tube/history/enums/words_sort_options.dart';
 import 'package:lang_tube/history/providers/videos_history_provider/provider.dart';
 import 'package:lang_tube/history/providers/words_history_provider/provider.dart';
-import 'package:lang_tube/utils/capitalization.dart';
 import 'package:search_app_bar/search_app_bar.dart';
 import 'package:size_utils/size_utils.dart';
 import 'package:sized_button/sized_button.dart';

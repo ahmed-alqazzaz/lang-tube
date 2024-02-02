@@ -1,14 +1,12 @@
-import 'dart:developer';
 import 'package:readability/readability.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
-
 extension SubtitleReadbilityCalculator on ScrapedSubtitles {
-  Future<ReadabilityScore> get subtitlesComplexity async =>
-      await calculateTextReadability(
-        text: subtitles.map((e) => e.text).join(),
-      ).onError((error, stackTrace) {
-        log(subtitles.map((e) => e.text).join());
-        throw stackTrace;
-      });
+  Future<ReadabilityScore> get subtitlesComplexity async {
+    return Readability.getInstance(Language.english).then(
+      (instance) => instance.calculateScore(
+        subtitles.map((e) => e.text).join(),
+      ),
+    );
+  }
 }

@@ -84,6 +84,8 @@ dependencies:
     path: packages/bottom_tabbed_navigator
   aligned_bottom_sheet:
     path: packages/aligned_bottom_sheet
+  core_utils: 
+    path: packages/core_utils
   quiver: ^3.2.1
   mutex: ^3.1.0
   listenable_stream: ^1.1.0

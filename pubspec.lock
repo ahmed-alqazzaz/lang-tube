@@ -308,6 +308,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  core_utils:
+    dependency: "direct main"
+    description:
+      path: "packages/core_utils"
+      relative: true
+    source: path
+    version: "0.0.1"
   coverage:
     dependency: transitive
     description:

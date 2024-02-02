@@ -9,7 +9,7 @@ class _ReadabilityImpl extends Readability {
   }) : super._();
 
   @override
-  Future<ReadabilityScore> calculateTextReadability(String text) async =>
+  Future<ReadabilityScore> calculateScore(String text) async =>
       ReadabilityScore.fromJson(
         await rustApi.calculateTextComplexity(
           text: text,
@@ -19,6 +19,6 @@ class _ReadabilityImpl extends Readability {
       );
 
   @override
-  Future<int> countSyllables(String text) async =>
+  Future<int> calculateSyllables(String text) async =>
       await rustApi.countSyllables(text: text);
 }

@@ -18,18 +18,19 @@ abstract class Readability {
         language: language,
       );
       // calculating text for the first time takes longer due to model initialization
-      await instance.calculateTextReadability(_initializationText);
+      await instance.calculateScore(_initializationText);
       _instances[language] = instance;
     }
     return _instances[language]!;
   }
 
-  Future<ReadabilityScore> calculateTextReadability(String text);
-  Future<int> countSyllables(String text);
   static Future<String?> get _cacheDirectory async {
     return await getApplicationDocumentsDirectory()
         .then((dir) => "${dir.path}\readability");
   }
 
   static const String _initializationText = "test";
+
+  Future<ReadabilityScore> calculateScore(String text);
+  Future<int> calculateSyllables(String text);
 }

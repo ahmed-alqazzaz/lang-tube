@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
+import 'package:core_utils/core_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:lang_tube/crud/subtitles_cache_manager/utils.dart';
-import 'package:lang_tube/utils/bool_to_int.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart'
     as subtitles_scraper;
@@ -65,11 +65,11 @@ final class SubtitlesCacheManager implements subtitles_scraper.CacheManager {
 
         return sortByFirstCacheDate
             ? subtitlesList.sorted(
-                (a, b) => boolToInt(
-                  a.cacheCreationDate != null && b.cacheCreationDate != null
-                      ? a.cacheCreationDate!.isAfter(b.cacheCreationDate!)
-                      : false,
-                ),
+                (a, b) =>
+                    (a.cacheCreationDate != null && b.cacheCreationDate != null
+                            ? a.cacheCreationDate!.isAfter(b.cacheCreationDate!)
+                            : false)
+                        .toInt(),
               )
             : subtitlesList;
       });
@@ -92,11 +92,11 @@ final class SubtitlesCacheManager implements subtitles_scraper.CacheManager {
 
           return sortByFirstCacheDate
               ? sources.sorted(
-                  (a, b) => boolToInt(
-                    a.cacheCreationDate != null && b.cacheCreationDate != null
-                        ? a.cacheCreationDate!.isAfter(b.cacheCreationDate!)
-                        : false,
-                  ),
+                  (a, b) => (a.cacheCreationDate != null &&
+                              b.cacheCreationDate != null
+                          ? a.cacheCreationDate!.isAfter(b.cacheCreationDate!)
+                          : false)
+                      .toInt(),
                 )
               : sources;
         },

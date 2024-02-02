@@ -94,4 +94,21 @@ class ReadabilityScore {
 
   factory ReadabilityScore.fromJson(String source) =>
       ReadabilityScore.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  Map<String, dynamic> toMap() {
+    return {
+      'rawMetrics': rawMetrics.toMap(),
+      'lix_index': lixIndex,
+      'rix_index': rixIndex,
+      'flesch_kincaid_grade': fleschKincaidGrade,
+      'automated_readability_index': automatedReadabilityIndex,
+      'coleman_liau_index': colemanLiauIndex,
+      'gunning_fox_index': gunningFoxIndex,
+      'smog_index': smogIndex,
+    };
+  }
+
+  String toJson() {
+    return json.encode(toMap());
+  }
 }
