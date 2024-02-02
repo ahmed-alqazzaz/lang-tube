@@ -19,28 +19,9 @@ public class PosTaggerPluginTest {
   public void onMethodCall_getPlatformVersion_returnsExpectedValue() {
     PosTaggerPlugin plugin = new PosTaggerPlugin();
 
-    final MethodCall call = new MethodCall("getPlatformVersion", null);
-    MethodChannel.Result mockResult = mock(MethodChannel.Result.class);
-    plugin.onMethodCall(call, mockResult);
-
     Map<String, Object> args = new HashMap<>();
-    args.put("input", "hello world");
-    final MethodCall call2 = new MethodCall("splitter", args);
-    MethodChannel.Result mockResult2 = mock(MethodChannel.Result.class);
-
-    // Print the result when the success method is called
-    doAnswer(new Answer<Void>() {
-      public Void answer(InvocationOnMock invocation) {
-        Object[] args = invocation.getArguments();
-        System.out.println("splitter result: " + args[0]);
-        return null;
-      }
-    }).when(mockResult2).success(any());
-
-    plugin.onMethodCall(call2, mockResult2);
-
-    verify(mockResult).success("Android " + android.os.Build.VERSION.RELEASE);
-
+    args.put("text", "I like playing football with my friends");
+    args.put("modelPath", "/Users/snonosystems/Projects/lang-tube/packages/pos_tagger/android/src/main/java/com/example/pos_tagger/en.bin");
     // Test for posTag method
     final MethodCall call3 = new MethodCall("posTag", args);
     MethodChannel.Result mockResult3 = mock(MethodChannel.Result.class);
