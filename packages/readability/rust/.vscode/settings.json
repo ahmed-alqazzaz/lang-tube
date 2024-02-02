@@ -1,0 +1,6 @@
+{
+    "rust-analyzer.linkedProjects": [
+        ".\\libs\\readability_implementation\\example\\Cargo.toml",
+        ".\\libs\\readability_implementation\\example\\Cargo.toml"
+    ]
+}

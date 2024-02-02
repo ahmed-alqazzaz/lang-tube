@@ -33,8 +33,8 @@ class _ReadabilityExampleState extends State<ReadabilityExample> {
                     await Readability.getInstance(Language.english);
                 log("started");
                 try {
-                  final scoree =
-                      (await instance.calculateTextReadability(txt + value));
+                  final scoree = (await instance
+                      .calculateTextReadability(txt + txt + txt + txt));
                   log(scoree.rawMetrics.sentencesCount.toString());
                   score = scoree.toString();
                   x = timer.elapsed;

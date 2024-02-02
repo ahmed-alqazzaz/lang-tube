@@ -134,10 +134,8 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
                             words: subtitle.words,
                             backgroundColor: Colors.transparent,
                             textFontSize: MainSubtitlesPlayer.textFontSize,
-                            defaultTextColor:
-                                MainSubtitlesPlayer.defaultTextColor,
+                            defaultTextColor: Colors.white.withOpacity(0.8),
                             fontWeight: FontWeight.w300,
-                            selectable: false,
                             onTapUp: ({required onReset, required word}) {
                               Timer(MainSubtitlesPlayer.bodyScrollDuration, () {
                                 _onTap(word: word, onReset: onReset);

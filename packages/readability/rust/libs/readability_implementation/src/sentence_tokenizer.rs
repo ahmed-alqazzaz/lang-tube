@@ -2,6 +2,8 @@ use nnsplit::{NNSplit, NNSplitOptions};
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
+use rayon::prelude::*;
+
 
 static INSTANCES: Lazy<Mutex<HashMap<String, Arc<SentenceTokenizer>>>> =
     Lazy::new(|| Mutex::new(HashMap::new()));
@@ -50,10 +52,60 @@ impl Multiton for SentenceTokenizer {
 
 impl SentenceTokenizer {
     pub fn evaluate(&self, text: &str) -> Vec<String> {
-        let tokens = self.nn_split.split(&[text]);
-        tokens[0]
-            .iter()
-            .map(|sentence| sentence.text().to_string())
-            .collect()
+        // split text using punctuation initially
+        let mut major_segments: Vec<String> = text.split(".").map(|s| s.to_string()).collect();
+        // ensure each segment is at least 8000 chars
+        // splitter works best with texts between 7000 and 10000 chars
+        major_segments.ensure_min_length(8000, Some('.'));
+        
+        println!("{}", major_segments.len());
+        // split using punctuation agnsotic splitter concurrently
+        let sentences: Vec<String> = major_segments
+            .par_iter()
+            .flat_map(|sentence| {
+                let tokens: Vec<String> =self.nn_split.split(&[sentence])[0] 
+                    .iter()
+                    .map(|sentence| sentence.text().to_string())
+                    .collect();
+                tokens
+            })
+            .collect();
+        sentences
+    }
+    // pub fn evaluate(&self, text: &str) -> Vec<String> {
+    //     println!("{}" ,text.len());
+    //     let tokens = self.nn_split.split(&[text]);
+    //     tokens[0]
+    //         .iter()
+    //         .map(|sentence| sentence.text().to_string())
+    //         .collect()
+    // }
+}
+
+trait MergeShortStrings {
+    fn ensure_min_length(&mut self, min_len: usize, insert_char: Option<char>);
+}
+
+impl MergeShortStrings for Vec<String> {
+    fn ensure_min_length(&mut self, min_len: usize, concat_char: Option<char>) {
+        let mut i = 0;
+        while i < self.len() {
+            while i < self.len() - 1 && self[i].len() < min_len {
+                let next = self.remove(i + 1);
+                match concat_char {
+                    Some(ch) => self[i] = format!("{}{}{}", self[i], ch, next),
+                    None => self[i].push_str(&next),
+                }
+            }
+            if i == self.len() - 1 && self[i].len() < min_len && i > 0 {
+                let last = self.remove(i);
+                match concat_char {
+                    Some(ch) => self[i - 1] = format!("{}{}{}", self[i - 1], ch, last),
+                    None => self[i - 1].push_str(&last),
+                }
+            } else {
+                i += 1;
+            }
+        }
     }
 }
