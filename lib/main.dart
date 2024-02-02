@@ -13,9 +13,12 @@ import 'package:lang_tube/explanation_modal/explanation_page/data/lexicon_entry.
 import 'package:lang_tube/explanation_modal/explanation_page/data/web_example.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/data/youtube_example.dart';
 import 'package:lang_tube/explanation_modal/explanation_page/page.dart';
+import 'package:languages/languages.dart';
 //import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
 import 'package:user_agent/user_agent.dart';
+
+import 'providers/language_config_provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,9 +31,13 @@ Future<void> main() async {
     if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
     return stack;
   };
-  // await ReceiveSharingIntent.getInitialText();
-  await SubtitlesScraper.ensureInitalized();
-  ProviderContainer().read(appStateProvider.notifier).displayVideoPlayer(
+
+  final container = ProviderContainer();
+  final languageConfigNotifier =
+      container.read(languageConfigProvider.notifier);
+  await languageConfigNotifier.setTargetLanguage(Language.german);
+  await languageConfigNotifier.setTranslationLanguage(Language.english);
+  container.read(appStateProvider.notifier).displayVideoPlayer(
         videoId: 'hLoatpfE7VM',
       );
   runApp(const ProviderScope(child: LangTube()));
@@ -78,7 +85,7 @@ class LangTube extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       //routerConfig: GoRouter(routes: $appRoutes),
-      home: const YoutubeVideoPlayerView(),
+      home: VideoIdSelector(),
       theme: ThemeData(
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: backgroundColor,

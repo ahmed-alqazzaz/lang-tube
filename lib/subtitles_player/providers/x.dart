@@ -57,7 +57,7 @@ class _ProgressIndicatorTestState extends State<ProgressIndicatorTest> {
   void initState() {
     SubtitlesScraper.instance.fetchSubtitlesBundle(
       youtubeVideoId: '2QcZSVu3CCY',
-      mainLanguages: Language.germanVariants,
+      mainLanguages: [Language.german, ...Language.german.variants],
       translatedLanguage: Language.arabic,
       onProgressUpdated: (p0) {
         _notifer.value = p0;

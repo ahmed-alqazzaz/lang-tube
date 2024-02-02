@@ -1,0 +1,168 @@
+Date : 2024-02-02 15:30:02
+Directory : c:\Users\acer\workspace1\langtube\packages\readability\rust
+Total : 71 files,  -2199 codes, -431 comments, -472 blanks, all -3102 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| C          |          2 |         -2 |         -4 |         -2 |         -8 |
+| Properties |          3 |        -14 |          0 |         -2 |        -16 |
+| Ruby       |          2 |        -34 |        -17 |         -6 |        -57 |
+| Batch      |          3 |        -43 |        -29 |        -22 |        -94 |
+| Swift      |          6 |        -52 |         -7 |        -20 |        -79 |
+| YAML       |          6 |        -67 |       -135 |        -31 |       -233 |
+| Markdown   |          4 |        -81 |          0 |        -38 |       -119 |
+| Gradle     |          5 |       -125 |        -39 |        -37 |       -201 |
+| JSON       |          3 |       -213 |          0 |         -3 |       -216 |
+| XML        |         11 |       -467 |        -48 |        -14 |       -529 |
+| C++        |         16 |       -531 |       -121 |       -182 |       -834 |
+| Dart       |         10 |       -570 |        -31 |       -115 |       -716 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                         | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                            |         71 |     -2,199 |       -431 |       -472 |     -3,102 |
+| ..                                                                                                                           |         71 |     -2,199 |       -431 |       -472 |     -3,102 |
+| .. (Files)                                                                                                                   |          8 |       -116 |        -47 |        -41 |       -204 |
+| ..\android                                                                                                                   |          5 |        -82 |        -63 |        -39 |       -184 |
+| ..\android (Files)                                                                                                           |          3 |        -74 |        -63 |        -37 |       -174 |
+| ..\android\gradle                                                                                                            |          1 |         -5 |          0 |         -1 |         -6 |
+| ..\android\gradle\wrapper                                                                                                    |          1 |         -5 |          0 |         -1 |         -6 |
+| ..\android\src                                                                                                               |          1 |         -3 |          0 |         -1 |         -4 |
+| ..\android\src\main                                                                                                          |          1 |         -3 |          0 |         -1 |         -4 |
+| ..\example                                                                                                                   |         45 |     -1,447 |       -270 |       -277 |     -1,994 |
+| ..\example (Files)                                                                                                           |          3 |        -33 |        -88 |        -26 |       -147 |
+| ..\example\android                                                                                                           |         12 |       -159 |        -51 |        -33 |       -243 |
+| ..\example\android (Files)                                                                                                   |          3 |        -39 |          0 |         -9 |        -48 |
+| ..\example\android\app                                                                                                       |          8 |       -115 |        -51 |        -23 |       -189 |
+| ..\example\android\app (Files)                                                                                               |          1 |        -55 |         -5 |        -13 |        -73 |
+| ..\example\android\app\src                                                                                                   |          7 |        -60 |        -46 |        -10 |       -116 |
+| ..\example\android\app\src\debug                                                                                             |          1 |         -3 |         -4 |         -1 |         -8 |
+| ..\example\android\app\src\main                                                                                              |          5 |        -54 |        -38 |         -8 |       -100 |
+| ..\example\android\app\src\main (Files)                                                                                      |          1 |        -28 |         -6 |         -2 |        -36 |
+| ..\example\android\app\src\main\res                                                                                          |          4 |        -26 |        -32 |         -6 |        -64 |
+| ..\example\android\app\src\main\res\drawable                                                                                 |          1 |         -4 |         -7 |         -2 |        -13 |
+| ..\example\android\app\src\main\res\drawable-v21                                                                             |          1 |         -4 |         -7 |         -2 |        -13 |
+| ..\example\android\app\src\main\res\values                                                                                   |          1 |         -9 |         -9 |         -1 |        -19 |
+| ..\example\android\app\src\main\res\values-night                                                                             |          1 |         -9 |         -9 |         -1 |        -19 |
+| ..\example\android\app\src\profile                                                                                           |          1 |         -3 |         -4 |         -1 |         -8 |
+| ..\example\android\gradle                                                                                                    |          1 |         -5 |          0 |         -1 |         -6 |
+| ..\example\android\gradle\wrapper                                                                                            |          1 |         -5 |          0 |         -1 |         -6 |
+| ..\example\ios                                                                                                               |          8 |       -229 |         -4 |        -13 |       -246 |
+| ..\example\ios\Runner                                                                                                        |          7 |       -222 |         -2 |         -9 |       -233 |
+| ..\example\ios\Runner (Files)                                                                                                |          2 |        -13 |          0 |         -3 |        -16 |
+| ..\example\ios\RunnerTests                                                                                                   |          1 |         -7 |         -2 |         -4 |        -13 |
+| ..\example\ios\Runner\Assets.xcassets                                                                                        |          3 |       -148 |          0 |         -4 |       -152 |
+| ..\example\ios\Runner\Assets.xcassets\AppIcon.appiconset                                                                     |          1 |       -122 |          0 |         -1 |       -123 |
+| ..\example\ios\Runner\Assets.xcassets\LaunchImage.imageset                                                                   |          2 |        -26 |          0 |         -3 |        -29 |
+| ..\example\ios\Runner\Base.lproj                                                                                             |          2 |        -61 |         -2 |         -2 |        -65 |
+| ..\example\lib                                                                                                               |          1 |        -52 |         -1 |         -8 |        -61 |
+| ..\example\linux                                                                                                             |          5 |        -94 |        -27 |        -38 |       -159 |
+| ..\example\linux (Files)                                                                                                     |          3 |        -86 |        -18 |        -27 |       -131 |
+| ..\example\linux\flutter                                                                                                     |          2 |         -8 |         -9 |        -11 |        -28 |
+| ..\example\macos                                                                                                             |          6 |       -444 |         -5 |        -16 |       -465 |
+| ..\example\macos\Flutter                                                                                                     |          1 |         -6 |         -3 |         -4 |        -13 |
+| ..\example\macos\Runner                                                                                                      |          4 |       -431 |          0 |         -8 |       -439 |
+| ..\example\macos\Runner (Files)                                                                                              |          2 |        -20 |          0 |         -6 |        -26 |
+| ..\example\macos\RunnerTests                                                                                                 |          1 |         -7 |         -2 |         -4 |        -13 |
+| ..\example\macos\Runner\Assets.xcassets                                                                                      |          1 |        -68 |          0 |         -1 |        -69 |
+| ..\example\macos\Runner\Assets.xcassets\AppIcon.appiconset                                                                   |          1 |        -68 |          0 |         -1 |        -69 |
+| ..\example\macos\Runner\Base.lproj                                                                                           |          1 |       -343 |          0 |         -1 |       -344 |
+| ..\example\windows                                                                                                           |         10 |       -436 |        -94 |       -143 |       -673 |
+| ..\example\windows\flutter                                                                                                   |          2 |         -8 |         -9 |        -11 |        -28 |
+| ..\example\windows\runner                                                                                                    |          8 |       -428 |        -85 |       -132 |       -645 |
+| ..\ios                                                                                                                       |          2 |        -18 |        -11 |         -4 |        -33 |
+| ..\ios (Files)                                                                                                               |          1 |        -17 |         -9 |         -3 |        -29 |
+| ..\ios\Classes                                                                                                               |          1 |         -1 |         -2 |         -1 |         -4 |
+| ..\lib                                                                                                                       |          7 |       -503 |        -30 |       -103 |       -636 |
+| ..\lib (Files)                                                                                                               |          1 |         -3 |          0 |         -1 |         -4 |
+| ..\lib\src                                                                                                                   |          6 |       -500 |        -30 |       -102 |       -632 |
+| ..\lib\src (Files)                                                                                                           |          2 |        -49 |         -2 |        -11 |        -62 |
+| ..\lib\src\models                                                                                                            |          2 |       -192 |         -2 |        -28 |       -222 |
+| ..\lib\src\rust_bridge                                                                                                       |          2 |       -259 |        -26 |        -63 |       -348 |
+| ..\macos                                                                                                                     |          2 |        -18 |        -10 |         -4 |        -32 |
+| ..\macos (Files)                                                                                                             |          1 |        -17 |         -8 |         -3 |        -28 |
+| ..\macos\Classes                                                                                                             |          1 |         -1 |         -2 |         -1 |         -4 |
+| ..\test                                                                                                                      |          2 |        -15 |          0 |         -4 |        -19 |
++------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                                     | language   | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\acer\workspace1\langtube\packages\readability\CHANGELOG.md                                                          | Markdown   |         -2 |          0 |         -2 |         -4 |
+| c:\Users\acer\workspace1\langtube\packages\readability\README.md                                                             | Markdown   |        -66 |          0 |        -27 |        -93 |
+| c:\Users\acer\workspace1\langtube\packages\readability\analysis_options.yaml                                                 | YAML       |         -1 |         -2 |         -2 |         -5 |
+| c:\Users\acer\workspace1\langtube\packages\readability\android\build.gradle                                                  | Gradle     |        -34 |        -34 |        -14 |        -82 |
+| c:\Users\acer\workspace1\langtube\packages\readability\android\gradle\wrapper\gradle-wrapper.properties                      | Properties |         -5 |          0 |         -1 |         -6 |
+| c:\Users\acer\workspace1\langtube\packages\readability\android\gradlew.bat                                                   | Batch      |        -39 |        -29 |        -22 |        -90 |
+| c:\Users\acer\workspace1\langtube\packages\readability\android\settings.gradle                                               | Gradle     |         -1 |          0 |         -1 |         -2 |
+| c:\Users\acer\workspace1\langtube\packages\readability\android\src\main\AndroidManifest.xml                                  | XML        |         -3 |          0 |         -1 |         -4 |
+| c:\Users\acer\workspace1\langtube\packages\readability\bindgen.bat                                                           | Batch      |         -1 |          0 |          0 |         -1 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\README.md                                                     | Markdown   |        -10 |          0 |         -7 |        -17 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\analysis_options.yaml                                         | YAML       |         -3 |        -23 |         -4 |        -30 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\android\app\build.gradle                                      | Gradle     |        -55 |         -5 |        -13 |        -73 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\android\app\src\debug\AndroidManifest.xml                     | XML        |         -3 |         -4 |         -1 |         -8 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\android\app\src\main\AndroidManifest.xml                      | XML        |        -28 |         -6 |         -2 |        -36 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\android\app\src\main\res\drawable-v21\launch_background.xml   | XML        |         -4 |         -7 |         -2 |        -13 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\android\app\src\main\res\drawable\launch_background.xml       | XML        |         -4 |         -7 |         -2 |        -13 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\android\app\src\main\res\values-night\styles.xml              | XML        |         -9 |         -9 |         -1 |        -19 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\android\app\src\main\res\values\styles.xml                    | XML        |         -9 |         -9 |         -1 |        -19 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\android\app\src\profile\AndroidManifest.xml                   | XML        |         -3 |         -4 |         -1 |         -8 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\android\build.gradle                                          | Gradle     |        -27 |          0 |         -5 |        -32 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\android\gradle.properties                                     | Properties |         -4 |          0 |          0 |         -4 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\android\gradle\wrapper\gradle-wrapper.properties              | Properties |         -5 |          0 |         -1 |         -6 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\android\settings.gradle                                       | Gradle     |         -8 |          0 |         -4 |        -12 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\ios\RunnerTests\RunnerTests.swift                             | Swift      |         -7 |         -2 |         -4 |        -13 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\ios\Runner\AppDelegate.swift                                  | Swift      |        -12 |          0 |         -2 |        -14 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\ios\Runner\Assets.xcassets\AppIcon.appiconset\Contents.json   | JSON       |       -122 |          0 |         -1 |       -123 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\ios\Runner\Assets.xcassets\LaunchImage.imageset\Contents.json | JSON       |        -23 |          0 |         -1 |        -24 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\ios\Runner\Assets.xcassets\LaunchImage.imageset\README.md     | Markdown   |         -3 |          0 |         -2 |         -5 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\ios\Runner\Base.lproj\LaunchScreen.storyboard                 | XML        |        -36 |         -1 |         -1 |        -38 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\ios\Runner\Base.lproj\Main.storyboard                         | XML        |        -25 |         -1 |         -1 |        -27 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\ios\Runner\Runner-Bridging-Header.h                           | C++        |         -1 |          0 |         -1 |         -2 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\lib\main.dart                                                 | Dart       |        -52 |         -1 |         -8 |        -61 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\linux\flutter\generated_plugin_registrant.cc                  | C++        |         -3 |         -4 |         -5 |        -12 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\linux\flutter\generated_plugin_registrant.h                   | C++        |         -5 |         -5 |         -6 |        -16 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\linux\main.cc                                                 | C++        |         -5 |          0 |         -2 |         -7 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\linux\my_application.cc                                       | C++        |        -74 |        -11 |        -20 |       -105 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\linux\my_application.h                                        | C++        |         -7 |         -7 |         -5 |        -19 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\macos\Flutter\GeneratedPluginRegistrant.swift                 | Swift      |         -6 |         -3 |         -4 |        -13 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\macos\RunnerTests\RunnerTests.swift                           | Swift      |         -7 |         -2 |         -4 |        -13 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\macos\Runner\AppDelegate.swift                                | Swift      |         -8 |          0 |         -2 |        -10 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\macos\Runner\Assets.xcassets\AppIcon.appiconset\Contents.json | JSON       |        -68 |          0 |         -1 |        -69 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\macos\Runner\Base.lproj\MainMenu.xib                          | XML        |       -343 |          0 |         -1 |       -344 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\macos\Runner\MainFlutterWindow.swift                          | Swift      |        -12 |          0 |         -4 |        -16 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\pubspec.yaml                                                  | YAML       |        -20 |        -65 |        -15 |       -100 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\windows\flutter\generated_plugin_registrant.cc                | C++        |         -3 |         -4 |         -5 |        -12 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\windows\flutter\generated_plugin_registrant.h                 | C++        |         -5 |         -5 |         -6 |        -16 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\windows\runner\flutter_window.cpp                             | C++        |        -49 |         -7 |        -16 |        -72 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\windows\runner\flutter_window.h                               | C++        |        -20 |         -5 |         -9 |        -34 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\windows\runner\main.cpp                                       | C++        |        -30 |         -4 |        -10 |        -44 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\windows\runner\resource.h                                     | C++        |         -9 |         -6 |         -2 |        -17 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\windows\runner\utils.cpp                                      | C++        |        -54 |         -2 |        -10 |        -66 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\windows\runner\utils.h                                        | C++        |         -8 |         -6 |         -6 |        -20 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\windows\runner\win32_window.cpp                               | C++        |       -210 |        -24 |        -55 |       -289 |
+| c:\Users\acer\workspace1\langtube\packages\readability\example\windows\runner\win32_window.h                                 | C++        |        -48 |        -31 |        -24 |       -103 |
+| c:\Users\acer\workspace1\langtube\packages\readability\ffigen.yaml                                                           | YAML       |         -6 |         -1 |         -2 |         -9 |
+| c:\Users\acer\workspace1\langtube\packages\readability\flutter_rust_bridge.yaml                                              | YAML       |         -2 |          0 |          0 |         -2 |
+| c:\Users\acer\workspace1\langtube\packages\readability\ios\Classes\readability.c                                             | C          |         -1 |         -2 |         -1 |         -4 |
+| c:\Users\acer\workspace1\langtube\packages\readability\ios\readability.podspec                                               | Ruby       |        -17 |         -9 |         -3 |        -29 |
+| c:\Users\acer\workspace1\langtube\packages\readability\lib\readability.dart                                                  | Dart       |         -3 |          0 |         -1 |         -4 |
+| c:\Users\acer\workspace1\langtube\packages\readability\lib\src\models\readability_score.dart                                 | Dart       |        -98 |         -1 |        -16 |       -115 |
+| c:\Users\acer\workspace1\langtube\packages\readability\lib\src\models\text_metrics.dart                                      | Dart       |        -94 |         -1 |        -12 |       -107 |
+| c:\Users\acer\workspace1\langtube\packages\readability\lib\src\readability.dart                                              | Dart       |        -28 |         -2 |         -7 |        -37 |
+| c:\Users\acer\workspace1\langtube\packages\readability\lib\src\readability_impl.dart                                         | Dart       |        -21 |          0 |         -4 |        -25 |
+| c:\Users\acer\workspace1\langtube\packages\readability\lib\src\rust_bridge\api.dart                                          | Dart       |        -13 |         -7 |         -9 |        -29 |
+| c:\Users\acer\workspace1\langtube\packages\readability\lib\src\rust_bridge\bridge.dart                                       | Dart       |       -246 |        -19 |        -54 |       -319 |
+| c:\Users\acer\workspace1\langtube\packages\readability\libgen.bat                                                            | Batch      |         -3 |          0 |          0 |         -3 |
+| c:\Users\acer\workspace1\langtube\packages\readability\macos\Classes\readability.c                                           | C          |         -1 |         -2 |         -1 |         -4 |
+| c:\Users\acer\workspace1\langtube\packages\readability\macos\readability.podspec                                             | Ruby       |        -17 |         -8 |         -3 |        -28 |
+| c:\Users\acer\workspace1\langtube\packages\readability\pubspec.yaml                                                          | YAML       |        -35 |        -44 |         -8 |        -87 |
+| c:\Users\acer\workspace1\langtube\packages\readability\test\readability_test.dart                                            | Dart       |        -11 |          0 |         -3 |        -14 |
+| c:\Users\acer\workspace1\langtube\packages\readability\test\texts.dart                                                       | Dart       |         -4 |          0 |         -1 |         -5 |
+| Total                                                                                                                        |            |     -2,199 |       -431 |       -472 |     -3,102 |
++------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

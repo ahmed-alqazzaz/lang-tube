@@ -20,7 +20,7 @@ Future<void> main(List<String> args) async {
         .fetchSubtitlesBundle(
       youtubeVideoId: '8fEEbKJoNbU',
       mainLanguages: [Language.english],
-      translatedLanguage: Language.germanVariants.first,
+      translatedLanguage: Language.german,
       onProgressUpdated: print,
     )
         .then((value) {

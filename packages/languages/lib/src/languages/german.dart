@@ -1,93 +1,33 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of '../languages.dart';
 
-class X {
-  final Language main;
-  final List<Language> variants;
-  X()
-      : main = _builder(
-          code: LanguageCodes.german,
-          name: 'German',
-        ),
-        variants = [
-          _builder(
-            code: LanguageCodes.german,
-            name: 'German',
-          ),
-          _builder(
-            code: LanguageCodes.germanGermany,
-            name: 'German (Germany)',
-          ),
-          _builder(
-            code: LanguageCodes.germanAustria,
-            name: 'German (Austria)',
-          ),
-          _builder(
-            code: LanguageCodes.germanSwitzerland,
-            name: 'German (Switzerland)',
-          ),
-          _builder(
-            code: LanguageCodes.germanLiechtenstein,
-            name: 'German (Liechtenstein)',
-          ),
-          German._(
-            code: LanguageCodes.germanLuxembourg,
-            name: 'German (Luxembourg)',
-          ),
-        ];
-
-  static Language _builder({
-    required String code,
-    required String name,
-  }) {
-    return Language._(
-      code: code,
-      name: name,
-      pattern: LanguagePatterns.german,
-      flag: LangaugeFlags.german,
-    );
-  }
-}
-
 @immutable
-final class German extends Language {
-  German._({
-    required String code,
-    required String name,
-  }) : super._(
+class German extends Language {
+  static const String _pattern =
+      r'^[a-zA-Z0-9äöüß\s!@#$%^&*(),.?":{}|<>`~_-]+$';
+  static const String _flagUrl =
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/800px-Flag_of_Germany.svg.png";
+
+  const German()
+      : super(
+          code: 'de',
+          name: "German",
+          pattern: _pattern,
+          flagUrl: _flagUrl,
+        );
+
+  const German._variant(String code, String name)
+      : super(
           code: code,
           name: name,
-          pattern: LanguagePatterns.german,
-          flag: LangaugeFlags.german,
+          pattern: _pattern,
+          flagUrl: _flagUrl,
         );
-  static Language get main => German._(
-        code: LanguageCodes.german,
-        name: 'German',
-      );
-  static List<Language> get variants => [
-        German._(
-          code: LanguageCodes.german,
-          name: 'German',
-        ),
-        German._(
-          code: LanguageCodes.germanGermany,
-          name: 'German (Germany)',
-        ),
-        German._(
-          code: LanguageCodes.germanAustria,
-          name: 'German (Austria)',
-        ),
-        German._(
-          code: LanguageCodes.germanSwitzerland,
-          name: 'German (Switzerland)',
-        ),
-        German._(
-          code: LanguageCodes.germanLiechtenstein,
-          name: 'German (Liechtenstein)',
-        ),
-        German._(
-          code: LanguageCodes.germanLuxembourg,
-          name: 'German (Luxembourg)',
-        ),
+  @override
+  List<Language> get variants => const [
+        German._variant('de-DE', 'German (Germany)'),
+        German._variant('de-AT', 'German (Austria)'),
+        German._variant('de-CH', 'German (Switzerland)'),
+        German._variant('de-LI', 'German (Liechtenstein)'),
+        German._variant('de-LU', 'German (Luxembourg)'),
       ];
 }

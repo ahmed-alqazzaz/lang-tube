@@ -32,6 +32,8 @@ class SourceCaptions {
     for (Language language in Language.values) {
       if (language.code == languageCode) return language;
     }
+    print("no lang found");
+    print(uri.toString());
     return null;
   }
 

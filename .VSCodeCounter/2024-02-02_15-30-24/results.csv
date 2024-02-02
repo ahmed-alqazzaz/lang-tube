@@ -1,0 +1,7 @@
+"filename", "language", "Rust", "comment", "blank", "total"
+"c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\readability_implementation\example\src\main.rs", "Rust", 13, 32, 8, 53
+"c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\readability_implementation\src\lib.rs", "Rust", 128, 6, 23, 157
+"c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\readability_implementation\src\sentence_tokenizer.rs", "Rust", 91, 12, 8, 111
+"c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\readability_implementation\src\syllable_counter.rs", "Rust", 74, 0, 8, 82
+"c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\readability_implementation\src\text_metrics.rs", "Rust", 133, 0, 16, 149
+"Total", "-", 439, 50, 63, 552

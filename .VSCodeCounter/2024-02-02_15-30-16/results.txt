@@ -1,0 +1,147 @@
+Date : 2024-02-02 15:30:16
+Directory : c:\Users\acer\workspace1\langtube\packages\readability\rust\libs
+Total : 73 files,  28648 codes, 193 comments, 806 blanks, all 29647 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| JSON             |          9 |     24,485 |          0 |          6 |     24,491 |
+| Rust             |         15 |      1,667 |        174 |        313 |      2,154 |
+| vue              |          6 |        967 |          0 |         85 |      1,052 |
+| Python           |         12 |        845 |         15 |        291 |      1,151 |
+| YAML             |          2 |        190 |          0 |         15 |        205 |
+| JavaScript       |         10 |        123 |          1 |         26 |        150 |
+| pip requirements |          1 |        115 |          0 |          1 |        116 |
+| Markdown         |          5 |        103 |          0 |         46 |        149 |
+| CSS              |          1 |         68 |          0 |          2 |         70 |
+| Shell Script     |          3 |         35 |          1 |         11 |         47 |
+| HTML             |          3 |         31 |          1 |          7 |         39 |
+| Makefile         |          1 |         10 |          1 |          2 |         13 |
+| Properties       |          2 |          6 |          0 |          1 |          7 |
+| XML              |          3 |          3 |          0 |          0 |          3 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                       | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                          |         73 |     28,648 |        193 |        806 |     29,647 |
+| readability_implementation                                                                                                 |          5 |        439 |         50 |         63 |        552 |
+| readability_implementation\example                                                                                         |          1 |         13 |         32 |          8 |         53 |
+| readability_implementation\example\src                                                                                     |          1 |         13 |         32 |          8 |         53 |
+| readability_implementation\src                                                                                             |          4 |        426 |         18 |         55 |        499 |
+| wtpsplit                                                                                                                   |         68 |     28,209 |        143 |        743 |     29,095 |
+| wtpsplit (Files)                                                                                                           |          4 |         51 |          1 |         18 |         70 |
+| wtpsplit\.github                                                                                                           |          2 |        190 |          0 |         15 |        205 |
+| wtpsplit\.github\workflows                                                                                                 |          2 |        190 |          0 |         15 |        205 |
+| wtpsplit\benchmarks                                                                                                        |          2 |         38 |          0 |         18 |         56 |
+| wtpsplit\bindings                                                                                                          |         23 |      7,177 |         70 |        162 |      7,409 |
+| wtpsplit\bindings\javascript                                                                                               |         16 |      6,841 |         24 |         74 |      6,939 |
+| wtpsplit\bindings\javascript (Files)                                                                                       |          3 |         54 |          0 |          2 |         56 |
+| wtpsplit\bindings\javascript\cypress                                                                                       |          1 |         13 |          0 |          3 |         16 |
+| wtpsplit\bindings\javascript\cypress\integration                                                                           |          1 |         13 |          0 |          3 |         16 |
+| wtpsplit\bindings\javascript\dev_server                                                                                    |          8 |      6,514 |          0 |         16 |      6,530 |
+| wtpsplit\bindings\javascript\src                                                                                           |          3 |        232 |         24 |         48 |        304 |
+| wtpsplit\bindings\javascript\test                                                                                          |          1 |         28 |          0 |          5 |         33 |
+| wtpsplit\bindings\python                                                                                                   |          7 |        336 |         46 |         88 |        470 |
+| wtpsplit\bindings\python (Files)                                                                                           |          1 |         10 |          1 |          2 |         13 |
+| wtpsplit\bindings\python\benches                                                                                           |          1 |         12 |          0 |          6 |         18 |
+| wtpsplit\bindings\python\src                                                                                               |          3 |        295 |         45 |         68 |        408 |
+| wtpsplit\bindings\python\tests                                                                                             |          2 |         19 |          0 |         12 |         31 |
+| wtpsplit\nnsplit                                                                                                           |          5 |        719 |         57 |        146 |        922 |
+| wtpsplit\nnsplit\examples                                                                                                  |          2 |         34 |          0 |         11 |         45 |
+| wtpsplit\nnsplit\src                                                                                                       |          3 |        685 |         57 |        135 |        877 |
+| wtpsplit\train                                                                                                             |         11 |      5,708 |         13 |        246 |      5,967 |
+| wtpsplit\website                                                                                                           |         21 |     14,326 |          2 |        138 |     14,466 |
+| wtpsplit\website (Files)                                                                                                   |          5 |     13,186 |          1 |          9 |     13,196 |
+| wtpsplit\website\public                                                                                                    |          4 |         22 |          1 |          3 |         26 |
+| wtpsplit\website\public (Files)                                                                                            |          1 |         19 |          1 |          3 |         23 |
+| wtpsplit\website\public\assets                                                                                             |          3 |          3 |          0 |          0 |          3 |
+| wtpsplit\website\src                                                                                                       |         12 |      1,118 |          0 |        126 |      1,244 |
+| wtpsplit\website\src (Files)                                                                                               |          2 |        166 |          0 |         17 |        183 |
+| wtpsplit\website\src\assets                                                                                                |          3 |         68 |          0 |         32 |        100 |
+| wtpsplit\website\src\components                                                                                            |          5 |        811 |          0 |         72 |        883 |
+| wtpsplit\website\src\plugins                                                                                               |          1 |          5 |          0 |          3 |          8 |
+| wtpsplit\website\src\style                                                                                                 |          1 |         68 |          0 |          2 |         70 |
++----------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                                                                                   | language         | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\readability_implementation\example\src\main.rs            | Rust             |         13 |         32 |          8 |         53 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\readability_implementation\src\lib.rs                     | Rust             |        128 |          6 |         23 |        157 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\readability_implementation\src\sentence_tokenizer.rs      | Rust             |         91 |         12 |          8 |        111 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\readability_implementation\src\syllable_counter.rs        | Rust             |         74 |          0 |          8 |         82 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\readability_implementation\src\text_metrics.rs            | Rust             |        133 |          0 |         16 |        149 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\.github\workflows\ci.yml                         | YAML             |        153 |          0 |         11 |        164 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\.github\workflows\deploy.yml                     | YAML             |         37 |          0 |          4 |         41 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\README.md                                        | Markdown         |         16 |          0 |          8 |         24 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\benchmarks\benchmark.py                          | Python           |         37 |          0 |         18 |         55 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\benchmarks\sample.json                           | JSON             |          1 |          0 |          0 |          1 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\build.sh                     | Shell Script     |          3 |          0 |          1 |          4 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\cypress.json                 | JSON             |          6 |          0 |          0 |          6 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\cypress\integration\test.js  | JavaScript       |         13 |          0 |          3 |         16 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\dev_server\benchmark.html    | HTML             |          6 |          0 |          2 |          8 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\dev_server\benchmark.js      | JavaScript       |          3 |          0 |          1 |          4 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\dev_server\index.html        | HTML             |          6 |          0 |          2 |          8 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\dev_server\index.js          | JavaScript       |         17 |          0 |          6 |         23 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\dev_server\package-lock.json | JSON             |      6,436 |          0 |          1 |      6,437 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\dev_server\package.json      | JSON             |         18 |          0 |          1 |         19 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\dev_server\test.js           | JavaScript       |          3 |          0 |          1 |          4 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\dev_server\webpack.config.js | JavaScript       |         25 |          0 |          2 |         27 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\package.json                 | JSON             |         45 |          0 |          1 |         46 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\src\lib.rs                   | Rust             |        119 |         17 |         21 |        157 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\src\tractjs_backend.rs       | Rust             |        109 |          1 |         26 |        136 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\src\utils.rs                 | Rust             |          4 |          6 |          1 |         11 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\javascript\test\test.js                 | JavaScript       |         28 |          0 |          5 |         33 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\python\Makefile                         | Makefile         |         10 |          1 |          2 |         13 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\python\benches\benchmark.py             | Python           |         12 |          0 |          6 |         18 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\python\src\backend.py                   | Python           |         18 |          2 |         12 |         32 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\python\src\lib.rs                       | Rust             |        188 |         41 |         35 |        264 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\python\src\onnxruntime_backend.rs       | Rust             |         89 |          2 |         21 |        112 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\python\tests\__init__.py                | Python           |          0 |          0 |          1 |          1 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\bindings\python\tests\test_nnsplit.py            | Python           |         19 |          0 |         11 |         30 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\nnsplit\examples\benchmark.rs                    | Rust             |         21 |          0 |          5 |         26 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\nnsplit\examples\cli.rs                          | Rust             |         13 |          0 |          6 |         19 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\nnsplit\src\lib.rs                               | Rust             |        459 |         43 |         89 |        591 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\nnsplit\src\model_loader.rs                      | Rust             |         72 |          6 |         15 |         93 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\nnsplit\src\tract_backend.rs                     | Rust             |        154 |          8 |         31 |        193 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\release.sh                                       | Shell Script     |         16 |          1 |          6 |         23 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\setup.cfg                                        | Properties       |          3 |          0 |          0 |          3 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\train\__init__.py                                | Python           |         81 |          2 |         15 |         98 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\train\dataset.py                                 | Python           |         46 |          1 |         17 |         64 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\train\evaluate.ipynb                             | JSON             |      3,871 |          0 |          0 |      3,871 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\train\evaluate.py                                | Python           |        136 |          2 |         48 |        186 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\train\labeler.py                                 | Python           |        248 |          1 |         96 |        345 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\train\model.py                                   | Python           |        173 |          4 |         39 |        216 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\train\requirements.txt                           | pip requirements |        115 |          0 |          1 |        116 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\train\setup.cfg                                  | Properties       |          3 |          0 |          1 |          4 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\train\text_data.py                               | Python           |         69 |          3 |         24 |         96 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\train\train.ipynb                                | JSON             |        960 |          0 |          1 |        961 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\train\utils.py                                   | Python           |          6 |          0 |          4 |         10 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\update_version.sh                                | Shell Script     |         16 |          0 |          4 |         20 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\README.md                                | Markdown         |         19 |          0 |          6 |         25 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\babel.config.js                          | JavaScript       |          5 |          0 |          1 |          6 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\package-lock.json                        | JSON             |     13,095 |          0 |          1 |     13,096 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\package.json                             | JSON             |         53 |          0 |          1 |         54 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\public\assets\javascript.svg             | XML              |          1 |          0 |          0 |          1 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\public\assets\python.svg                 | XML              |          1 |          0 |          0 |          1 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\public\assets\rust.svg                   | XML              |          1 |          0 |          0 |          1 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\public\index.html                        | HTML             |         19 |          1 |          3 |         23 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\src\App.vue                              | vue              |        156 |          0 |         13 |        169 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\src\assets\js_usage.md                   | Markdown         |         21 |          0 |         14 |         35 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\src\assets\python_usage.md               | Markdown         |         22 |          0 |          9 |         31 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\src\assets\rust_usage.md                 | Markdown         |         25 |          0 |          9 |         34 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\src\components\Benchmark.vue             | vue              |        129 |          0 |          8 |        137 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\src\components\BenchmarkChart.vue        | vue              |         10 |          0 |          1 |         11 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\src\components\Metrics.vue               | vue              |        286 |          0 |          2 |        288 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\src\components\Splitter.vue              | vue              |        329 |          0 |         56 |        385 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\src\components\Usage.vue                 | vue              |         57 |          0 |          5 |         62 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\src\main.js                              | JavaScript       |         10 |          0 |          4 |         14 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\src\plugins\vuetify.js                   | JavaScript       |          5 |          0 |          3 |          8 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\src\style\quill.snow.reduced.css         | CSS              |         68 |          0 |          2 |         70 |
+| c:\Users\acer\workspace1\langtube\packages\readability\rust\libs\wtpsplit\website\vue.config.js                            | JavaScript       |         14 |          1 |          0 |         15 |
+| Total                                                                                                                      |                  |     28,648 |        193 |        806 |     29,647 |
++----------------------------------------------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+

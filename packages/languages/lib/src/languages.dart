@@ -1,56 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:languages/src/language_flags.dart';
-import 'language_codes.dart';
-import 'language_patterns.dart';
 part 'languages/german.dart';
+part 'languages/english.dart';
+part 'languages/french.dart';
+part 'languages/arabic.dart';
 
 @immutable
-class Language {
-  const Language._({
+abstract class Language {
+  const Language({
     required this.code,
     required this.pattern,
     required this.name,
-    required this.flag,
+    required this.flagUrl,
   });
 
   final String code;
   final String pattern;
   final String name;
-  final Image flag;
+  final String flagUrl;
 
-  static Language get english => Language._(
-        code: LanguageCodes.english,
-        name: 'english',
-        pattern: LanguagePatterns.english,
-        flag: LangaugeFlags.english,
+  Image get flag => Image.network(
+        flagUrl,
+        fit: BoxFit.cover,
       );
 
-  static List<Language> get germanVariants => German.variants;
+  static const English english = English();
 
-  static Language get french => Language._(
-        code: LanguageCodes.french,
-        name: 'french',
-        pattern: LanguagePatterns.french,
-        flag: LangaugeFlags.french,
-      );
+  static const German german = German();
 
-  static Language get arabic => Language._(
-        code: LanguageCodes.arabic,
-        name: 'arabic',
-        pattern: LanguagePatterns.arabic,
-        flag: LangaugeFlags.arabic,
-      );
+  static const French french = French();
+
+  static const Arabic arabic = Arabic();
 
   static List<Language> get values => [
         Language.arabic,
-        Language.english,
+        ...Language.arabic.variants,
         Language.french,
-        ...Language.germanVariants,
+        ...Language.french.variants,
+        Language.english,
+        ...Language.english.variants,
+        Language.german,
+        ...Language.german.variants,
       ];
 
   @override
   String toString() {
-    return 'Language(code: $code, pattern: $pattern, name: $name, flag: $flag)';
+    return 'Language(code: $code, pattern: $pattern, name: $name, flag: $flagUrl)';
   }
 
   @override
@@ -62,20 +56,8 @@ class Language {
 
   @override
   int get hashCode {
-    return code.hashCode ^ pattern.hashCode ^ name.hashCode ^ flag.hashCode;
+    return code.hashCode ^ pattern.hashCode ^ name.hashCode ^ flagUrl.hashCode;
   }
 
-  Language copyWith({
-    String? code,
-    String? pattern,
-    String? name,
-    Image? flag,
-  }) {
-    return Language._(
-      code: code ?? this.code,
-      pattern: pattern ?? this.pattern,
-      name: name ?? this.name,
-      flag: flag ?? this.flag,
-    );
-  }
+  List<Language> get variants;
 }

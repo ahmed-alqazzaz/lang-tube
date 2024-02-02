@@ -102,6 +102,7 @@ dependencies:
   stack_trace: ^1.11.0
   custom_refresh_indicator: ^2.2.1
   gap: ^3.0.1
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

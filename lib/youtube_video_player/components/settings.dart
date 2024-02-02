@@ -68,7 +68,7 @@ class _SubtitlesSettingsState extends ConsumerState<SubtitlesConfig> {
                     borderRadius: BorderRadius.circular(_flagBorderRadius),
                     child: AspectRatio(
                       aspectRatio: _flagAspectRatio,
-                      child: Language.germanVariants.first.flag,
+                      child: bundle.mainSubtitles.language!.flag,
                     ),
                   ),
                 ),
