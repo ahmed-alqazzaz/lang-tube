@@ -2,5 +2,7 @@
     "rust-analyzer.linkedProjects": [
         ".\\parser_test\\Cargo.toml",
         "Cargo.toml",
-    ]
+        ".\\example\\Cargo.toml",
+    ],
+    "rust-analyzer.showUnlinkedFileNotification": false
 }
