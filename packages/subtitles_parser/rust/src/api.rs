@@ -1,7 +1,6 @@
 mod data;
 mod regex;
 mod logger;
-
 use ::regex::NoExpand;
 use scraper::Html;
 use rayon::prelude::*;
@@ -12,10 +11,7 @@ pub use self::data::*;
 
 
 pub fn parse_subtitles(raw_subtitles: String) -> Vec<ParsedSubtitle> {
-    let mut cleaned_subtitles = FILE_CLEANUP_REGEX.replace_all(&raw_subtitles, "").to_string();
-    cleaned_subtitles =  APOSTROPHE_REGEX.replace_all(&cleaned_subtitles, "'").to_string();
-    cleaned_subtitles =  LONG_SPACE_REGEX.replace_all(&cleaned_subtitles, " ").to_string();
-    cleaned_subtitles = QUOTE_REGEX.replace_all(&cleaned_subtitles, NoExpand("\"")).to_string();
+    let cleaned_subtitles = clean_subtitles(&raw_subtitles);
     cleaned_subtitles.split("</text>")
         .filter(|line| !line.trim().is_empty())
         .collect::<Vec<_>>()
@@ -33,6 +29,13 @@ pub fn parse_subtitles(raw_subtitles: String) -> Vec<ParsedSubtitle> {
         .collect()
 }
 
+fn clean_subtitles(raw_subtitles: &str) -> String {
+    let mut cleaned_subtitles = FILE_CLEANUP_REGEX.replace_all(raw_subtitles, "").to_string();
+    cleaned_subtitles = APOSTROPHE_REGEX.replace_all(&cleaned_subtitles, "'").to_string();
+    cleaned_subtitles = LONG_SPACE_REGEX.replace_all(&cleaned_subtitles, " ").to_string();
+    cleaned_subtitles = QUOTE_REGEX.replace_all(&cleaned_subtitles, NoExpand("\"")).to_string();
+    cleaned_subtitles
+}
 
 fn convert_raw_line_to_subtitle(line: &str) -> Option<ParsedSubtitle> {
     let start_string = LINE_START_REGEX.captures(line)?.get(1)?.as_str();
@@ -69,3 +72,6 @@ fn strip_html_tags(html: &str) -> String {
     let fragment = Html::parse_document(html);
     fragment.root_element().text().collect::<String>()
 }
+
+
+

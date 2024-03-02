@@ -15,14 +15,14 @@ Future<void> main() async {
     unnamedSubtitles,
   ];
 
-  // final timer = Stopwatch()..start();
-  // await Future.wait(List.generate(1000, (index) => index).map((e) async => [
-  //       for (String rawSubtitles in rawSubtitlesList)
-  //         await rustApi.parseSubtitles(rawSubtitles: rawSubtitles).then(
-  //               (subtitles) => subtitles.santitizeDurations().toList(),
-  //             )
-  //     ]));
-  // print('finnished within ${timer.elapsedMilliseconds}');
+  final timer = Stopwatch()..start();
+  await Future.wait(List.generate(1000, (index) => index).map((e) async => [
+        for (String rawSubtitles in rawSubtitlesList)
+          await rustApi.parseSubtitles(rawSubtitles: rawSubtitles).then(
+                (subtitles) => subtitles.santitizeDurations().toList(),
+              )
+      ]));
+  print('finnished within ${timer.elapsedMilliseconds}');
   final parsedSubtitlesList = [
     for (String rawSubtitles in rawSubtitlesList)
       await rustApi.parseSubtitles(rawSubtitles: rawSubtitles).then(

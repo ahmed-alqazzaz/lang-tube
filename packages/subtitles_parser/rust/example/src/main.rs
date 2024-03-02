@@ -10,15 +10,15 @@ fn load_xml_as_string(file_path: &str) -> Result<String> {
 
 fn main() -> Result<()> {
    let subtitles =  load_xml_as_string(
-        "../../../../test/assets/raw_subtitles/CES 2024… a glimpse into our AI-powered future.xml",
+        "../../../../test/assets/raw_subtitles/Nicos_Weg_A2.xml",
     )?;
     let start_time = Instant::now();
     let subs = parse_subtitles(subtitles.to_string());
     for subtitle in subs {
-        print!(
-            "Start: {}, End: {}, Text: {}\n",
-            subtitle.start.secs, subtitle.end.secs, subtitle.text
-        );
+        // print!(
+        //     "Start: {}, End: {}, Text: {}\n",
+        //     subtitle.start.secs, subtitle.end.secs, subtitle.text
+        // );
     }
 
     let end_time = Instant::now();
