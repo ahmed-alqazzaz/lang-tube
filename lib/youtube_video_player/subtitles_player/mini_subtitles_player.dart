@@ -22,7 +22,7 @@ class MiniSubtitlesPlayer extends ConsumerStatefulWidget {
 }
 
 class _MiniSubtitlesPlayerState extends ConsumerState<MiniSubtitlesPlayer> {
-  void _onTap({required String word, required VoidCallback onReset}) {
+  void _onTap({required String word, required VoidCallback reset}) {
     final controller = ref.read(youtubeControllerProvider);
     controller.pause();
     showModalBottomSheet(
@@ -37,7 +37,7 @@ class _MiniSubtitlesPlayerState extends ConsumerState<MiniSubtitlesPlayer> {
         }).whenComplete(
       () {
         controller.play();
-        onReset();
+        reset();
       },
     );
   }
@@ -53,7 +53,6 @@ class _MiniSubtitlesPlayerState extends ConsumerState<MiniSubtitlesPlayer> {
         SubtitleBox(
           words:
               subtitlesPlayerValue.currentSubtitles.mainSubtitle?.words ?? [],
-          backgroundColor: MiniSubtitlesPlayer.backgroundColor,
           onTapUp: _onTap,
           textFontSize: MiniSubtitlesPlayer.textFontSize,
           defaultTextColor: MiniSubtitlesPlayer.defaultTextColor,
@@ -64,7 +63,6 @@ class _MiniSubtitlesPlayerState extends ConsumerState<MiniSubtitlesPlayer> {
           SubtitleBox(
             words:
                 subtitlesPlayerValue.currentSubtitles.translatedSubtitle!.words,
-            backgroundColor: MiniSubtitlesPlayer.backgroundColor,
             onTapUp: _onTap,
             textFontSize: MiniSubtitlesPlayer.textFontSize,
             defaultTextColor: Colors.amber.shade600,

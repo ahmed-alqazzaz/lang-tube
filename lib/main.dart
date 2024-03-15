@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 import 'dart:io';
+import 'package:colourful_print/colourful_print.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lang_tube/providers/app_state_provider/app_state_provider.dart';
-import 'package:lang_tube/subtitles_scraper/scraper.dart';
-import 'package:lang_tube/youtube_video_player/providers/video_id_provider.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -19,6 +19,7 @@ import 'package:stack_trace/stack_trace.dart' as stack_trace;
 import 'package:user_agent/user_agent.dart';
 
 import 'providers/language_config_provider/provider.dart';
+import 'router/routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,6 +71,23 @@ class VideoIdSelector extends ConsumerWidget {
             },
             child: const Text('proceed'),
           ),
+          TextButton(
+            onPressed: () async {
+              final cookies = await CookieManager.instance().getCookies(
+                url: Uri.parse('https://www.youtube.com/'),
+              );
+              printRed("cookies" + cookies.toString());
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => InAppWebView(
+                    initialUrlRequest:
+                        URLRequest(url: Uri.parse('https://www.youtube.com/')),
+                  ),
+                ),
+              );
+            },
+            child: const Text('display web'),
+          ),
         ],
       ),
     );
@@ -84,8 +102,8 @@ class LangTube extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //routerConfig: GoRouter(routes: $appRoutes),
       home: VideoIdSelector(),
+      // routerConfig: GoRouter(routes: $appRoutes),
       theme: ThemeData(
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: backgroundColor,
@@ -147,6 +165,7 @@ class LangTube extends StatelessWidget {
 }
 
 final explanationPage = ExplanationPage(
+  key: GlobalKey(),
   word: 'Try',
   data: Lexicon(
     entries: [

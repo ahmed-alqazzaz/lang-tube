@@ -1,15 +1,14 @@
-import 'dart:developer';
-
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
 import 'package:throttler/throttler.dart';
 import 'package:value_notifier_transformer/value_notifier_transformer.dart';
 
 final _tapThrottler = Throttler.privateInstance();
-const _tapThrottlerDuration = Duration(milliseconds: 100);
+const _tapThrottlerDuration = Duration(milliseconds: 300);
 
 typedef OnSubtitleTapped = void Function({
-  required void Function() onReset,
+  required void Function() reset,
   required String word,
 });
 
@@ -17,20 +16,20 @@ class SubtitleBox extends StatefulWidget {
   const SubtitleBox({
     super.key,
     required this.words,
-    required this.backgroundColor,
-    required this.defaultTextColor,
-    required this.textFontSize,
+    this.textStyle,
     this.onTapUp,
     this.maxLines = 3,
     this.margin = EdgeInsets.zero,
-    this.fontWeight = FontWeight.normal,
+    this.defaultTextColor,
+    this.textFontSize,
+    this.fontWeight,
   });
 
+  final Color? defaultTextColor;
+  final double? textFontSize;
+  final FontWeight? fontWeight;
   final int maxLines;
-  final Color backgroundColor;
-  final Color defaultTextColor;
-  final double textFontSize;
-  final FontWeight fontWeight;
+  final TextStyle? textStyle;
   final EdgeInsets margin;
   final OnSubtitleTapped? onTapUp;
   final List<String> words;
@@ -58,13 +57,20 @@ class _SubtitleBoxState extends State<SubtitleBox> {
 
   @override
   Widget build(BuildContext context) {
+    //
     return TapRegion(
-      onTapOutside: (_) => _tapThrottler.throttle(
-        _tapThrottlerDuration,
-        () => _selectionNode.requestFocus(),
-      ),
+      onTapInside: (event) {
+        printOrange("inside");
+        _tapThrottler.cancel();
+      },
+      onTapOutside: (tap) {
+        printPurple("outisde");
+        // _tapThrottler.throttle(
+        //   _tapThrottlerDuration,
+        //   () => _selectionNode.requestFocus(),
+        // );
+      },
       child: Container(
-        color: widget.backgroundColor,
         padding: widget.margin,
         child: SelectionArea(
           focusNode: _selectionNode,
@@ -83,7 +89,7 @@ class _SubtitleBoxState extends State<SubtitleBox> {
                         return GestureDetector(
                           onTap: () => _selectedIndexNotifier.value = index,
                           onTapUp: (_) => widget.onTapUp?.call(
-                            onReset: () => _selectedIndexNotifier.value = null,
+                            reset: () => _selectedIndexNotifier.value = null,
                             word: widget.words[index],
                           ),
                           child: Text(
@@ -112,4 +118,18 @@ class _SubtitleBoxState extends State<SubtitleBox> {
   }
 
   static const Color selectedTextColor = Colors.amber;
+}
+
+class SubtitleText extends StatefulWidget {
+  const SubtitleText({super.key});
+
+  @override
+  State<SubtitleText> createState() => _SubtitleTextState();
+}
+
+class _SubtitleTextState extends State<SubtitleText> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
 }

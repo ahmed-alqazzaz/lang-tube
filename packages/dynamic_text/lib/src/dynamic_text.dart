@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +11,7 @@ class DynamicText extends StatefulWidget {
     this.maxLines = 2,
   });
 
-  final ValueListenable<String> listenableText;
+  final Stream<String> listenableText;
   final TextStyle? style;
   final int maxLines;
   @override
@@ -18,18 +20,19 @@ class DynamicText extends StatefulWidget {
 
 class _DynamicTextState extends State<DynamicText> {
   late final ScrollController _scrollController;
+  late final StreamSubscription<String> _subscription;
   @override
   void initState() {
     _jumpToEnd();
     _scrollController = ScrollController();
-    widget.listenableText.addListener(_animateToEnd);
+    _subscription = widget.listenableText.listen((_) => _animateToEnd());
     super.initState();
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
-    widget.listenableText.removeListener(_animateToEnd);
+    _subscription.cancel();
     super.dispose();
   }
 
@@ -71,12 +74,14 @@ class _DynamicTextState extends State<DynamicText> {
       child: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         controller: _scrollController,
-        child: ValueListenableBuilder<String>(
-          valueListenable: widget.listenableText,
-          builder: (context, text, _) => Text(
-            text,
-            style: widget.style,
-          ),
+        child: StreamBuilder<String>(
+          stream: widget.listenableText,
+          builder: (context, snapshot) {
+            return Text(
+              snapshot.data ?? "",
+              style: widget.style,
+            );
+          },
         ),
       ),
     );

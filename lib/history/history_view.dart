@@ -132,12 +132,12 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
     return Column(
       children: [
         SizedBox(height: height * 0.01),
-        _sortButtonsBuilder(
-          buttonsList: [_videosSortOptions],
-          onTap: (selectedIndex) => videosHistoryNotifier.sort(
-            VideosSortOption.values[selectedIndex],
-          ),
-        ),
+        // _sortButtonsBuilder(
+        //   buttonsList: [_videosSortOptions],
+        //   onTap: (selectedIndex) => videosHistoryNotifier.sort(
+        //     VideosSortOption.values[selectedIndex],
+        //   ),
+        // ),
         Expanded(
           child: Consumer(
             builder: (context, ref, _) {

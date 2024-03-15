@@ -25,6 +25,9 @@ final subtitlesPlayerProvider =
     if (mainSubtitles != null) {
       printRed("player started");
     }
+    if (mainSubtitles?.isNotEmpty != true) {
+      printPurple("no subs");
+    }
     return MultiSubtitlesPlayer(
       mainSubtitles: mainSubtitles?.toList() ?? [],
       translatedSubtitles: (subtitlesConfig?.showTranslations == true
@@ -76,6 +79,7 @@ class MultiSubtitlesPlayer extends StateNotifier<SubtitlesPlayerValue> {
           index: subtitle != null ? mainSubtitles.indexOf(subtitle) : null,
         );
       },
+      fireImmediately: true,
     );
     _translatedSubtitlesPlayer.addListener(
       (subtitle) {
@@ -86,6 +90,7 @@ class MultiSubtitlesPlayer extends StateNotifier<SubtitlesPlayerValue> {
               subtitle != null ? translatedSubtitles.indexOf(subtitle) : null,
         );
       },
+      fireImmediately: true,
     );
   }
   final SubtitlesPlayer _mainSubtitlesPlayer;

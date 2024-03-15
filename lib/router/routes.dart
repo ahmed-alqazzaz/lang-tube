@@ -1,13 +1,22 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:bottom_tabbed_navigator/bottom_tabbed_navigator.dart';
+import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lang_tube/browser/webview.dart';
+import 'package:lang_tube/main.dart';
 import 'package:lang_tube/video_recommendations.dart/video_recommendations_view.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
-
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 import '../history/history_view.dart';
 part 'routes.g.dart';
+
+final screenShotController = ScreenshotController();
 
 @TypedGoRoute<HomeScreenRoute>(path: '/', routes: [
   TypedGoRoute<YoutubePlayerRoute>(
@@ -17,33 +26,37 @@ part 'routes.g.dart';
 @immutable
 class HomeScreenRoute extends GoRouteData {
   const HomeScreenRoute();
+
   @override
-  Widget build(BuildContext context, GoRouterState state) => TabbedNavigator(
-        keepAlive: true,
-        items: const [
-          TabNavigationItem(
-            page: VideoRecommendationsView(),
-            bottomNavigationBarItem: BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "Home",
-            ),
+  Widget build(BuildContext context, GoRouterState state) {
+    return explanationPage;
+    return TabbedNavigator(
+      keepAlive: true,
+      items: const [
+        TabNavigationItem(
+          page: VideoRecommendationsView(),
+          bottomNavigationBarItem: BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
-          TabNavigationItem(
-            page: BrowserWebview(),
-            bottomNavigationBarItem: BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.chrome),
-              label: "Browser",
-            ),
+        ),
+        TabNavigationItem(
+          page: BrowserWebview(),
+          bottomNavigationBarItem: BottomNavigationBarItem(
+            icon: Icon(FontAwesomeIcons.chrome),
+            label: 'Browser',
           ),
-          TabNavigationItem(
-            page: HistoryView(),
-            bottomNavigationBarItem: BottomNavigationBarItem(
-              icon: Icon(Icons.video_library_rounded),
-              label: "Library",
-            ),
+        ),
+        TabNavigationItem(
+          page: HistoryView(),
+          bottomNavigationBarItem: BottomNavigationBarItem(
+            icon: Icon(Icons.video_library_rounded),
+            label: "Library",
           ),
-        ],
-      );
+        ),
+      ],
+    );
+  }
 }
 
 @immutable

@@ -25,6 +25,7 @@ dependencies:
     path: ../languages
   colourful_print:
     path: ../colourful_print
+  cookie_jar: ^4.0.8
 
 dev_dependencies:
   flutter_test:

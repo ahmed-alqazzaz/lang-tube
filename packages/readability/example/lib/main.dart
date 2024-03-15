@@ -38,11 +38,10 @@ class _ReadabilityExampleState extends State<ReadabilityExample> {
                   log(scoree.rawMetrics.sentencesCount.toString());
                   score = scoree.toString();
                   x = timer.elapsed;
-                  log("lasted ${timer.elapsedMilliseconds}");
                 } catch (e) {
                   score = e.toString();
                 }
-
+                log("lasted ${timer.elapsedMilliseconds}");
                 setState(() {});
               },
             ),

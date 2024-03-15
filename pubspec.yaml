@@ -86,6 +86,8 @@ dependencies:
     path: packages/aligned_bottom_sheet
   core_utils: 
     path: packages/core_utils
+  dynamic_text:
+    path: packages/dynamic_text
   quiver: ^3.2.1
   mutex: ^3.1.0
   listenable_stream: ^1.1.0
@@ -103,6 +105,8 @@ dependencies:
   custom_refresh_indicator: ^2.2.1
   gap: ^3.0.1
   shared_preferences: ^2.2.2
+  screenshot: ^2.1.0
+  share_plus: ^7.2.2
 
 dev_dependencies:
   flutter_test:

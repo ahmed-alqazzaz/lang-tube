@@ -9,14 +9,15 @@ class _ReadabilityImpl extends Readability {
   }) : super._();
 
   @override
-  Future<ReadabilityScore> calculateScore(String text) async =>
-      ReadabilityScore.fromJson(
-        await rustApi.calculateTextComplexity(
-          text: text,
-          language: language.code,
-          cacheDir: cacheDirectory,
-        ),
-      );
+  Future<ReadabilityScore> calculateScore(String text) async {
+    return ReadabilityScore.fromJson(
+      await rustApi.calculateTextComplexity(
+        text: text,
+        language: language.code,
+        cacheDir: cacheDirectory,
+      ),
+    );
+  }
 
   @override
   Future<int> calculateSyllables(String text) async =>

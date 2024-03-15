@@ -61,29 +61,31 @@ class _ExplanationPageState extends State<ExplanationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        toolbarHeight: 50,
-        title: Text(
-          widget.word.capitalize(),
-          style: const TextStyle(
-            fontSize: 26,
-            color: LangTube.tmp,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        actions: [
-          Transform.translate(
-            offset: const Offset(-15, 0),
-            child: CircularInkWell(
-              onTap: () {},
-              child: const Icon(Icons.close),
-            ),
-          )
-        ],
-      ),
       body: CustomScrollView(
         slivers: [
+          SliverToBoxAdapter(
+            child: AppBar(
+              centerTitle: false,
+              toolbarHeight: 50,
+              title: Text(
+                widget.word.capitalize(),
+                style: const TextStyle(
+                  fontSize: 26,
+                  color: LangTube.tmp,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              actions: [
+                Transform.translate(
+                  offset: const Offset(-15, 0),
+                  child: CircularInkWell(
+                    onTap: () {},
+                    child: const Icon(Icons.close),
+                  ),
+                )
+              ],
+            ),
+          ),
           SliverToBoxAdapter(
             child: StatefulBuilder(
               builder: (context, setState) {
@@ -145,7 +147,6 @@ class _ExplanationPageState extends State<ExplanationPage> {
             {required String subtitle, required Color textColor}) =>
         SubtitleBox(
           words: subtitle.split(' '),
-          backgroundColor: Colors.white,
           defaultTextColor: textColor,
           textFontSize: 17,
           fontWeight: FontWeight.w500,

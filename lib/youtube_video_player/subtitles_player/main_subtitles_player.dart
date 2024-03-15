@@ -5,7 +5,7 @@ import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/explanation_modal/explanation_modal_constraints_provider.dart';
-
+import 'package:dynamic_text/dynamic_text.dart';
 import 'package:lang_tube/youtube_video_player/components/subtitle_box.dart';
 import 'package:lang_tube/youtube_video_player/providers/subtitles_download_progress_provider.dart';
 import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
@@ -59,7 +59,7 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
     super.dispose();
   }
 
-  void _onTap({required String word, required VoidCallback onReset}) {
+  void _onTap({required String word, required VoidCallback reset}) {
     final controller = ref.read(youtubeControllerProvider);
     controller.pause();
 
@@ -77,7 +77,7 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
         }).whenComplete(
       () {
         controller.play();
-        onReset();
+        reset();
       },
     );
   }
@@ -86,6 +86,8 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
     final subtitlesPlayerValue = ref.watch(subtitlesPlayerProvider);
     final youtubePlayerController = ref.read(youtubeControllerProvider);
     final subtitles = subtitlesPlayerValue.subtitles;
+    printRed("length ${subtitles.length}");
+    printRed("index ${subtitlesPlayerValue.index}");
     return LayoutBuilder(
       builder: (context, constraints) {
         return Listener(
@@ -132,13 +134,12 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
                         Expanded(
                           child: SubtitleBox(
                             words: subtitle.words,
-                            backgroundColor: Colors.transparent,
                             textFontSize: MainSubtitlesPlayer.textFontSize,
                             defaultTextColor: Colors.white.withOpacity(0.8),
                             fontWeight: FontWeight.w300,
-                            onTapUp: ({required onReset, required word}) {
+                            onTapUp: ({required reset, required word}) {
                               Timer(MainSubtitlesPlayer.bodyScrollDuration, () {
-                                _onTap(word: word, onReset: onReset);
+                                _onTap(word: word, reset: reset);
                               });
                             },
                           ),
@@ -167,6 +168,7 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
   }
 
   Widget headerBuilder() {
+    final subtitlesStream = ref.read(subtitlesPlayerProvider.notifier).stream;
     return Container(
       color: MainSubtitlesPlayer.headerBackgroundColor,
       padding: EdgeInsets.symmetric(
@@ -178,23 +180,22 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Consumer(
-              builder: (context, ref, _) {
-                final mainSubtitle = ref.watch(
-                  subtitlesPlayerProvider.select(
-                    (value) => value.currentSubtitles.mainSubtitle,
-                  ),
+            StreamBuilder<Subtitle?>(
+              stream:
+                  ref.read(subtitlesPlayerProvider.notifier).stream.asyncMap(
+                        (value) => value.currentSubtitles.mainSubtitle,
+                      ),
+              builder: (context, snapshot) {
+                // DynamicText(
+                //   listenableText:
+                // )
+                if (!snapshot.hasData) return Container();
+                return SubtitleBox(
+                  words: snapshot.data!.words,
+                  textFontSize: MainSubtitlesPlayer.headerTextFontSize,
+                  onTapUp: _onTap,
+                  defaultTextColor: Colors.white,
                 );
-                if (mainSubtitle != null) {
-                  return SubtitleBox(
-                    words: mainSubtitle.words,
-                    backgroundColor: Colors.transparent,
-                    textFontSize: MainSubtitlesPlayer.headerTextFontSize,
-                    onTapUp: _onTap,
-                    defaultTextColor: Colors.white,
-                  );
-                }
-                return Container();
               },
             ),
             const SizedBox(
@@ -209,7 +210,6 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
                 if (translatedSubtitle != null) {
                   return SubtitleBox(
                     words: translatedSubtitle.words,
-                    backgroundColor: Colors.transparent,
                     textFontSize: MainSubtitlesPlayer.headerTextFontSize,
                     defaultTextColor: Colors.amber.shade600,
                   );
@@ -244,12 +244,17 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
   Widget build(BuildContext context) {
     super.build(context);
     final shouldAbsorbPointers = ref.watch(actionsMenuActivityProvider);
+    // normally listen is triggered before rebuild
+    // causing scroll to have no impact
+    // we must ensure that scroll executes after rebuild
     ref.listen<SubtitlesPlayerValue>(
       subtitlesPlayerProvider,
       (_, value) {
-        _scrollController.scrollTo(
-          index: value.subtitles.length - value.index,
-          duration: MainSubtitlesPlayer.bodyScrollDuration,
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => _scrollController.scrollTo(
+            index: value.subtitles.length - value.index,
+            duration: MainSubtitlesPlayer.bodyScrollDuration,
+          ),
         );
       },
     );
