@@ -1,6 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:subtitles_parser/src/rust_bridge/duration_converter.dart';
+
+import 'bridge.g.dart';
 
 @immutable
 class ParsedSubtitle {
@@ -8,18 +11,25 @@ class ParsedSubtitle {
   final Duration end;
   final String text;
 
-  const ParsedSubtitle({
+  const ParsedSubtitle._({
     required this.start,
     required this.end,
     required this.text,
   });
+
+  ParsedSubtitle({
+    required RustDuration start,
+    required RustDuration end,
+    required this.text,
+  })  : start = start.toDart(),
+        end = end.toDart();
 
   ParsedSubtitle copyWith({
     Duration? start,
     Duration? end,
     String? text,
   }) {
-    return ParsedSubtitle(
+    return ParsedSubtitle._(
       start: start ?? this.start,
       end: end ?? this.end,
       text: text ?? this.text,
@@ -48,7 +58,7 @@ class ParsedSubtitle {
   }
 
   factory ParsedSubtitle.fromMap(Map<String, dynamic> map) {
-    return ParsedSubtitle(
+    return ParsedSubtitle._(
       start: DurationJsonifier.fromJson(map['start'] as String),
       end: DurationJsonifier.fromJson(map['end'] as String),
       text: map['text'] as String,

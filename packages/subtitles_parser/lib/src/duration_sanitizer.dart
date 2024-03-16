@@ -1,4 +1,4 @@
-import 'rust_bridge/api.dart';
+import 'rust_bridge/parsed_subtitle.dart';
 
 extension DurationSanitizer on List<ParsedSubtitle> {
   Iterable<ParsedSubtitle> santitizeDurations() sync* {

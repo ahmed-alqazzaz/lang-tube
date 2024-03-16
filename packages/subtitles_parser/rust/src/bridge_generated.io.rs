@@ -2,8 +2,19 @@ use super::*;
 // Section: wire functions
 
 #[no_mangle]
-pub extern "C" fn wire_parse_subtitles(port_: i64, raw_subtitles: *mut wire_uint_8_list) {
-    wire_parse_subtitles_impl(port_, raw_subtitles)
+pub extern "C" fn wire_parse_srv1__static_method__SubtitlesParser(
+    port_: i64,
+    raw_subtitles: *mut wire_uint_8_list,
+) {
+    wire_parse_srv1__static_method__SubtitlesParser_impl(port_, raw_subtitles)
+}
+
+#[no_mangle]
+pub extern "C" fn wire_parse_youtube_timed_text__static_method__SubtitlesParser(
+    port_: i64,
+    raw_subtitles: *mut wire_uint_8_list,
+) {
+    wire_parse_youtube_timed_text__static_method__SubtitlesParser_impl(port_, raw_subtitles)
 }
 
 // Section: allocate functions

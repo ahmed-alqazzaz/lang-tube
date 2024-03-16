@@ -1,9 +1,28 @@
 
+pub const MILLIS_PER_SEC: u64 = 1_000; 
+
+
 #[derive(Debug)]
 pub struct ParsedSubtitle {
     pub start: RustDuration,
     pub end: RustDuration,
     pub text: String,
+}
+
+impl RustDuration {
+    pub fn from_milliseconds(millis: u64) -> Self {
+        Self {
+            secs: millis / 1000,
+            millis: millis % 1000,
+        }
+    }
+
+    pub fn from_seconds(secs: u64) -> Self {
+        Self {
+            secs,
+            millis: 0,
+        }
+    }
 }
 
 #[derive(Copy, Clone)]
@@ -12,8 +31,6 @@ pub struct RustDuration {
     pub secs: u64,
     pub millis: u64, // Always 0 <= millis < MILLIS_PER_SEC
 }
-
-pub const MILLIS_PER_SEC: u64 = 1_000; 
 
 impl std::ops::Add for RustDuration {
     type Output = Self;

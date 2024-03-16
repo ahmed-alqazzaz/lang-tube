@@ -21,7 +21,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    sumAsyncResult = parseSubtitles(marinaSubtitles);
+    sumAsyncResult = SubtitlesParser.parseSrv1(marinaSubtitles);
   }
 
   @override
