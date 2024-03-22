@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:colourful_print/colourful_print.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lang_tube/providers/app_state_provider/app_state_provider.dart';
+import 'package:lang_tube/subtitles_scraper/scraper.dart';
 import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -41,6 +42,7 @@ Future<void> main() async {
   container.read(appStateProvider.notifier).displayVideoPlayer(
         videoId: 'hLoatpfE7VM',
       );
+  await SubtitlesScraper.ensureInitalized();
   runApp(const ProviderScope(child: LangTube()));
 }
 
@@ -74,15 +76,30 @@ class VideoIdSelector extends ConsumerWidget {
           TextButton(
             onPressed: () async {
               final cookies = await CookieManager.instance().getCookies(
-                url: Uri.parse('https://www.youtube.com/'),
+                url: Uri.parse(
+                    'https://youtube.com/watch?v=8WQ3LUvVP6g&bpctr=9999999999&hl=en'),
               );
               printRed("cookies" + cookies.toString());
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => InAppWebView(
-                    initialUrlRequest:
-                        URLRequest(url: Uri.parse('https://www.youtube.com/')),
-                  ),
+                  builder: (context) {
+                    SubtitlesScraper.instance
+                        .fetchSubtitlesBundle(
+                      youtubeVideoId: '8WQ3LUvVP6g',
+                      mainLanguages: [Language.german],
+                      translatedLanguage: Language.english,
+                      onProgressUpdated: print,
+                    )
+                        .onError((error, stackTrace) {
+                      printRed("error: $error");
+                      throw error!;
+                    }).then((value) => printRed(value.toString()));
+                    return InAppWebView(
+                      initialUrlRequest: URLRequest(
+                          url: Uri.parse(
+                              'https://youtube.com/watch?v=8WQ3LUvVP6g&bpctr=9999999999&hl=en')),
+                    );
+                  },
                 ),
               );
             },

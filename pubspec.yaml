@@ -107,6 +107,7 @@ dependencies:
   shared_preferences: ^2.2.2
   screenshot: ^2.1.0
   share_plus: ^7.2.2
+  floor: ^1.4.2
 
 dev_dependencies:
   flutter_test:
@@ -124,8 +125,9 @@ dev_dependencies:
   freezed: ^2.3.5
   go_router_builder: ^2.3.0
   build_verify: ^3.1.0
-  riverpod_lint: ^2.3.7
   custom_lint: ^0.5.8
+  floor_generator: ^1.4.2
+  riverpod_lint: ^2.1.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -133,10 +135,8 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - assets/fireship_video.srt
-    - assets/maxresdefault.jpg
-    - assets/music.jpg
-    - assets/google_icon.png
+    - assets/
+    
   fonts:
   - family: MyFlutterApp
     fonts:

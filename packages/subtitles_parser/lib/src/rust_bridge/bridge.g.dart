@@ -9,7 +9,6 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:uuid/uuid.dart';
 
 import 'dart:ffi' as ffi;
-
 import 'parsed_subtitle.dart';
 
 abstract class SubtitlesParser {

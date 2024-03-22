@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
+import 'package:lang_tube/crud/subtitles_cache_manager/cache_manager.dart';
 import 'package:lang_tube/models/subtitles/subtitles_bundle.dart';
 import 'package:languages/languages.dart';
 import 'package:user_agent/user_agent.dart';

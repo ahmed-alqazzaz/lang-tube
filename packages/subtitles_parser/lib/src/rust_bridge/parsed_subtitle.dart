@@ -1,9 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:subtitles_parser/src/rust_bridge/duration_converter.dart';
 
-import 'bridge.g.dart';
+import 'package:flutter/foundation.dart';
+import 'package:subtitles_parser/src/rust_bridge/bridge.g.dart';
+import 'package:subtitles_parser/src/rust_bridge/duration_converter.dart';
 
 @immutable
 class ParsedSubtitle {

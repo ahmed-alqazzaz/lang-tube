@@ -1,11 +1,10 @@
-
 import 'package:youtube_subtitles_scraper/src/abstract/cache_manager.dart';
 
 extension SourcesCountManager on CacheManager {
   static const int _defaultMaxSourcesCount = 50;
   Future<void> limitSourcesCount(
       {int maxSourceCount = _defaultMaxSourcesCount}) async {
-    final sources = await retrieveSources(sortByFirstCacheDate: true);
+    final sources = await retrieveSources();
     if (sources != null && sources.length > maxSourceCount) {
       sources.toList().sublist(maxSourceCount).forEach((source) async {
         await clearSources(

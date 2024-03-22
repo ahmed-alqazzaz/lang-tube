@@ -1,11 +1,11 @@
 import 'dart:ffi';
 import 'dart:io';
 
-import 'bridge.g.dart';
-
 // Re-export the bridge so it is only necessary to import this file.
-export 'bridge.g.dart';
+
 import 'dart:io' as io;
+
+import 'package:subtitles_parser/src/rust_bridge/bridge.g.dart';
 
 const _base = 'subtitles_parser';
 

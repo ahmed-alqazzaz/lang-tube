@@ -1,7 +1,8 @@
 import 'dart:developer';
-import 'rust_bridge/api.dart';
-import 'rust_bridge/parsed_subtitle.dart';
-import 'duration_sanitizer.dart';
+
+import 'package:subtitles_parser/src/duration_sanitizer.dart';
+import 'package:subtitles_parser/src/rust_bridge/api.dart';
+import 'package:subtitles_parser/src/rust_bridge/parsed_subtitle.dart';
 
 final class SubtitlesParser {
   static Future<List<ParsedSubtitle>> parseSrv1(String rawSubtitles) async =>
