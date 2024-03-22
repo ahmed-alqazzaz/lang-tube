@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
-import 'package:lang_tube/crud/subtitles_cache_manager/cache_manager.dart';
+import 'package:lang_tube/crud/subtitles_cache_manager/impl/cache_manager_impl.dart';
 import 'package:lang_tube/models/subtitles/subtitles_bundle.dart';
 import 'package:languages/languages.dart';
 import 'package:user_agent/user_agent.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 import '../crud/subtitles_cache_manager/cache_manager.dart';
+import '../crud/subtitles_cache_manager/impl/cache_manager_impl.dart';
+import '../crud/subtitles_cache_manager/impl/youtube_cache_manager.dart';
 import 'api_client.dart';
 import 'package:quiver/iterables.dart';
 
@@ -16,30 +18,27 @@ Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserAgentManager.instance.initilize();
   await SubtitlesScraper.ensureInitalized();
-  try {
-    await SubtitlesScraper.instance
-        .fetchSubtitlesBundle(
-      youtubeVideoId: '8fEEbKJoNbU',
-      mainLanguages: [Language.english],
-      translatedLanguage: Language.german,
-      onProgressUpdated: print,
-    )
-        .then((value) {
-      for (var element in value) {
-        print(element.mainSubtitles.language);
-      }
-      return null;
-    });
-  } catch (e) {
-    printRed(e.toString());
-  }
+
+  await SubtitlesScraper.instance
+      .fetchSubtitlesBundle(
+    youtubeVideoId: '8fEEbKJoNbU',
+    mainLanguages: [Language.english],
+    translatedLanguage: Language.german,
+    onProgressUpdated: print,
+  )
+      .then((value) {
+    for (var element in value) {
+      print(element.mainSubtitles.info.language);
+    }
+    return null;
+  });
 }
 
 @immutable
 final class SubtitlesScraper {
-  static SubtitlesCacheManager? _cacheManager;
+  static YouTubeCaptionsCacheManager? _cacheManager;
   static Future<void> ensureInitalized() async =>
-      _cacheManager ??= await SubtitlesCacheManager.open();
+      _cacheManager ??= await CaptionsCacheManager.youtube;
 
   static SubtitlesScraper get instance => _instance;
   static final _instance = SubtitlesScraper._();
@@ -61,7 +60,7 @@ final class SubtitlesScraper {
     void Function(double)? onProgressUpdated,
   }) async {
     final progressList = <double>[0.0, 0.0];
-    return await Future.wait<Iterable<ScrapedSubtitles>>(
+    return await Future.wait<Iterable<ScrapedCaptions>>(
       [
         _scraper
             .scrapeSubtitles(
@@ -105,12 +104,10 @@ final class SubtitlesScraper {
     );
   }
 
-  Future<List<ScrapedSubtitles>?> Function({
+  Future<List<ScrapedCaptions>?> Function({
     required String youtubeVideoId,
     required List<Language> mainLanguages,
     Language? translatedLanguage,
     void Function(double)? onProgressUpdated,
   }) get scrapeSubtitles => _scraper.scrapeSubtitles;
-
-  Future<void> close() async => await _cacheManager!.close();
 }

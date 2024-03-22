@@ -4,8 +4,8 @@ import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
 @immutable
 final class SubtitlesBundle {
-  final ScrapedSubtitles mainSubtitles;
-  final ScrapedSubtitles translatedSubtitles;
+  final ScrapedCaptions mainSubtitles;
+  final ScrapedCaptions translatedSubtitles;
   const SubtitlesBundle({
     required this.mainSubtitles,
     required this.translatedSubtitles,
@@ -27,8 +27,8 @@ final class SubtitlesBundle {
   int get hashCode => mainSubtitles.hashCode ^ translatedSubtitles.hashCode;
 
   SubtitlesBundle copyWith({
-    ScrapedSubtitles? mainSubtitles,
-    ScrapedSubtitles? translatedSubtitles,
+    ScrapedCaptions? mainSubtitles,
+    ScrapedCaptions? translatedSubtitles,
   }) {
     return SubtitlesBundle(
       mainSubtitles: mainSubtitles ?? this.mainSubtitles,

@@ -1,11 +1,11 @@
-import 'package:youtube_subtitles_scraper/src/models/scraped_subtitles.dart';
+import 'package:youtube_subtitles_scraper/src/models/scraped_captions.dart';
 import 'package:youtube_subtitles_scraper/src/models/source_captions.dart';
 
 abstract class CacheManager {
-  Future<void> cacheSubtitles(ScrapedSubtitles subtitles);
+  Future<void> cacheCaptions(ScrapedCaptions subtitles);
   Future<void> cacheSourceCaptions(SourceCaptions sourceCaptions);
 
-  Future<Iterable<ScrapedSubtitles>> retrieveSubtitles(
+  Future<Iterable<ScrapedCaptions>> retrieveSubtitles(
       {String? videoId, String? language});
   Future<Iterable<SourceCaptions>> retrieveSources(
       {String? videoId, String? language});

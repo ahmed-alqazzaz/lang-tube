@@ -10,8 +10,8 @@ extension CacheExpirationManager on CacheManager {
 
     for (var source in sources.unique) {
       if (source.isExpired == true) {
-        clearSources(videoId: source.videoId).whenComplete(
-          () => onSourcesDeleted(source.videoId),
+        clearSources(videoId: source.info.videoId).whenComplete(
+          () => onSourcesDeleted(source.info.videoId),
         );
       }
     }
@@ -22,8 +22,8 @@ extension on Iterable<SourceCaptions> {
   Iterable<SourceCaptions> get unique sync* {
     String prevId = "";
     for (SourceCaptions source in this) {
-      if (source.videoId == prevId) continue;
-      prevId = source.videoId;
+      if (source.info.videoId == prevId) continue;
+      prevId = source.info.videoId;
       yield source;
     }
   }

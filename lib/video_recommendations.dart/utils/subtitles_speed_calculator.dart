@@ -2,7 +2,7 @@ import 'package:readability/readability.dart';
 import 'package:subtitles_parser/subtitles_parser.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
-extension SubtitlesSpeed on ScrapedSubtitles {
+extension SubtitlesSpeed on ScrapedCaptions {
   Future<double> get avgerageSyllablesPerMillisecond async {
     final length = subtitles.length;
     List<double> individualSyllablesPerMillisecond = [
