@@ -8,15 +8,15 @@ import '../database/database.dart';
 
 @immutable
 @Entity(tableName: SubtitlesDatabase.videosTable)
-final class Video {
+final class DatabaseVideo {
   @ColumnInfo(name: SubtitlesDatabase.videoIdColumn)
   @PrimaryKey()
   final String videoId;
 
-  const Video(this.videoId);
+  const DatabaseVideo(this.videoId);
 
   @override
-  bool operator ==(covariant Video other) {
+  bool operator ==(covariant DatabaseVideo other) {
     if (identical(this, other)) return true;
 
     return other.videoId == videoId;
@@ -28,10 +28,10 @@ final class Video {
   @override
   String toString() => 'Video(videoId: $videoId)';
 
-  Video copyWith({
+  DatabaseVideo copyWith({
     String? videoId,
   }) {
-    return Video(
+    return DatabaseVideo(
       videoId ?? this.videoId,
     );
   }
@@ -42,14 +42,14 @@ final class Video {
     };
   }
 
-  factory Video.fromMap(Map<String, dynamic> map) {
-    return Video(
+  factory DatabaseVideo.fromMap(Map<String, dynamic> map) {
+    return DatabaseVideo(
       map['videoId'] as String,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Video.fromJson(String source) =>
-      Video.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory DatabaseVideo.fromJson(String source) =>
+      DatabaseVideo.fromMap(json.decode(source) as Map<String, dynamic>);
 }

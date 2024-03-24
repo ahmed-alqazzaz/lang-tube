@@ -118,7 +118,7 @@ class _BrowserWebviewState extends State<BrowserWebview> {
                     },
                   );
                 },
-                userAgent: UserAgentManager.instance.userAgent,
+                userAgent: UserAgent.instance.userAgent,
                 initialRequest: Uri.parse(
                   _currentUrlNotifier.value,
                 ),

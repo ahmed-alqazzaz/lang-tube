@@ -13,7 +13,7 @@ import 'video.dart';
     ForeignKey(
       childColumns: [SubtitlesDatabase.videoIdColumn],
       parentColumns: [SubtitlesDatabase.videoIdColumn],
-      entity: Video,
+      entity: DatabaseVideo,
     ),
   ],
   indices: [
@@ -27,7 +27,7 @@ import 'video.dart';
     ),
   ],
 )
-final class SubtitlesInfo {
+final class DatabaseSubtitlesInfo {
   @PrimaryKey(autoGenerate: true)
   final int? infoId;
 
@@ -35,7 +35,7 @@ final class SubtitlesInfo {
   final String language;
   final CaptionsType captionsType;
   final DateTime? createdAt;
-  const SubtitlesInfo({
+  const DatabaseSubtitlesInfo({
     this.infoId,
     required this.videoId,
     required this.language,
@@ -43,14 +43,14 @@ final class SubtitlesInfo {
     this.createdAt,
   });
 
-  SubtitlesInfo copyWith({
+  DatabaseSubtitlesInfo copyWith({
     int? infoId,
     String? videoId,
     String? language,
     CaptionsType? captionsType,
     DateTime? createdAt,
   }) {
-    return SubtitlesInfo(
+    return DatabaseSubtitlesInfo(
       infoId: infoId ?? this.infoId,
       videoId: videoId ?? this.videoId,
       language: language ?? this.language,
@@ -65,7 +65,7 @@ final class SubtitlesInfo {
   }
 
   @override
-  bool operator ==(covariant SubtitlesInfo other) {
+  bool operator ==(covariant DatabaseSubtitlesInfo other) {
     if (identical(this, other)) return true;
 
     return other.videoId == videoId &&

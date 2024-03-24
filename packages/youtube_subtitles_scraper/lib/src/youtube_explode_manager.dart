@@ -3,10 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:unique_key_mutex/unique_key_mutex.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-import 'package:youtube_subtitles_scraper/src/models/captions_info.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
-
-import 'utils/language_factory.dart';
 
 @immutable
 final class YoutubeExplodeManager {
@@ -44,7 +41,7 @@ final class YoutubeExplodeManager {
             uri: track.url,
             info: CaptionsInfo(
               videoId: youtubeVideoId,
-              language: LanguageFactory.fromCode(
+              language: Language.fromCode(
                 track.url.queryParameters['tlang'] ??
                     track.url.queryParameters['lang'],
               ),

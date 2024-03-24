@@ -6,6 +6,4 @@ export 'src/subtitles_scraper.dart';
 export 'src/models/scraped_captions.dart';
 export 'src/models/source_captions.dart';
 export 'src/models/captions_info.dart';
-export 'src/exceptions/exceptions.dart';
-export 'src/utils/language_factory.dart';
 export 'package:languages/languages.dart';

@@ -7,7 +7,7 @@ import 'package:subtitles_parser/subtitles_parser.dart';
 import 'package:subtitles_player/subtitles_player.dart';
 import 'package:value_notifier_transformer/value_notifier_transformer.dart';
 
-import '../../../models/subtitles/consumable_subtitles.dart';
+import '../../models/subtitles/consumable_caption.dart';
 import '../../../models/subtitles/subtitles_player_value.dart';
 import 'subtitles_config_provider.dart';
 
@@ -61,12 +61,12 @@ class MultiSubtitlesPlayer extends StateNotifier<SubtitlesPlayerValue> {
               for (int i = 0;
                   i < max(mainSubtitles.length, translatedSubtitles.length);
                   i++)
-                ConsumableSubtitles(
+                ConsumableCaption(
                   mainSubtitle: mainSubtitles.elementAtOrNull(i),
                   translatedSubtitle: translatedSubtitles.elementAtOrNull(i),
                 )
             ],
-            currentSubtitles: const ConsumableSubtitles(),
+            currentSubtitles: const ConsumableCaption(),
             index:
                 mainSubtitles.getClosestIndexByDuration(playbackPosition.value),
           ),

@@ -135,8 +135,8 @@ class _$VideoDao extends VideoDao {
     this.database,
     this.changeListener,
   )   : _queryAdapter = QueryAdapter(database),
-        _videoInsertionAdapter = InsertionAdapter(database, 'videos',
-            (Video item) => <String, Object?>{'videoId': item.videoId});
+        _databaseVideoInsertionAdapter = InsertionAdapter(database, 'videos',
+            (DatabaseVideo item) => <String, Object?>{'videoId': item.videoId});
 
   final sqflite.DatabaseExecutor database;
 
@@ -144,12 +144,13 @@ class _$VideoDao extends VideoDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<Video> _videoInsertionAdapter;
+  final InsertionAdapter<DatabaseVideo> _databaseVideoInsertionAdapter;
 
   @override
-  Future<Video?> retrieveById(String videoId) async {
+  Future<DatabaseVideo?> retrieveById(String videoId) async {
     return _queryAdapter.query('SELECT * FROM videos WHERE videoId = ?1',
-        mapper: (Map<String, Object?> row) => Video(row['videoId'] as String),
+        mapper: (Map<String, Object?> row) =>
+            DatabaseVideo(row['videoId'] as String),
         arguments: [videoId]);
   }
 
@@ -160,8 +161,9 @@ class _$VideoDao extends VideoDao {
   }
 
   @override
-  Future<void> add(Video video) async {
-    await _videoInsertionAdapter.insert(video, OnConflictStrategy.abort);
+  Future<void> add(DatabaseVideo video) async {
+    await _databaseVideoInsertionAdapter.insert(
+        video, OnConflictStrategy.abort);
   }
 }
 
@@ -170,16 +172,16 @@ class _$SubtitlesInfoDao extends SubtitlesInfoDao {
     this.database,
     this.changeListener,
   )   : _queryAdapter = QueryAdapter(database),
-        _subtitlesInfoInsertionAdapter = InsertionAdapter(
+        _databaseSubtitlesInfoInsertionAdapter = InsertionAdapter(
             database,
             'subtitlesInfo',
-            (SubtitlesInfo item) => <String, Object?>{
+            (DatabaseSubtitlesInfo item) => <String, Object?>{
                   'infoId': item.infoId,
                   'videoId': item.videoId,
                   'language': item.language,
                   'captionsType':
-                      _captionsTypeStrigifier.encode(item.captionsType),
-                  'createdAt': _dateTimeStrigifier.encode(item.createdAt)
+                      _captionsTypeStringifier.encode(item.captionsType),
+                  'createdAt': _dateTimeStringifier.encode(item.createdAt)
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -188,46 +190,48 @@ class _$SubtitlesInfoDao extends SubtitlesInfoDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<SubtitlesInfo> _subtitlesInfoInsertionAdapter;
+  final InsertionAdapter<DatabaseSubtitlesInfo>
+      _databaseSubtitlesInfoInsertionAdapter;
 
   @override
-  Future<List<SubtitlesInfo>> retrieveAll() async {
+  Future<List<DatabaseSubtitlesInfo>> retrieveAll() async {
     return _queryAdapter.queryList(
         'SELECT * FROM subtitlesInfo ORDER BY createdAt ASC',
-        mapper: (Map<String, Object?> row) => SubtitlesInfo(
+        mapper: (Map<String, Object?> row) => DatabaseSubtitlesInfo(
             infoId: row['infoId'] as int?,
             videoId: row['videoId'] as String,
             language: row['language'] as String,
             captionsType:
-                _captionsTypeStrigifier.decode(row['captionsType'] as String),
-            createdAt: _dateTimeStrigifier.decode(row['createdAt'] as String)));
+                _captionsTypeStringifier.decode(row['captionsType'] as String),
+            createdAt:
+                _dateTimeStringifier.decode(row['createdAt'] as String)));
   }
 
   @override
-  Future<List<SubtitlesInfo>> retrieveByVideoId(String videoId) async {
+  Future<List<DatabaseSubtitlesInfo>> retrieveByVideoId(String videoId) async {
     return _queryAdapter.queryList(
         'SELECT * FROM subtitlesInfo WHERE videoId = ?1 ORDER BY createdAt ASC',
-        mapper: (Map<String, Object?> row) => SubtitlesInfo(
+        mapper: (Map<String, Object?> row) => DatabaseSubtitlesInfo(
             infoId: row['infoId'] as int?,
             videoId: row['videoId'] as String,
             language: row['language'] as String,
             captionsType:
-                _captionsTypeStrigifier.decode(row['captionsType'] as String),
-            createdAt: _dateTimeStrigifier.decode(row['createdAt'] as String)),
+                _captionsTypeStringifier.decode(row['captionsType'] as String),
+            createdAt: _dateTimeStringifier.decode(row['createdAt'] as String)),
         arguments: [videoId]);
   }
 
   @override
-  Future<SubtitlesInfo?> retrieveByInfoId(int infoId) async {
+  Future<DatabaseSubtitlesInfo?> retrieveByInfoId(int infoId) async {
     return _queryAdapter.query(
         'SELECT * FROM subtitlesInfo WHERE infoId = ?1 ORDER BY createdAt ASC',
-        mapper: (Map<String, Object?> row) => SubtitlesInfo(
+        mapper: (Map<String, Object?> row) => DatabaseSubtitlesInfo(
             infoId: row['infoId'] as int?,
             videoId: row['videoId'] as String,
             language: row['language'] as String,
             captionsType:
-                _captionsTypeStrigifier.decode(row['captionsType'] as String),
-            createdAt: _dateTimeStrigifier.decode(row['createdAt'] as String)),
+                _captionsTypeStringifier.decode(row['captionsType'] as String),
+            createdAt: _dateTimeStringifier.decode(row['createdAt'] as String)),
         arguments: [infoId]);
   }
 
@@ -251,8 +255,8 @@ class _$SubtitlesInfoDao extends SubtitlesInfoDao {
   }
 
   @override
-  Future<void> add(SubtitlesInfo subtitlesInfo) async {
-    await _subtitlesInfoInsertionAdapter.insert(
+  Future<void> add(DatabaseSubtitlesInfo subtitlesInfo) async {
+    await _databaseSubtitlesInfoInsertionAdapter.insert(
         subtitlesInfo, OnConflictStrategy.abort);
   }
 }
@@ -262,10 +266,10 @@ class _$SubtitlesDao extends SubtitlesDao {
     this.database,
     this.changeListener,
   )   : _queryAdapter = QueryAdapter(database),
-        _subtitlesInsertionAdapter = InsertionAdapter(
+        _databaseSubtitlesInsertionAdapter = InsertionAdapter(
             database,
             'subtitles',
-            (Subtitles item) => <String, Object?>{
+            (DatabaseSubtitles item) => <String, Object?>{
                   'id': item.id,
                   'infoId': item.infoId,
                   'subtitles': item.subtitles
@@ -277,12 +281,12 @@ class _$SubtitlesDao extends SubtitlesDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<Subtitles> _subtitlesInsertionAdapter;
+  final InsertionAdapter<DatabaseSubtitles> _databaseSubtitlesInsertionAdapter;
 
   @override
-  Future<List<Subtitles>> retrieveByInfoId(int infoId) async {
+  Future<List<DatabaseSubtitles>> retrieveByInfoId(int infoId) async {
     return _queryAdapter.queryList('SELECT * FROM subtitles WHERE infoId = ?1',
-        mapper: (Map<String, Object?> row) => Subtitles(
+        mapper: (Map<String, Object?> row) => DatabaseSubtitles(
             id: row['id'] as int?,
             infoId: row['infoId'] as int,
             subtitles: row['subtitles'] as String),
@@ -290,9 +294,9 @@ class _$SubtitlesDao extends SubtitlesDao {
   }
 
   @override
-  Future<List<Subtitles>> retrieveAll() async {
+  Future<List<DatabaseSubtitles>> retrieveAll() async {
     return _queryAdapter.queryList('SELECT * FROM subtitles',
-        mapper: (Map<String, Object?> row) => Subtitles(
+        mapper: (Map<String, Object?> row) => DatabaseSubtitles(
             id: row['id'] as int?,
             infoId: row['infoId'] as int,
             subtitles: row['subtitles'] as String));
@@ -310,8 +314,8 @@ class _$SubtitlesDao extends SubtitlesDao {
   }
 
   @override
-  Future<void> add(Subtitles subtitles) async {
-    await _subtitlesInsertionAdapter.insert(
+  Future<void> add(DatabaseSubtitles subtitles) async {
+    await _databaseSubtitlesInsertionAdapter.insert(
         subtitles, OnConflictStrategy.abort);
   }
 }
@@ -321,10 +325,10 @@ class _$SubtitlesSourceDao extends SubtitlesSourceDao {
     this.database,
     this.changeListener,
   )   : _queryAdapter = QueryAdapter(database),
-        _subtitlesSourceInsertionAdapter = InsertionAdapter(
+        _datebaseSubtitlesSourceInsertionAdapter = InsertionAdapter(
             database,
             'subtitlesSource',
-            (SubtitlesSource item) => <String, Object?>{
+            (DatebaseSubtitlesSource item) => <String, Object?>{
                   'id': item.id,
                   'infoId': item.infoId,
                   'subtitles_source': item.subtitlesSource
@@ -336,13 +340,14 @@ class _$SubtitlesSourceDao extends SubtitlesSourceDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<SubtitlesSource> _subtitlesSourceInsertionAdapter;
+  final InsertionAdapter<DatebaseSubtitlesSource>
+      _datebaseSubtitlesSourceInsertionAdapter;
 
   @override
-  Future<List<SubtitlesSource>> retrieveByInfoId(int infoId) async {
+  Future<List<DatebaseSubtitlesSource>> retrieveByInfoId(int infoId) async {
     return _queryAdapter.queryList(
         'SELECT * FROM subtitlesSource WHERE infoId = ?1',
-        mapper: (Map<String, Object?> row) => SubtitlesSource(
+        mapper: (Map<String, Object?> row) => DatebaseSubtitlesSource(
             id: row['id'] as int?,
             infoId: row['infoId'] as int,
             subtitlesSource: row['subtitles_source'] as String),
@@ -350,9 +355,9 @@ class _$SubtitlesSourceDao extends SubtitlesSourceDao {
   }
 
   @override
-  Future<List<SubtitlesSource>> retrieveAll() async {
+  Future<List<DatebaseSubtitlesSource>> retrieveAll() async {
     return _queryAdapter.queryList('SELECT * FROM subtitlesSource',
-        mapper: (Map<String, Object?> row) => SubtitlesSource(
+        mapper: (Map<String, Object?> row) => DatebaseSubtitlesSource(
             id: row['id'] as int?,
             infoId: row['infoId'] as int,
             subtitlesSource: row['subtitles_source'] as String));
@@ -371,12 +376,12 @@ class _$SubtitlesSourceDao extends SubtitlesSourceDao {
   }
 
   @override
-  Future<void> add(SubtitlesSource subtitlesSource) async {
-    await _subtitlesSourceInsertionAdapter.insert(
+  Future<void> add(DatebaseSubtitlesSource subtitlesSource) async {
+    await _datebaseSubtitlesSourceInsertionAdapter.insert(
         subtitlesSource, OnConflictStrategy.abort);
   }
 }
 
 // ignore_for_file: unused_element
-final _dateTimeStrigifier = DateTimeStringifier();
-final _captionsTypeStrigifier = CaptionsTypeStringifier();
+final _dateTimeStringifier = DateTimeStringifier();
+final _captionsTypeStringifier = CaptionsTypeStringifier();

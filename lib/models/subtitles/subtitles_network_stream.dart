@@ -4,7 +4,7 @@ import 'subtitles_bundle.dart';
 
 @immutable
 final class SubtitlesNetworkStream {
-  final Iterable<SubtitlesBundle>? subtitlesBundles;
+  final Iterable<CaptionsBundle>? subtitlesBundles;
   final double downloadProgress;
   const SubtitlesNetworkStream({
     this.subtitlesBundles,
@@ -14,7 +14,7 @@ final class SubtitlesNetworkStream {
             : downloadProgress < 1.0);
 
   SubtitlesNetworkStream copyWith({
-    Iterable<SubtitlesBundle>? subtitlesBundles,
+    Iterable<CaptionsBundle>? subtitlesBundles,
     double? downloadProgress,
   }) {
     return SubtitlesNetworkStream(

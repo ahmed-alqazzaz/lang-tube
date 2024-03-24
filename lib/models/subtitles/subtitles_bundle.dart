@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
 @immutable
-final class SubtitlesBundle {
+final class CaptionsBundle {
   final ScrapedCaptions mainSubtitles;
   final ScrapedCaptions translatedSubtitles;
-  const SubtitlesBundle({
+  const CaptionsBundle({
     required this.mainSubtitles,
     required this.translatedSubtitles,
   });
@@ -16,7 +16,7 @@ final class SubtitlesBundle {
       'SubtitlesBundle(mainSubtitles: $mainSubtitles, translatedSubtitles: $translatedSubtitles)';
 
   @override
-  bool operator ==(covariant SubtitlesBundle other) {
+  bool operator ==(covariant CaptionsBundle other) {
     if (identical(this, other)) return true;
 
     return other.mainSubtitles == mainSubtitles &&
@@ -26,11 +26,11 @@ final class SubtitlesBundle {
   @override
   int get hashCode => mainSubtitles.hashCode ^ translatedSubtitles.hashCode;
 
-  SubtitlesBundle copyWith({
+  CaptionsBundle copyWith({
     ScrapedCaptions? mainSubtitles,
     ScrapedCaptions? translatedSubtitles,
   }) {
-    return SubtitlesBundle(
+    return CaptionsBundle(
       mainSubtitles: mainSubtitles ?? this.mainSubtitles,
       translatedSubtitles: translatedSubtitles ?? this.translatedSubtitles,
     );

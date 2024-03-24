@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:floor/floor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:lang_tube/crud/subtitles_cache_manager/dao/video_dao.dart';
 import 'package:lang_tube/crud/subtitles_cache_manager/type_converters/captions_type_stringifier.dart';
 import 'package:lang_tube/crud/subtitles_cache_manager/type_converters/datetime_stringifier.dart';
@@ -19,10 +20,10 @@ part 'database.g.dart'; // the generated code will be there
 @Database(
   version: 1,
   entities: [
-    Video,
-    SubtitlesInfo,
-    Subtitles,
-    SubtitlesSource,
+    DatabaseVideo,
+    DatabaseSubtitlesInfo,
+    DatabaseSubtitles,
+    DatebaseSubtitlesSource,
   ],
 )
 abstract class SubtitlesDatabase extends FloorDatabase {
@@ -36,7 +37,7 @@ abstract class SubtitlesDatabase extends FloorDatabase {
   SubtitlesDao get subtitlesDao;
   SubtitlesSourceDao get subtitlesSourceDao;
 
-  static const String databaseName = 'subtitles_cacheee.db';
+  static const String databaseName = 'subtitles_cache.db';
 
   // Table names
   static const String videosTable = 'videos';

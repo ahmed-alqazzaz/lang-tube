@@ -1,12 +1,10 @@
 import 'package:collection/collection.dart';
-import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/foundation.dart';
+import 'package:once/once.dart';
 import 'package:subtitles_parser/subtitles_parser.dart';
-import 'package:unique_key_mutex/unique_key_mutex.dart';
-import 'package:youtube_subtitles_scraper/src/models/captions_info.dart';
 import 'package:youtube_subtitles_scraper/src/utils/cache_expiration_manager.dart';
-import 'package:youtube_subtitles_scraper/src/utils/cache_redundancy_manager.dart';
 import 'package:youtube_subtitles_scraper/src/utils/language_filter.dart';
+import 'package:youtube_subtitles_scraper/src/utils/sources_count_manager.dart';
 import 'package:youtube_subtitles_scraper/src/youtube_explode_manager.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
@@ -20,13 +18,14 @@ final class YoutubeSubtitlesScraper {
           cacheManager: cacheManager,
         ),
         _cacheManager = cacheManager {
-    _cacheManager
-        .deleteUnnecessarySources()
-        .whenComplete(() => _cacheManager.clearExpiredSources(
-              onSourcesDeleted: _onSourcesDeleted,
-            ))
-        .whenComplete(_cacheManager.deleteUnnecessarySources);
+    Once.runDaily(
+      "YoutubeScraperMaintainanceKey",
+      callback: () => cacheManager
+        ..clearExpiredSources()
+        ..limitSourcesCount(),
+    );
   }
+
   final CacheManager _cacheManager;
   final SubtitlesScraperApiClient _apiClient;
   final YoutubeExplodeManager _youtubeExplodeManager;
@@ -34,95 +33,63 @@ final class YoutubeSubtitlesScraper {
   // in case translated language is provided,
   // the function will return a translated version
   // the main language subtitle
-  Future<List<ScrapedCaptions>?> scrapeSubtitles({
+  Future<List<ScrapedCaptions>> scrapeSubtitles({
     required String youtubeVideoId,
     required List<Language> mainLanguages,
     Language? translatedLanguage,
     void Function(double)? onProgressUpdated,
   }) async {
     final progressList = <double>[];
-    Future<ScrapedCaptions> scrape(SourceCaptions captions,
-        [int recusrsionCount = 0]) async {
-      try {
-        final progressIndex = progressList.length;
-        progressList.add(0.25);
-        return await _scrapeAndCacheSubtitles(
-          youtubeVideoId: youtubeVideoId,
-          sourceCaptions: translatedLanguage == null
-              ? captions
-              : captions.autoTranslate(translatedLanguage),
-          language: translatedLanguage ?? captions.info.language!,
-          onProgressUpdated: (progress) {
-            progressList[progressIndex] = 0.25 + progress * 0.75;
-            onProgressUpdated?.call(progressList.average);
-          },
-        );
-      } on SubtitlesScraperBlockedRequestException {
-        printRed('recursively scraping subs');
-        if (recusrsionCount == 0) {
-          return scrape(captions, recusrsionCount + 1);
-        }
-        rethrow;
-      }
-    }
-
-    onProgressUpdated?.call(0);
-    // check if cache exists
-    final cacheSubtitles = <ScrapedCaptions>[];
-    for (var i = 0;
-        i < (translatedLanguage != null ? 1 : mainLanguages.length);
-        i++) {
-      cacheSubtitles.addAll(await _cacheManager.retrieveSubtitles(
-        videoId: youtubeVideoId,
-        language: (translatedLanguage ?? mainLanguages[i]).name,
-      ));
-    }
-
-    if (cacheSubtitles.isNotEmpty) {
-      onProgressUpdated?.call(1.0);
-      return cacheSubtitles;
-    }
-
-    // in case no cache found
+    onProgressUpdated?.call(0.125);
     final sourceCaptions = await _youtubeExplodeManager
         .fetchAllCaptions(youtubeVideoId: youtubeVideoId)
         .then((captions) => captions.filteredByLanguage(mainLanguages));
     onProgressUpdated?.call(0.25);
-    final subtitles = await Future.wait(sourceCaptions.map(scrape));
-    onProgressUpdated?.call(1.0);
-    return subtitles.isEmpty ? null : subtitles;
+    return await Future.wait(
+      sourceCaptions.map(
+        (captions) async {
+          final progressIndex = progressList.length;
+          progressList.add(0.25);
+          return await _scrapeFromSourceCaptions(
+            youtubeVideoId: youtubeVideoId,
+            sourceCaptions: translatedLanguage == null
+                ? captions
+                : captions.autoTranslate(translatedLanguage),
+            language: translatedLanguage ?? captions.info.language!,
+            onProgressUpdated: (progress) {
+              progressList[progressIndex] = 0.25 + progress * 0.75;
+              onProgressUpdated?.call(progressList.average);
+            },
+          );
+        },
+      ),
+    ).whenComplete(() => onProgressUpdated?.call(1.0));
   }
 
-  Future<ScrapedCaptions> _scrapeAndCacheSubtitles({
+  Future<ScrapedCaptions> _scrapeFromSourceCaptions({
     required String youtubeVideoId,
     required SourceCaptions sourceCaptions,
     required Language language,
     void Function(double)? onProgressUpdated,
-  }) async {
-    final rawSubtitles = await _apiClient.fetchSubtitles(
-        url: sourceCaptions.uri, onProgressUpdated: onProgressUpdated);
-    final parsedSubtitles = await SubtitlesParser.parseSrv1(rawSubtitles);
-    final scrapedSubtitles = ScrapedCaptions(
-      subtitles: parsedSubtitles,
-      info: CaptionsInfo(
-        videoId: youtubeVideoId,
-        isAutoGenerated: sourceCaptions.info.isAutoGenerated,
-        language: language,
-      ),
-    );
-    await _cacheManager.cacheCaptions(scrapedSubtitles);
-    return scrapedSubtitles;
-  }
-
-  Future<void> _onSourcesDeleted(String videoId) async {
-    final mutex = UniqueKeyMutex(key: "Source Deletion Mutex");
-    try {
-      await mutex.acquire();
-      await _youtubeExplodeManager.fetchAllCaptions(youtubeVideoId: videoId);
-    } finally {
-      mutex.release();
-    }
-  }
+  }) async =>
+      ScrapedCaptions(
+        subtitles: await SubtitlesParser.parseSrv1(
+          await _apiClient
+              .fetchSubtitles(
+                url: sourceCaptions.uri,
+                onProgressUpdated: onProgressUpdated,
+              )
+              .whenComplete(
+                () => _cacheManager.clearSources(
+                    videoId: youtubeVideoId, language: language.name),
+              ),
+        ),
+        info: CaptionsInfo(
+          videoId: youtubeVideoId,
+          isAutoGenerated: sourceCaptions.info.isAutoGenerated,
+          language: language,
+        ),
+      );
 
   Future<void> dispose() async => _youtubeExplodeManager.close();
 }

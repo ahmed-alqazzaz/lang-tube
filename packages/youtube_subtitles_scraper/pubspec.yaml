@@ -26,6 +26,7 @@ dependencies:
   colourful_print:
     path: ../colourful_print
   cookie_jar: ^4.0.8
+  once: ^1.6.1
 
 dev_dependencies:
   flutter_test:

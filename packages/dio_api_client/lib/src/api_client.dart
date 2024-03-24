@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -17,9 +18,11 @@ class DioApiClient {
       );
     }
   }
-  Future<Response<T>> fetchUri<T>(Uri uri,
+  Future<T?> fetchUri<T>(Uri uri,
           {void Function(int, int)? onReceiveProgress}) async =>
-      await _dio.getUri<T>(uri, onReceiveProgress: onReceiveProgress);
+      await _dio
+          .getUri<T>(uri, onReceiveProgress: onReceiveProgress)
+          .then((res) => res.data);
 
   static Future<String> get _cacheDirectory async =>
       await getApplicationDocumentsDirectory().then(

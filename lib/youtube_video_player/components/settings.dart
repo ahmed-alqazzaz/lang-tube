@@ -14,8 +14,7 @@ class SubtitlesConfig extends ConsumerStatefulWidget {
 }
 
 class _SubtitlesSettingsState extends ConsumerState<SubtitlesConfig> {
-  void _updateConfig(
-      {bool? showTranslations, SubtitlesBundle? selectedBundle}) {
+  void _updateConfig({bool? showTranslations, CaptionsBundle? selectedBundle}) {
     final config = ref.read(subtitlesConfigProvider);
     if (config != null) {
       ref.read(subtitlesConfigProvider.notifier).state = config.copyWith(
@@ -51,7 +50,7 @@ class _SubtitlesSettingsState extends ConsumerState<SubtitlesConfig> {
     );
   }
 
-  Widget _optionBuilder({required SubtitlesBundle bundle}) {
+  Widget _optionBuilder({required CaptionsBundle bundle}) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Consumer(

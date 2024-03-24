@@ -1,8 +1,9 @@
 import 'package:mutex/mutex.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../models/subtitles/cached_source_captions.dart';
-import '../../../models/subtitles/cached_subtitles.dart';
-import '../../../models/subtitles/captions_type.dart';
+import '../../../models/subtitles/cached_captions.dart';
+import '../utils/db_info_matcher.dart';
 import 'cache_manager_impl.dart';
 
 class MutexedCacheManager implements CaptionsCacheManagerImpl {
@@ -11,7 +12,7 @@ class MutexedCacheManager implements CaptionsCacheManagerImpl {
   const MutexedCacheManager(this._cacheManager);
 
   @override
-  Future<void> cacheCaptions(CachedSubtitles subtitles) async {
+  Future<void> cacheCaptions(CachedCaptions subtitles) async {
     await _mutex.acquire();
     return _cacheManager.cacheCaptions(subtitles).whenComplete(
           _mutex.release,
@@ -27,44 +28,55 @@ class MutexedCacheManager implements CaptionsCacheManagerImpl {
   }
 
   @override
-  Future<Iterable<CachedSubtitles>> retrieveSubtitles(
-      {String? videoId, String? language, CaptionsType? type}) async {
+  Stream<CachedCaptions> retrieveSubtitles({InfoFilter? filter}) async* {
     await _mutex.acquire();
-    return _cacheManager
-        .retrieveSubtitles(videoId: videoId, language: language, type: type)
-        .whenComplete(_mutex.release);
+    yield* _cacheManager.retrieveSubtitles(filter: filter).doOnFinished(
+          _mutex.release,
+        );
   }
 
   @override
-  Future<Iterable<CachedSourceCaptions>> retrieveSources(
-      {String? videoId, String? language, CaptionsType? type}) async {
+  Stream<CachedSourceCaptions> retrieveSources({InfoFilter? filter}) async* {
     await _mutex.acquire();
-    return _cacheManager
-        .retrieveSources(videoId: videoId, language: language, type: type)
-        .whenComplete(_mutex.release);
+    yield* _cacheManager.retrieveSources(filter: filter).doOnFinished(
+          _mutex.release,
+        );
   }
 
   @override
-  Future<void> clearCaptions(
-      {String? videoId, String? language, CaptionsType? type}) async {
+  Future<void> clearCaptions({InfoFilter? filter}) async {
     await _mutex.acquire();
-    return _cacheManager
-        .clearCaptions(videoId: videoId, language: language, type: type)
-        .whenComplete(_mutex.release);
+    return _cacheManager.clearCaptions(filter: filter).whenComplete(
+          _mutex.release,
+        );
   }
 
   @override
-  Future<void> clearSources(
-      {String? videoId, String? language, CaptionsType? type}) async {
+  Future<void> clearSources({InfoFilter? filter}) async {
     await _mutex.acquire();
-    return _cacheManager
-        .clearSources(videoId: videoId, language: language, type: type)
-        .whenComplete(_mutex.release);
+    return _cacheManager.clearSources(filter: filter).whenComplete(
+          _mutex.release,
+        );
   }
 
   @override
   Future<void> close() async {
     await _mutex.acquire();
     return _cacheManager.close().whenComplete(_mutex.release);
+  }
+}
+
+extension _StreamExtension<T> on Stream<T> {
+  Stream<T> doOnFinished(void Function() callback) {
+    bool isCalled = false;
+    void _callback() {
+      if (isCalled) return;
+      isCalled = true;
+      callback();
+    }
+
+    return doOnDone(_callback).doOnCancel(_callback).doOnError((p0, p1) {
+      _callback();
+    });
   }
 }

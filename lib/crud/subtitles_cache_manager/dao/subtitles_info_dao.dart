@@ -6,19 +6,19 @@ import '../entity/subtitles_info.dart';
 @dao
 abstract class SubtitlesInfoDao {
   @insert
-  Future<void> add(SubtitlesInfo subtitlesInfo);
+  Future<void> add(DatabaseSubtitlesInfo subtitlesInfo);
 
   @Query(
       'SELECT * FROM ${SubtitlesDatabase.subtitlesInfoTable} ORDER BY ${SubtitlesDatabase.sourceCreatedAtColumn} ASC')
-  Future<List<SubtitlesInfo>> retrieveAll();
+  Future<List<DatabaseSubtitlesInfo>> retrieveAll();
 
   @Query(
       'SELECT * FROM ${SubtitlesDatabase.subtitlesInfoTable} WHERE ${SubtitlesDatabase.videoIdColumn} = :videoId ORDER BY ${SubtitlesDatabase.sourceCreatedAtColumn} ASC')
-  Future<List<SubtitlesInfo>> retrieveByVideoId(String videoId);
+  Future<List<DatabaseSubtitlesInfo>> retrieveByVideoId(String videoId);
 
   @Query(
       'SELECT * FROM ${SubtitlesDatabase.subtitlesInfoTable} WHERE ${SubtitlesDatabase.infoIdColumn} = :infoId ORDER BY ${SubtitlesDatabase.sourceCreatedAtColumn} ASC')
-  Future<SubtitlesInfo?> retrieveByInfoId(int infoId);
+  Future<DatabaseSubtitlesInfo?> retrieveByInfoId(int infoId);
 
   @Query('DELETE FROM ${SubtitlesDatabase.subtitlesInfoTable}')
   Future<void> deleteAll();
@@ -31,7 +31,7 @@ abstract class SubtitlesInfoDao {
       'DELETE FROM ${SubtitlesDatabase.subtitlesInfoTable} WHERE ${SubtitlesDatabase.videoIdColumn} = :videoId')
   Future<void> deleteByVideoId(String videoId);
 
-  Future<int> addIfNotPresent(SubtitlesInfo subtitlesInfo) async {
+  Future<int> addIfNotPresent(DatabaseSubtitlesInfo subtitlesInfo) async {
     final subtitlesInfoList = await retrieveByVideoId(subtitlesInfo.videoId);
     if (!subtitlesInfoList.contains(subtitlesInfo)) await add(subtitlesInfo);
     return retrieveByVideoId(subtitlesInfo.videoId).then(

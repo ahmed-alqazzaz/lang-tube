@@ -1,5 +1,6 @@
+import 'package:lang_tube/crud/subtitles_cache_manager/utils/db_info_matcher.dart';
 import 'package:lang_tube/models/subtitles/captions_type.dart';
-import '../../../models/subtitles/cached_subtitles.dart';
+import '../../../models/subtitles/cached_captions.dart';
 import 'cache_manager_impl.dart';
 
 /// Manages the cache for user-uploaded captions.
@@ -8,21 +9,29 @@ final class UserUploadedCaptionsCacheManager {
       : _cacheManager = cacheManager;
   final CaptionsCacheManagerImpl _cacheManager;
 
-  Future<void> cacheCaptions(CachedSubtitles subtitles) =>
+  Future<void> cacheCaptions(CachedCaptions subtitles) =>
       _cacheManager.cacheCaptions(subtitles);
 
-  Future<Iterable<CachedSubtitles>> retrieveSubtitles(
+  Future<List<CachedCaptions>> retrieveSubtitles(
           {String? videoId, String? language}) =>
-      _cacheManager.retrieveSubtitles(
-        videoId: videoId,
-        language: language,
-        type: CaptionsType.userUploaded,
-      );
+      _cacheManager
+          .retrieveSubtitles(
+            filter: (dbInfo) => dbInfo.matches(
+              videoId: videoId,
+              language: language,
+              type: CaptionsType.userUploaded,
+            ),
+          )
+          .toList();
 
   Future<void> clearCaptions({String? videoId, String? language}) =>
       _cacheManager.clearCaptions(
-        videoId: videoId,
-        language: language,
-        type: CaptionsType.userUploaded,
+        filter: (dbInfo) => dbInfo.matches(
+          videoId: videoId,
+          language: language,
+          type: CaptionsType.userUploaded,
+        ),
       );
+
+  Future<void> close() async => await _cacheManager.close();
 }

@@ -14,11 +14,11 @@ import 'subtitles_info.dart';
     ForeignKey(
       childColumns: [SubtitlesDatabase.infoIdColumn],
       parentColumns: [SubtitlesDatabase.infoIdColumn],
-      entity: SubtitlesInfo,
+      entity: DatabaseSubtitlesInfo,
     ),
   ],
 )
-final class Subtitles {
+final class DatabaseSubtitles {
   @PrimaryKey(autoGenerate: true)
   final int? id;
 
@@ -28,10 +28,11 @@ final class Subtitles {
   @ColumnInfo(name: SubtitlesDatabase.subtitlesColumn)
   final String subtitles;
 
-  const Subtitles({this.id, required this.infoId, required this.subtitles});
+  const DatabaseSubtitles(
+      {this.id, required this.infoId, required this.subtitles});
 
   @override
-  bool operator ==(covariant Subtitles other) {
+  bool operator ==(covariant DatabaseSubtitles other) {
     if (identical(this, other)) return true;
 
     return other.infoId == infoId && other.subtitles == subtitles;
@@ -43,11 +44,11 @@ final class Subtitles {
   @override
   String toString() => 'Subtitles(infoId: $infoId, subtitles: $subtitles)';
 
-  Subtitles copyWith({
+  DatabaseSubtitles copyWith({
     int? infoId,
     String? subtitles,
   }) {
-    return Subtitles(
+    return DatabaseSubtitles(
       infoId: infoId ?? this.infoId,
       subtitles: subtitles ?? this.subtitles,
     );
@@ -60,8 +61,8 @@ final class Subtitles {
     };
   }
 
-  factory Subtitles.fromMap(Map<String, dynamic> map) {
-    return Subtitles(
+  factory DatabaseSubtitles.fromMap(Map<String, dynamic> map) {
+    return DatabaseSubtitles(
       infoId: map['infoId'] as int,
       subtitles: map['subtitles'] as String,
     );
@@ -69,6 +70,6 @@ final class Subtitles {
 
   String toJson() => json.encode(toMap());
 
-  factory Subtitles.fromJson(String source) =>
-      Subtitles.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory DatabaseSubtitles.fromJson(String source) =>
+      DatabaseSubtitles.fromMap(json.decode(source) as Map<String, dynamic>);
 }

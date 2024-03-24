@@ -14,11 +14,11 @@ import 'subtitles_info.dart';
     ForeignKey(
       childColumns: [SubtitlesDatabase.infoIdColumn],
       parentColumns: [SubtitlesDatabase.infoIdColumn],
-      entity: SubtitlesInfo,
+      entity: DatabaseSubtitlesInfo,
     ),
   ],
 )
-final class SubtitlesSource {
+final class DatebaseSubtitlesSource {
   @PrimaryKey(autoGenerate: true)
   final int? id;
 
@@ -28,15 +28,15 @@ final class SubtitlesSource {
   @ColumnInfo(name: SubtitlesDatabase.subtitlesSourceColumn)
   final String subtitlesSource;
 
-  const SubtitlesSource(
+  const DatebaseSubtitlesSource(
       {this.id, required this.infoId, required this.subtitlesSource});
 
-  SubtitlesSource copyWith({
+  DatebaseSubtitlesSource copyWith({
     int? id,
     int? infoId,
     String? subtitlesSource,
   }) {
-    return SubtitlesSource(
+    return DatebaseSubtitlesSource(
       id: id ?? this.id,
       infoId: infoId ?? this.infoId,
       subtitlesSource: subtitlesSource ?? this.subtitlesSource,
@@ -48,7 +48,7 @@ final class SubtitlesSource {
       'SubtitlesSource(id: $id, infoId: $infoId, subtitlesSource: $subtitlesSource)';
 
   @override
-  bool operator ==(covariant SubtitlesSource other) {
+  bool operator ==(covariant DatebaseSubtitlesSource other) {
     if (identical(this, other)) return true;
 
     return other.id == id &&
@@ -67,8 +67,8 @@ final class SubtitlesSource {
     };
   }
 
-  factory SubtitlesSource.fromMap(Map<String, dynamic> map) {
-    return SubtitlesSource(
+  factory DatebaseSubtitlesSource.fromMap(Map<String, dynamic> map) {
+    return DatebaseSubtitlesSource(
       id: map['id'] != null ? map['id'] as int : null,
       infoId: map['infoId'] as int,
       subtitlesSource: map['subtitlesSource'] as String,
@@ -77,6 +77,7 @@ final class SubtitlesSource {
 
   String toJson() => json.encode(toMap());
 
-  factory SubtitlesSource.fromJson(String source) =>
-      SubtitlesSource.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory DatebaseSubtitlesSource.fromJson(String source) =>
+      DatebaseSubtitlesSource.fromMap(
+          json.decode(source) as Map<String, dynamic>);
 }

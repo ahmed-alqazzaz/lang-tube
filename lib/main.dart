@@ -24,7 +24,7 @@ import 'router/routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await UserAgentManager.instance.initilize();
+  await UserAgent.instance.initilize();
   if (Platform.isAndroid) {
     await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
   }

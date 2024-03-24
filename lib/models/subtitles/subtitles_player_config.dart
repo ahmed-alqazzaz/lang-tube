@@ -4,7 +4,7 @@ import 'subtitles_bundle.dart';
 @immutable
 final class SubtitlesPlayerConfig {
   final bool showTranslations;
-  final SubtitlesBundle selectedBundle;
+  final CaptionsBundle selectedBundle;
   const SubtitlesPlayerConfig({
     required this.showTranslations,
     required this.selectedBundle,
@@ -27,7 +27,7 @@ final class SubtitlesPlayerConfig {
 
   SubtitlesPlayerConfig copyWith({
     bool? showTranslations,
-    SubtitlesBundle? selectedBundle,
+    CaptionsBundle? selectedBundle,
   }) {
     return SubtitlesPlayerConfig(
       showTranslations: showTranslations ?? this.showTranslations,

@@ -6,13 +6,13 @@ import '../entity/subtitles_source.dart';
 @dao
 abstract class SubtitlesSourceDao {
   @insert
-  Future<void> add(SubtitlesSource subtitlesSource);
+  Future<void> add(DatebaseSubtitlesSource subtitlesSource);
 
   @Query(
       'SELECT * FROM ${SubtitlesDatabase.subtitlesSourceTable} WHERE ${SubtitlesDatabase.infoIdColumn} = :infoId')
-  Future<List<SubtitlesSource>> retrieveByInfoId(int infoId);
+  Future<List<DatebaseSubtitlesSource>> retrieveByInfoId(int infoId);
   @Query('SELECT * FROM ${SubtitlesDatabase.subtitlesSourceTable}')
-  Future<List<SubtitlesSource>> retrieveAll();
+  Future<List<DatebaseSubtitlesSource>> retrieveAll();
 
   @Query('DELETE FROM ${SubtitlesDatabase.subtitlesSourceTable}')
   Future<void> deleteAll();
@@ -21,7 +21,7 @@ abstract class SubtitlesSourceDao {
       'DELETE FROM ${SubtitlesDatabase.subtitlesSourceTable} WHERE ${SubtitlesDatabase.infoIdColumn} = :infoId')
   Future<void> deleteByInfoId(int infoId);
 
-  Future<void> addIfNotPresent(SubtitlesSource subtitlesSource) async {
+  Future<void> addIfNotPresent(DatebaseSubtitlesSource subtitlesSource) async {
     final existingSubtitlesSource =
         await retrieveByInfoId(subtitlesSource.infoId);
     if (!existingSubtitlesSource.contains(subtitlesSource)) {
