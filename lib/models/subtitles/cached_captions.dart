@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lang_tube/models/subtitles/cached_captions_info.dart';
-import 'package:lang_tube/models/subtitles/captions_type.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
+
+import 'cached_captions_info.dart';
+import 'captions_type.dart';
 
 @immutable
 final class CachedCaptions extends ScrapedCaptions {

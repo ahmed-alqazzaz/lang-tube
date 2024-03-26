@@ -1,7 +1,6 @@
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/foundation.dart';
-import 'package:lang_tube/crud/subtitles_cache_manager/utils/model_mapper.dart';
-
+import '../utils/model_mapper.dart';
 import '../../../models/subtitles/cached_captions_info.dart';
 import '../../../models/subtitles/cached_source_captions.dart';
 import '../../../models/subtitles/cached_captions.dart';

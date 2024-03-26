@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/models/video_recommendations/recommended_video.dart';
-import 'package:lang_tube/video_recommendations.dart/utils/language_filter.dart';
-import 'package:lang_tube/video_recommendations.dart/utils/ranker.dart';
-import 'package:lang_tube/video_recommendations.dart/recommendations_manager/recommendations_state.dart';
-import 'package:lang_tube/video_recommendations.dart/utils/diversity_score.dart';
+import '../utils/diversity_score.dart';
+import '../utils/language_filter.dart';
+import '../utils/ranker.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
+
+import '../../models/video_recommendations/recommended_video.dart';
+import 'recommendations_state.dart';
 
 typedef NavigationDepthCallback = int Function();
 typedef RecommendationsCallback = Iterable<RecommendedVideo> Function();

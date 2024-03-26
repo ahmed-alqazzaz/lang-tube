@@ -1,10 +1,10 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:lang_tube/video_recommendations.dart/recommendations_manager/recommendations_actions_handler.dart';
-import 'package:lang_tube/video_recommendations.dart/recommendations_manager/recommendations_collector.dart';
-import 'package:lang_tube/video_recommendations.dart/recommendations_manager/recommendations_state_notifier.dart';
 import 'package:listenable_stream/listenable_stream.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
 import '../../models/video_recommendations/video_recommendations.dart';
+import 'recommendations_actions_handler.dart';
+import 'recommendations_collector.dart';
+import 'recommendations_state_notifier.dart';
 import 'youtube_scraper_cookies_storage_manager.dart';
 
 class YoutubeRecommendationsManager {

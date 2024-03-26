@@ -1,9 +1,9 @@
 import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
-import 'package:lang_tube/main.dart';
-import 'package:lang_tube/video_widgets/display_video_item.dart';
 import 'package:size_utils/size_utils.dart';
 import 'package:sized_button/sized_button.dart';
+import '../main.dart';
+import 'display_video_item.dart';
 import 'video_item.dart';
 
 class VideosCarousel extends StatelessWidget {
@@ -89,7 +89,7 @@ class VideosCarousel extends StatelessWidget {
       color: LangTube.tmp,
       textColor: Colors.white,
       onPressed: () {},
-      child: const Text("More"),
+      child: const Text('More'),
     );
   }
 

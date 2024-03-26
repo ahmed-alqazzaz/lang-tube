@@ -1,25 +1,22 @@
 import 'package:collection/collection.dart';
 import 'package:colourful_print/colourful_print.dart';
-import 'package:dio_api_client/dio_api_client.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/crud/subtitles_cache_manager/cache_manager.dart';
-import 'package:lang_tube/crud/subtitles_cache_manager/impl/user_uploaded_cache_manager.dart';
-import 'package:lang_tube/crud/subtitles_cache_manager/impl/youtube_cache_manager.dart';
-import 'package:lang_tube/providers/user_uploaded_captions_cache_provider.dart';
-import 'package:lang_tube/providers/youtube_cache_provider.dart';
 import 'package:quiver/iterables.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
+import '../crud/subtitles_cache_manager/impl/user_uploaded_cache_manager.dart';
+import '../crud/subtitles_cache_manager/impl/youtube_cache_manager.dart';
 import '../models/subtitles/subtitles_bundle.dart';
 import 'captions_scraper_client_provider.dart';
 import 'language_config_provider.dart';
+import 'user_uploaded_captions_cache_provider.dart';
+import 'youtube_cache_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   ProviderContainer container = ProviderContainer();
-  print("acquiring scraper");
+  print('acquiring scraper');
 
   await Future.delayed(const Duration(seconds: 1));
   final scraper = await container.read(captionsScraperProvider.future);
@@ -27,15 +24,15 @@ void main() async {
     ..setTargetLanguage(Language.english)
     ..setTranslationLanguage(Language.german);
   final x = Stopwatch()..start();
-  print("acquired scraper");
+  print('acquired scraper');
   await scraper.fetchSubtitlesBundle(
     youtubeVideoId: '8fEEbKJoNbU',
     onProgressUpdated: (p0) {
-      print("1: $p0");
+      print('1: $p0');
     },
   );
 
-  printRed("finnished in ${x.elapsedMilliseconds}");
+  printRed('finnished in ${x.elapsedMilliseconds}');
 }
 
 final captionsScraperProvider = FutureProvider((ref) async {

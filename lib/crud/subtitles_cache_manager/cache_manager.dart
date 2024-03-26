@@ -1,12 +1,11 @@
 import 'dart:async';
-
-import 'package:lang_tube/crud/subtitles_cache_manager/impl/user_uploaded_cache_manager.dart';
-import 'package:lang_tube/crud/subtitles_cache_manager/impl/youtube_cache_manager.dart';
-import 'package:lang_tube/crud/subtitles_cache_manager/utils/cache_manager_decorator.dart';
+import 'impl/youtube_cache_manager.dart';
+import 'utils/cache_manager_decorator.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'database/database.dart';
 import 'impl/cache_manager_impl.dart';
+import 'impl/user_uploaded_cache_manager.dart';
 
 abstract class CaptionsCacheManager {
   static Future<UserUploadedCaptionsCacheManager> openUserUploadedInstance(

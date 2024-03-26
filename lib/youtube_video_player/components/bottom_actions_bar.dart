@@ -1,10 +1,11 @@
 import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/components/custom_loop_button.dart';
-import 'package:lang_tube/youtube_video_player/components/playback_speed_button.dart';
-import 'package:lang_tube/youtube_video_player/components/settings.dart';
 import 'package:curved_bottom_bar/curved_bottom_bar.dart';
+
+import 'custom_loop_button.dart';
+import 'playback_speed_button.dart';
+import 'settings.dart';
 
 class BottomActionsBar extends StatelessWidget {
   const BottomActionsBar({

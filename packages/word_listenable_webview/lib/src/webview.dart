@@ -18,7 +18,7 @@ class WordListenableWebview extends StatefulWidget {
     required this.onUrlUpdated,
   });
 
-  final String userAgent;
+  final String? userAgent;
   final Uri initialRequest;
   final void Function(String url) onUrlUpdated;
   final void Function(int progress) onProgressUpdated;
@@ -76,7 +76,7 @@ class WordListenableWebviewState extends State<WordListenableWebview> {
                 initialUrlRequest: URLRequest(url: widget.initialRequest),
                 initialOptions: InAppWebViewGroupOptions(
                   crossPlatform: InAppWebViewOptions(
-                    userAgent: widget.userAgent,
+                    userAgent: widget.userAgent ?? '',
                     mediaPlaybackRequiresUserGesture: false,
                     transparentBackground: true,
                     supportZoom: true,
@@ -86,7 +86,7 @@ class WordListenableWebviewState extends State<WordListenableWebview> {
                   ),
                 ),
                 onConsoleMessage: (controller, consoleMessage) =>
-                    print("s" + consoleMessage.message),
+                    print("s${consoleMessage.message}"),
                 onWebViewCreated: (controller) {
                   _controller = WordListenableWebViewController(controller);
                   widget.onWebViewCreated(_controller);

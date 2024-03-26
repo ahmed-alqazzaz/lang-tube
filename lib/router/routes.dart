@@ -6,14 +6,14 @@ import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lang_tube/browser/webview.dart';
-import 'package:lang_tube/main.dart';
-import 'package:lang_tube/video_recommendations.dart/video_recommendations_view.dart';
-import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+import '../browser/webview.dart';
 import '../history/history_view.dart';
+import '../main.dart';
+import '../video_recommendations.dart/video_recommendations_view.dart';
+import '../youtube_video_player/youtube_video_player.dart';
 part 'routes.g.dart';
 
 final screenShotController = ScreenshotController();
@@ -29,7 +29,6 @@ class HomeScreenRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return explanationPage;
     return TabbedNavigator(
       keepAlive: true,
       items: const [
@@ -51,7 +50,7 @@ class HomeScreenRoute extends GoRouteData {
           page: HistoryView(),
           bottomNavigationBarItem: BottomNavigationBarItem(
             icon: Icon(Icons.video_library_rounded),
-            label: "Library",
+            label: 'Library',
           ),
         ),
       ],

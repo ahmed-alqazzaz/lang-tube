@@ -1,15 +1,17 @@
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/foundation.dart';
-import 'package:lang_tube/models/miscellaneous/cefr.dart';
-import 'package:lang_tube/models/video_recommendations/recommended_video.dart';
-import 'package:lang_tube/models/video_recommendations/video_recommendations.dart';
-import 'package:lang_tube/subtitles_scraper/scraper.dart';
-import 'package:lang_tube/video_recommendations.dart/utils/language_filter.dart';
-import 'package:lang_tube/video_recommendations.dart/utils/ranker.dart';
-import 'package:lang_tube/video_recommendations.dart/utils/subtitles_readability_calculator.dart';
-import 'package:lang_tube/video_recommendations.dart/utils/subtitles_speed_calculator.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../utils/language_filter.dart';
+import '../utils/subtitles_readability_calculator.dart';
+import '../utils/subtitles_speed_calculator.dart';
+import '../../models/miscellaneous/cefr.dart';
+import '../../providers/captions_scraper_provider.dart';
+import '../utils/ranker.dart';
 import 'package:languages/languages.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
+
+import '../../models/video_recommendations/recommended_video.dart';
+import '../../models/video_recommendations/video_recommendations.dart';
 
 class YoutubeRecommendationsCollector extends ChangeNotifier {
   YoutubeRecommendationsCollector({
@@ -47,10 +49,11 @@ class YoutubeRecommendationsCollector extends ChangeNotifier {
     final targetLanguageVideos = videos.toList().filteredByTargetLanguage;
     for (final video in targetLanguageVideos) {
       final subtitlesData =
-          await SubtitlesScraper.instance.scrapeAndCacheSubtitles(
-        youtubeVideoId: video.id,
-        mainLanguages: [Language.english],
-      ).then((value) => value?.first);
+          await (await ProviderContainer().read(captionsScraperProvider.future))
+              .scrapeTargetLanguages(
+                youtubeVideoId: video.id,
+              )
+              .then((value) => value.firstOrNull);
 
       if (subtitlesData != null) {
         yield RecommendedVideo.fromObservedVideo(
@@ -61,7 +64,7 @@ class YoutubeRecommendationsCollector extends ChangeNotifier {
           cefr: CEFR.a1,
         );
       } else {
-        printRed("${video.title} has no subtitles");
+        printRed('${video.title} has no subtitles');
       }
     }
   }

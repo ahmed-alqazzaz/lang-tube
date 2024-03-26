@@ -1,16 +1,16 @@
 import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/components/custom_loop_button.dart';
-import 'package:lang_tube/youtube_video_player/components/custom_position_indicator.dart';
-import 'package:lang_tube/youtube_video_player/components/custom_progress_bar.dart';
-import 'package:lang_tube/youtube_video_player/components/hd_button.dart';
-import 'package:lang_tube/youtube_video_player/components/orientation_toggler.dart';
-import 'package:lang_tube/youtube_video_player/components/playback_speed_button.dart';
-import 'package:lang_tube/youtube_video_player/providers/subtitle_loop_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../custom/icons/custom_icons.dart';
+import '../providers/subtitle_loop_provider.dart';
+import 'custom_loop_button.dart';
+import 'custom_position_indicator.dart';
+import 'custom_progress_bar.dart';
+import 'hd_button.dart';
+import 'orientation_toggler.dart';
+import 'playback_speed_button.dart';
 
 class FullScreenPlayerActions extends ConsumerWidget {
   const FullScreenPlayerActions({
@@ -179,7 +179,7 @@ class FullScreenPlayerActions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final areActionsVisible = true;
+    const areActionsVisible = true;
     // ref.watch(
     //   actions._actionsProvider
     //       .select((actionsModel) => actionsModel.areFullScreenActionsVisible),

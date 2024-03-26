@@ -17,15 +17,21 @@ class LanguageConfigNotifier extends AsyncNotifier<LanguageConfig> {
   @override
   Future<LanguageConfig> build() async {
     final prefs = await SharedPreferences.getInstance();
-    ref.listenSelf((_, langConfig) {
-      prefs.setString(
-        _targetLanguageCodeKey,
-        langConfig.value!.targetLanguage!.code,
-      );
-      prefs.setString(
-        _translationLanguageCodeKey,
-        langConfig.value!.translationLanguage!.code,
-      );
+    ref.listenSelf((_, langConfig) async {
+      final targetLangCode = langConfig.value?.targetLanguage?.code;
+      final translationLangCode = langConfig.value?.translationLanguage?.code;
+      if (targetLangCode != null) {
+        await prefs.setString(
+          _targetLanguageCodeKey,
+          targetLangCode,
+        );
+      }
+      if (translationLangCode != null) {
+        await prefs.setString(
+          _translationLanguageCodeKey,
+          translationLangCode,
+        );
+      }
     });
     return LanguageConfig(
       // Load target language.

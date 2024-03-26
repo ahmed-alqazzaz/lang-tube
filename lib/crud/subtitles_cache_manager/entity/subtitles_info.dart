@@ -1,8 +1,6 @@
 import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
-
-import 'package:lang_tube/models/subtitles/captions_type.dart';
-
+import '../../../models/subtitles/captions_type.dart';
 import '../database/database.dart';
 import 'video.dart';
 

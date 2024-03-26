@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lang_tube/main.dart';
+
+import '../../../main.dart';
 
 class BrowserSuggestionsList extends StatelessWidget {
   const BrowserSuggestionsList({
@@ -16,14 +17,14 @@ class BrowserSuggestionsList extends StatelessWidget {
       color: LangTube.backgroundColor,
       child: ListView.separated(
         itemCount: suggestions.length,
-        separatorBuilder: (context, index) => SizedBox(height: 2),
+        separatorBuilder: (context, index) => const SizedBox(height: 2),
         itemBuilder: (BuildContext context, int index) {
           return Container(
             color: Colors.white,
             child: ListTile(
               title: Text(
                 suggestions[index],
-                style: TextStyle(color: LangTube.tmp),
+                style: const TextStyle(color: LangTube.tmp),
               ),
               leading: const Icon(
                 Icons.search,

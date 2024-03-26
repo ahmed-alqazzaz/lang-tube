@@ -1,4 +1,4 @@
-import 'package:lang_tube/crud/subtitles_cache_manager/utils/db_info_matcher.dart';
+import '../utils/db_info_matcher.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
 import '../../../models/subtitles/cached_source_captions.dart';

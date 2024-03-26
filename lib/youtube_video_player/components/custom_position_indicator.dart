@@ -1,7 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+import '../providers/youtube_controller_provider.dart';
 
 class CustomPositionIndicator extends ConsumerStatefulWidget {
   const CustomPositionIndicator({super.key, required this.padding});

@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/models/youtube_player/loop.dart';
-import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import '../../models/youtube_player/loop.dart';
 import '../utils/raw_loop_notifier.dart';
+import 'youtube_controller_provider.dart';
 
 final customLoopProvider = StateNotifierProvider<CustomLoopNotifier, Loop?>(
   (ref) => CustomLoopNotifier(

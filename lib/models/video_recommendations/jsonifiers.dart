@@ -1,9 +1,8 @@
 import 'dart:convert';
-
-import 'package:lang_tube/models/video_recommendations/video_recommendations.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
 
 import 'recommended_video.dart';
+import 'video_recommendations.dart';
 
 // it's important to ensure that order of the elements stays the same
 extension VideoRecommendationsListJsonifier

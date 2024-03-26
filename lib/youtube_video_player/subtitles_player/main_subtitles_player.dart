@@ -4,19 +4,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/explanation_modal/explanation_modal_constraints_provider.dart';
-import 'package:dynamic_text/dynamic_text.dart';
-import 'package:lang_tube/youtube_video_player/components/subtitle_box.dart';
-import 'package:lang_tube/youtube_video_player/providers/subtitles_download_progress_provider.dart';
-import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:size_observer/size_observer.dart';
 import 'package:subtitles_player/subtitles_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../explanation_modal/explanation_modal.dart';
 import '../../models/subtitles/subtitles_player_value.dart';
+import '../components/subtitle_box.dart';
 import '../providers/actions_menu_activity_provider.dart';
+import '../providers/subtitles_download_progress_provider.dart';
 import '../providers/subtitles_player_provider.dart';
+import '../providers/youtube_controller_provider.dart';
 
 class MainSubtitlesPlayer extends ConsumerStatefulWidget {
   const MainSubtitlesPlayer({super.key});
@@ -86,8 +84,8 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
     final subtitlesPlayerValue = ref.watch(subtitlesPlayerProvider);
     final youtubePlayerController = ref.read(youtubeControllerProvider);
     final subtitles = subtitlesPlayerValue.subtitles;
-    printRed("length ${subtitles.length}");
-    printRed("index ${subtitlesPlayerValue.index}");
+    printRed('length ${subtitles.length}');
+    printRed('index ${subtitlesPlayerValue.index}');
     return LayoutBuilder(
       builder: (context, constraints) {
         return Listener(

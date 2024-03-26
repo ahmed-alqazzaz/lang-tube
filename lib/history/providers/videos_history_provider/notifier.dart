@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/history/enums/videos_sort_options.dart';
 
 import '../../../video_widgets/display_video_item.dart';
+import '../../enums/videos_sort_options.dart';
 
 final videos = [
   DisplayVideoItem(
@@ -11,7 +11,7 @@ final videos = [
     thumbnailUrl: 'https://i3.ytimg.com/vi/dzJvuswZ5ys/maxresdefault.jpg',
     lastWatched: DateTime(2020),
     duration: '12:35',
-    badges: [],
+    badges: const [],
     onActionsMenuPressed: () {},
     onPressed: () {},
   ),
@@ -21,7 +21,7 @@ final videos = [
     thumbnailUrl: 'https://i3.ytimg.com/vi/aXOChLn5ZdQ/maxresdefault.jpg',
     lastWatched: DateTime(2017),
     duration: '11:35',
-    badges: [],
+    badges: const [],
     onActionsMenuPressed: () {},
     onPressed: () {},
   ),
@@ -31,7 +31,7 @@ final videos = [
     thumbnailUrl: 'https://i3.ytimg.com/vi/lXfEK8G8CUI/maxresdefault.jpg',
     lastWatched: DateTime(2019),
     duration: '13:15',
-    badges: [],
+    badges: const [],
     onActionsMenuPressed: () {},
     onPressed: () {},
   ),
@@ -41,7 +41,7 @@ final videos = [
     thumbnailUrl: 'https://i3.ytimg.com/vi/sl0UUhmaiDU/maxresdefault.jpg',
     lastWatched: DateTime(2023),
     duration: '5:15',
-    badges: [],
+    badges: const [],
     onActionsMenuPressed: () {},
     onPressed: () {},
   ),

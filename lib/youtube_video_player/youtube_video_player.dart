@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
-import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/full_screen_youtube_player.dart';
-import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/portrait_youtube_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+import 'providers/youtube_controller_provider.dart';
+import 'yotube_video_player_modes/full_screen_youtube_player.dart';
+import 'yotube_video_player_modes/portrait_youtube_player.dart';
 
 class YoutubeVideoPlayerView extends ConsumerStatefulWidget {
   const YoutubeVideoPlayerView({

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/models/youtube_player/loop.dart';
-import 'package:lang_tube/youtube_video_player/providers/custom_loop_provider.dart';
-import 'package:lang_tube/youtube_video_player/providers/subtitle_loop_provider.dart';
-import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+import '../../models/youtube_player/loop.dart';
+import '../providers/custom_loop_provider.dart';
+import '../providers/subtitle_loop_provider.dart';
+import '../providers/youtube_controller_provider.dart';
 
 class CustomProgressBar extends ConsumerStatefulWidget {
   const CustomProgressBar({super.key});
@@ -20,7 +21,7 @@ class _CustomProgressBarState extends ConsumerState<CustomProgressBar> {
     required Loop loop,
     required Color color,
   }) {
-    final controler = ref.watch(youtubeControllerProvider)!;
+    final controler = ref.watch(youtubeControllerProvider);
     return CustomProgress(
       start: loop.start.inMilliseconds /
           controler.value.metaData.duration.inMilliseconds,

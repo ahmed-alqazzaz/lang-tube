@@ -1,18 +1,17 @@
 import 'dart:async';
 import 'package:floor/floor.dart';
-import 'package:flutter/foundation.dart';
-import 'package:lang_tube/crud/subtitles_cache_manager/dao/video_dao.dart';
-import 'package:lang_tube/crud/subtitles_cache_manager/type_converters/captions_type_stringifier.dart';
-import 'package:lang_tube/crud/subtitles_cache_manager/type_converters/datetime_stringifier.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
 import '../dao/subtitles_dao.dart';
 import '../dao/subtitles_info_dao.dart';
 import '../dao/subtitles_source_dao.dart';
+import '../dao/video_dao.dart';
 import '../entity/subtitles.dart';
 import '../entity/subtitles_info.dart';
 import '../entity/subtitles_source.dart';
 import '../entity/video.dart';
+import '../type_converters/captions_type_stringifier.dart';
+import '../type_converters/datetime_stringifier.dart';
 
 part 'database.g.dart'; // the generated code will be there
 

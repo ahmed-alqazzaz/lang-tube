@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+import 'youtube_controller_provider.dart';
 
 final youtubeHdProvider = StateNotifierProvider<YoutubeHdNotifier, bool>(
   (ref) => YoutubeHdNotifier(

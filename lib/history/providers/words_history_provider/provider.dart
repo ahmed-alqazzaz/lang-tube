@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/history/providers/words_history_provider/notifier.dart';
-import 'package:lang_tube/history/data/history_word_item.dart';
+
+import '../../data/history_word_item.dart';
+import 'notifier.dart';
 
 final wordsHistoryProvider =
     StateNotifierProvider<WordsHistoryNotifier, List<HistoryWordItem>>(

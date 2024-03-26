@@ -1,11 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lang_tube/browser/enums/popup_menu_items.dart';
 import 'package:value_notifier_transformer/value_notifier_transformer.dart';
 
 import '../main.dart';
+import 'enums/popup_menu_items.dart';
 import 'providers/suggestions_List_provider/provider.dart';
 import 'providers/suggestions_overlay_provider/provider.dart';
 

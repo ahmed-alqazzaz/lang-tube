@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:lang_tube/explanation_modal/explanation_page/data/web_example.dart';
-import 'package:lang_tube/explanation_modal/explanation_page/data/youtube_example.dart';
 
 import 'lexicon_entry.dart';
+import 'web_example.dart';
+import 'youtube_example.dart';
 
 @immutable
 final class Lexicon {

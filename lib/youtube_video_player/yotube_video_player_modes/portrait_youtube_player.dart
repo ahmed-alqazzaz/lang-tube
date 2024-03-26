@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/components/actions_circular_menu.dart';
-import 'package:lang_tube/youtube_video_player/components/bottom_actions_bar.dart';
-import 'package:lang_tube/youtube_video_player/components/custom_progress_bar.dart';
-import 'package:lang_tube/youtube_video_player/components/mini_player_actions.dart';
-import 'package:lang_tube/youtube_video_player/subtitles_player/main_subtitles_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import '../components/actions_circular_menu.dart';
+import '../components/bottom_actions_bar.dart';
+import '../components/custom_progress_bar.dart';
+import '../components/mini_player_actions.dart';
 import '../providers/actions_menu_activity_provider.dart';
+import '../subtitles_player/main_subtitles_player.dart';
 
 class PortraitYoutubePlayer extends StatelessWidget {
   const PortraitYoutubePlayer({super.key, required this.player});

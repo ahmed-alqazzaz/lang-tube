@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
 import 'package:subtitles_parser/subtitles_parser.dart';
 import 'package:subtitles_player/subtitles_player.dart';
 import 'package:value_notifier_transformer/value_notifier_transformer.dart';
@@ -10,6 +9,7 @@ import 'package:value_notifier_transformer/value_notifier_transformer.dart';
 import '../../models/subtitles/consumable_caption.dart';
 import '../../../models/subtitles/subtitles_player_value.dart';
 import 'subtitles_config_provider.dart';
+import 'youtube_controller_provider.dart';
 
 final subtitlesPlayerProvider =
     StateNotifierProvider<MultiSubtitlesPlayer, SubtitlesPlayerValue>(
@@ -23,10 +23,10 @@ final subtitlesPlayerProvider =
         ?.translatedSubtitles.subtitles
         .map((e) => e.toSubtitle());
     if (mainSubtitles != null) {
-      printRed("player started");
+      printRed('player started');
     }
     if (mainSubtitles?.isNotEmpty != true) {
-      printPurple("no subs");
+      printPurple('no subs');
     }
     return MultiSubtitlesPlayer(
       mainSubtitles: mainSubtitles?.toList() ?? [],

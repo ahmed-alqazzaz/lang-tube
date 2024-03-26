@@ -9,5 +9,10 @@
         "**/Thumbs.db": true
     },
     "hide-files.files": [],
-    "CodeGPT.apiKey": "CodeGPT Plus Beta"
+    "CodeGPT.apiKey": "CodeGPT Plus Beta",
+    "workbench.editor.enablePreview": true,
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "always"
+    },
 }

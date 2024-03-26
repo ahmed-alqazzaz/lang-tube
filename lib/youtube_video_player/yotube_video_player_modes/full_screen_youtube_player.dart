@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lang_tube/youtube_video_player/components/full_screen_player_actions.dart';
+
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import '../components/full_screen_player_actions.dart';
 import '../subtitles_player/main_subtitles_player.dart';
 import '../subtitles_player/mini_subtitles_player.dart';
 

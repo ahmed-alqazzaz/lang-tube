@@ -5,10 +5,6 @@ import 'package:core_utils/core_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/history/enums/videos_sort_options.dart';
-import 'package:lang_tube/history/enums/words_sort_options.dart';
-import 'package:lang_tube/history/providers/videos_history_provider/provider.dart';
-import 'package:lang_tube/history/providers/words_history_provider/provider.dart';
 import 'package:search_app_bar/search_app_bar.dart';
 import 'package:size_utils/size_utils.dart';
 import 'package:sized_button/sized_button.dart';
@@ -16,6 +12,10 @@ import 'package:sized_button/sized_button.dart';
 import '../main.dart';
 import '../video_widgets/videos_list.dart';
 import 'data/history_word_item.dart';
+import 'enums/videos_sort_options.dart';
+import 'enums/words_sort_options.dart';
+import 'providers/videos_history_provider/provider.dart';
+import 'providers/words_history_provider/provider.dart';
 
 class HistoryView extends ConsumerStatefulWidget {
   const HistoryView({super.key});
@@ -50,7 +50,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
     return Theme(
       data: Theme.of(context).copyWith(
         appBarTheme: Theme.of(context).appBarTheme.copyWith(
-              iconTheme: IconThemeData(color: LangTube.tmp, size: 30),
+              iconTheme: const IconThemeData(color: LangTube.tmp, size: 30),
               centerTitle: false,
             ),
       ),

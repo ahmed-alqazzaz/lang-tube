@@ -3,10 +3,11 @@ import 'dart:developer';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:lang_tube/video_recommendations.dart/recommendations_manager/recommendations_state.dart';
 import 'package:mutex/mutex.dart';
 import 'package:throttler/throttler.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';
+
+import 'recommendations_state.dart';
 
 @immutable
 final class YoutubeRecommendationsActionsHandler {

@@ -1,11 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/models/youtube_player/loop.dart';
-import 'package:lang_tube/models/youtube_player/raw_loop_state.dart';
-import 'package:lang_tube/youtube_video_player/providers/subtitles_player_provider.dart';
-import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
-import 'package:lang_tube/youtube_video_player/utils/raw_loop_notifier.dart';
 import 'package:subtitles_player/subtitles_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+import '../../models/youtube_player/loop.dart';
+import '../../models/youtube_player/raw_loop_state.dart';
+import '../utils/raw_loop_notifier.dart';
+import 'subtitles_player_provider.dart';
+import 'youtube_controller_provider.dart';
 
 typedef CurrentSubtitleGetter = Subtitle? Function();
 

@@ -4,9 +4,10 @@ import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
-import 'package:lang_tube/explanation_modal/explanation_page/data/lexicon_entry.dart';
-import 'package:lang_tube/main.dart';
 import 'package:sized_button/sized_button.dart';
+
+import '../../main.dart';
+import 'data/lexicon_entry.dart';
 
 class ExplanationFlashcard extends StatelessWidget {
   const ExplanationFlashcard({
@@ -140,7 +141,7 @@ class ExplanationFlashcard extends StatelessWidget {
               textColor: Colors.white,
               onPressed: () {},
               size: const Size(320, 40),
-              child: const Text("Save"),
+              child: const Text('Save'),
             ),
             SizedBox(height: size.height * 0.04),
             Container(
@@ -215,7 +216,7 @@ class ExplanationFlashcard extends StatelessWidget {
                   vertical: MediaQuery.of(context).size.height * 0.007,
                 ),
                 child: _exampleBuilder(
-                  words: entry.examples[index].split(" "),
+                  words: entry.examples[index].split(' '),
                 ),
               )
           ],

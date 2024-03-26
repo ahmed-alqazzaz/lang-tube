@@ -1,5 +1,6 @@
-import 'package:lang_tube/crud/subtitles_cache_manager/utils/db_info_matcher.dart';
-import 'package:lang_tube/models/subtitles/captions_type.dart';
+import '../../../models/subtitles/captions_type.dart';
+import '../utils/db_info_matcher.dart';
+
 import '../../../models/subtitles/cached_captions.dart';
 import 'cache_manager_impl.dart';
 

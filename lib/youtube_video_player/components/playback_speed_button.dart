@@ -1,7 +1,8 @@
 import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/providers/playback_speed_provider.dart';
+
+import '../providers/playback_speed_provider.dart';
 
 class YoutubePlaybackSpeedButton extends ConsumerWidget {
   const YoutubePlaybackSpeedButton({super.key, this.splashRadius = 8});

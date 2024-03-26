@@ -5,15 +5,15 @@ import 'package:core_utils/core_utils.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:lang_tube/explanation_modal/explanation_page/data/web_example.dart';
-import 'package:lang_tube/explanation_modal/explanation_page/data/youtube_example.dart';
-import 'package:lang_tube/youtube_video_player/components/subtitle_box.dart';
-import 'package:lang_tube/youtube_video_player/yotube_video_player_modes/iframe_youtube_player.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 import 'package:size_observer/size_observer.dart';
 import '../../main.dart';
+import '../../youtube_video_player/components/subtitle_box.dart';
+import '../../youtube_video_player/yotube_video_player_modes/iframe_youtube_player.dart';
 import 'data/lexicon.dart';
+import 'data/web_example.dart';
+import 'data/youtube_example.dart';
 import 'flashcard.dart';
 
 class ExplanationPage extends StatefulWidget {
@@ -252,9 +252,9 @@ class _ExplanationPageState extends State<ExplanationPage> {
                 fontSize: 15,
               ),
               children: [
-                TextSpan(text: "You "),
+                TextSpan(text: 'You '),
                 TextSpan(
-                    text: "guessed ",
+                    text: 'guessed ',
                     style: TextStyle(color: Colors.deepPurple)),
                 TextSpan(
                   text:

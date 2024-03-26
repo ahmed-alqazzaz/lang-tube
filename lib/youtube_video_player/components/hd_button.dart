@@ -1,7 +1,8 @@
 import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/providers/hd_provider.dart';
+
+import '../providers/hd_provider.dart';
 
 class YoutubeHdButton extends ConsumerWidget {
   const YoutubeHdButton({super.key});

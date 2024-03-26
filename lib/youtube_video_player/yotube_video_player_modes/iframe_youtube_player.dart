@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/providers/custom_loop_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+import '../providers/custom_loop_provider.dart';
 
 class IframeYoutubePlayer extends ConsumerStatefulWidget {
   const IframeYoutubePlayer({

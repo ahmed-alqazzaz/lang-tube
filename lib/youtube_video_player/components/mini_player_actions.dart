@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lang_tube/youtube_video_player/components/custom_position_indicator.dart';
-import 'package:lang_tube/youtube_video_player/components/orientation_toggler.dart';
+
+import 'custom_position_indicator.dart';
+import 'orientation_toggler.dart';
 
 class MiniPlayerActions extends StatelessWidget {
   const MiniPlayerActions({super.key});

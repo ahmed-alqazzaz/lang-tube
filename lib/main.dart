@@ -2,29 +2,22 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:colourful_print/colourful_print.dart';
-import 'package:go_router/go_router.dart';
-import 'package:lang_tube/providers/app_state_provider/app_state_provider.dart';
-import 'package:lang_tube/subtitles_scraper/scraper.dart';
-import 'package:lang_tube/youtube_video_player/youtube_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/explanation_modal/explanation_page/data/lexicon.dart';
-import 'package:lang_tube/explanation_modal/explanation_page/data/lexicon_entry.dart';
-import 'package:lang_tube/explanation_modal/explanation_page/data/web_example.dart';
-import 'package:lang_tube/explanation_modal/explanation_page/data/youtube_example.dart';
-import 'package:lang_tube/explanation_modal/explanation_page/page.dart';
 import 'package:languages/languages.dart';
-//import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
-import 'package:user_agent/user_agent.dart';
-
-import 'providers/language_config_provider/provider.dart';
-import 'router/routes.dart';
+import 'explanation_modal/explanation_page/data/lexicon.dart';
+import 'explanation_modal/explanation_page/data/lexicon_entry.dart';
+import 'explanation_modal/explanation_page/data/web_example.dart';
+import 'explanation_modal/explanation_page/data/youtube_example.dart';
+import 'explanation_modal/explanation_page/page.dart';
+import 'providers/app_state_provider.dart';
+import 'providers/language_config_provider.dart';
+import 'youtube_video_player/youtube_video_player.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await UserAgent.instance.initilize();
   if (Platform.isAndroid) {
     await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
@@ -37,12 +30,12 @@ Future<void> main() async {
   final container = ProviderContainer();
   final languageConfigNotifier =
       container.read(languageConfigProvider.notifier);
+  await languageConfigNotifier.build();
   await languageConfigNotifier.setTargetLanguage(Language.german);
   await languageConfigNotifier.setTranslationLanguage(Language.english);
   container.read(appStateProvider.notifier).displayVideoPlayer(
         videoId: 'hLoatpfE7VM',
       );
-  await SubtitlesScraper.ensureInitalized();
   runApp(const ProviderScope(child: LangTube()));
 }
 
@@ -79,21 +72,10 @@ class VideoIdSelector extends ConsumerWidget {
                 url: Uri.parse(
                     'https://youtube.com/watch?v=8WQ3LUvVP6g&bpctr=9999999999&hl=en'),
               );
-              printRed("cookies" + cookies.toString());
+              printRed('cookies$cookies');
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) {
-                    SubtitlesScraper.instance
-                        .fetchSubtitlesBundle(
-                      youtubeVideoId: '8WQ3LUvVP6g',
-                      mainLanguages: [Language.german],
-                      translatedLanguage: Language.english,
-                      onProgressUpdated: print,
-                    )
-                        .onError((error, stackTrace) {
-                      printRed("error: $error");
-                      throw error!;
-                    }).then((value) => printRed(value.toString()));
                     return InAppWebView(
                       initialUrlRequest: URLRequest(
                           url: Uri.parse(
@@ -189,7 +171,7 @@ final explanationPage = ExplanationPage(
       for (var i = 0; i < 5; i++)
         LexiconEntry(
           media: Image.asset(
-            "assets/music.jpg",
+            'assets/music.jpg',
             fit: BoxFit.cover,
           ),
           cefr: 'C1',
@@ -210,7 +192,7 @@ final explanationPage = ExplanationPage(
           title:
               "you guessed it, a good night's sleep. Sleep is comprised of four stages",
           link:
-              "https://www.nytimes.com/2023/08/22/climate/tropical-storm-california-maui-fire-extreme-august.html",
+              'https://www.nytimes.com/2023/08/22/climate/tropical-storm-california-maui-fire-extreme-august.html',
           content:
               """it, a good night's sleep. Sleep is comprised of four stages, the deepest of which is known as slow-wave sleep and rapid eye movement. EEG machines monitoring people during these stages have shown electrical impulses""",
         )

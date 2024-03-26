@@ -1,8 +1,9 @@
 import 'package:dio_api_client/dio_api_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/providers/user_agent_provider.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
+
+import 'user_agent_provider.dart';
 
 final captionsScraperApiClientProvider =
     FutureProvider<SubtitlesScraperApiClient>(

@@ -2,8 +2,9 @@ import 'package:circular_inkwell/circular_inkwell.dart';
 import 'package:clipped_icon/clipped_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lang_tube/youtube_video_player/providers/custom_loop_provider.dart';
-import 'package:lang_tube/youtube_video_player/providers/youtube_controller_provider.dart';
+
+import '../providers/custom_loop_provider.dart';
+import '../providers/youtube_controller_provider.dart';
 
 class YoutubeCustomLoopButton extends ConsumerStatefulWidget {
   const YoutubeCustomLoopButton({super.key, this.splashRadius = 8});
@@ -24,11 +25,11 @@ class _YoutubeCustomLoopButtonState
     final loopNotifier = ref.read(customLoopProvider.notifier);
     switch (state) {
       case CustomLoopState.inactive:
-        _loopStart = youtubePlayerController!.value.position;
+        _loopStart = youtubePlayerController.value.position;
         setState(() => state = CustomLoopState.activating);
         break;
       case CustomLoopState.activating:
-        final loopEnd = youtubePlayerController!.value.position;
+        final loopEnd = youtubePlayerController.value.position;
         loopNotifier.activateLoop(start: _loopStart!, end: loopEnd);
         setState(() => state = CustomLoopState.active);
         break;
