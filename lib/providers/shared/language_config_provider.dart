@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:languages/languages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/miscellaneous/lang_config.dart';
+import '../../models/miscellaneous/lang_config.dart';
 
 final languageConfigProvider =
     AsyncNotifierProvider<LanguageConfigNotifier, LanguageConfig>(
@@ -45,11 +45,18 @@ class LanguageConfigNotifier extends AsyncNotifier<LanguageConfig> {
     );
   }
 
-  Future<void> setTargetLanguage(Language language) async =>
-      state = AsyncValue.data(state.value!.copyWith(targetLanguage: language));
+  Future<void> setTargetLanguage(Language language) async {
+    state.whenData(
+      (value) =>
+          state = AsyncValue.data(value.copyWith(targetLanguage: language)),
+    );
+  }
 
-  Future<void> setTranslationLanguage(Language language) async => state =
-      AsyncValue.data(state.value!.copyWith(translationLanguage: language));
+  Future<void> setTranslationLanguage(Language language) async =>
+      state.whenData(
+        (value) => state =
+            AsyncValue.data(value.copyWith(translationLanguage: language)),
+      );
 
   // Keys for SharedPreferences.
   static const String _targetLanguageCodeKey = 'targetLanguageCode';

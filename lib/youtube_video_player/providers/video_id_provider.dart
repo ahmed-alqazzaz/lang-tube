@@ -2,7 +2,7 @@ import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/app_states/video_player_state.dart';
-import '../../providers/app_state_provider.dart';
+import '../../providers/shared/app_state_provider.dart';
 
 // this provider is necessary for obtaining latest emitted video id,
 // without returning null when the state changes anything
@@ -13,10 +13,10 @@ import '../../providers/app_state_provider.dart';
 final videoIdProvider = Provider<String>(
   (ref) {
     ref.listen(
-      appStateProvider,
-      (_, state) {
-        if (state is DisplayingVideoPlayer) {
-          printBlue("invalidating video id provider");
+      appStateProvider.future,
+      (_, state) async {
+        if (await state is DisplayingVideoPlayer) {
+          printBlue('invalidating video id provider');
           ref.invalidateSelf();
         }
       },
@@ -24,9 +24,9 @@ final videoIdProvider = Provider<String>(
     );
     return ref.read(
       appStateProvider.select((state) {
-        assert(state is DisplayingVideoPlayer,
+        assert(state.valueOrNull is DisplayingVideoPlayer,
             'state must be DisplayingVideoPlayer when video id provider is used or refreshed');
-        return (state as DisplayingVideoPlayer).videoId;
+        return (state.valueOrNull as DisplayingVideoPlayer).videoId;
       }),
     );
   },

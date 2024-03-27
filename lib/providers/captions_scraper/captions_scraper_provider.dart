@@ -5,13 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quiver/iterables.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
-import '../crud/subtitles_cache_manager/impl/user_uploaded_cache_manager.dart';
-import '../crud/subtitles_cache_manager/impl/youtube_cache_manager.dart';
-import '../models/subtitles/subtitles_bundle.dart';
+import '../../crud/subtitles_cache_manager/impl/user_uploaded_cache_manager.dart';
+import '../../crud/subtitles_cache_manager/impl/youtube_cache_manager.dart';
+import '../../models/subtitles/subtitles_bundle.dart';
 import 'captions_scraper_client_provider.dart';
-import 'language_config_provider.dart';
-import 'user_uploaded_captions_cache_provider.dart';
-import 'youtube_cache_provider.dart';
+import '../shared/language_config_provider.dart';
+import '../captions_cache/user_captions_cache_provider.dart';
+import '../captions_cache/youtube_cache_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

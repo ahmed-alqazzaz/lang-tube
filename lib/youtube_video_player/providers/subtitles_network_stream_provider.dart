@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../models/subtitles/subtitles_network_stream.dart';
-import '../../providers/captions_scraper_provider.dart';
+import '../../providers/captions_scraper/captions_scraper_provider.dart';
 import 'video_id_provider.dart';
 
 final subtitlesNetworkStreamProvider =

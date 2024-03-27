@@ -2,18 +2,26 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:colourful_print/colourful_print.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
+import 'package:lang_tube/providers/captions_cache/user_captions_cache_provider.dart';
+import 'package:lang_tube/providers/captions_scraper/captions_scraper_provider.dart';
 import 'package:languages/languages.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
+import 'package:subtitles_parser/subtitles_parser.dart';
 import 'explanation_modal/explanation_page/data/lexicon.dart';
 import 'explanation_modal/explanation_page/data/lexicon_entry.dart';
 import 'explanation_modal/explanation_page/data/web_example.dart';
 import 'explanation_modal/explanation_page/data/youtube_example.dart';
 import 'explanation_modal/explanation_page/page.dart';
-import 'providers/app_state_provider.dart';
-import 'providers/language_config_provider.dart';
+import 'models/subtitles/cached_captions.dart';
+import 'models/subtitles/cached_captions_info.dart';
+import 'models/subtitles/captions_type.dart';
+import 'providers/shared/app_state_provider.dart';
+import 'providers/shared/language_config_provider.dart';
 import 'youtube_video_player/youtube_video_player.dart';
 
 Future<void> main() async {
@@ -51,7 +59,7 @@ class VideoIdSelector extends ConsumerWidget {
           TextField(controller: _textEditingController),
           const SizedBox(height: 20),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               void x(_) => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => const YoutubeVideoPlayerView(),
@@ -61,7 +69,13 @@ class VideoIdSelector extends ConsumerWidget {
               ref.read(appStateProvider.notifier).displayVideoPlayer(
                     videoId: _textEditingController.text,
                   );
-
+              final languageConfigNotifier =
+                  ref.read(languageConfigProvider.notifier);
+              await languageConfigNotifier.build();
+              await languageConfigNotifier.setTargetLanguage(Language.german);
+              await languageConfigNotifier
+                  .setTranslationLanguage(Language.english);
+              await ref.watch(captionsScraperProvider.future);
               WidgetsBinding.instance.addPostFrameCallback(x);
             },
             child: const Text('proceed'),
@@ -87,6 +101,128 @@ class VideoIdSelector extends ConsumerWidget {
             },
             child: const Text('display web'),
           ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const CustomSubsCache();
+                  },
+                ),
+              );
+            },
+            child: const Text('cache subs'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CustomSubsCache extends StatefulWidget {
+  const CustomSubsCache({super.key});
+
+  @override
+  State<CustomSubsCache> createState() => _CustomSubsCacheState();
+}
+
+class _CustomSubsCacheState extends State<CustomSubsCache> {
+  String? file1Path;
+  String? file2Path;
+  String? videoId;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          StatefulBuilder(
+            builder: (context, setState) {
+              return TextButton(
+                onPressed: () {
+                  FilePicker.platform.pickFiles(
+                      type: FileType.custom,
+                      allowedExtensions: ['txt']).then((value) {
+                    if (value != null) {
+                      setState(() {
+                        file1Path = value.files.single.path;
+                      });
+                    }
+                  });
+                },
+                child: Text(file1Path ?? 'Pick file1'),
+              );
+            },
+          ),
+          StatefulBuilder(
+            builder: (context, setState) {
+              return TextButton(
+                onPressed: () {
+                  FilePicker.platform.pickFiles(
+                      type: FileType.custom,
+                      allowedExtensions: ['txt']).then((value) {
+                    if (value != null) {
+                      setState(() {
+                        file2Path = value.files.single.path;
+                      });
+                    }
+                  });
+                },
+                child: Text(file2Path ?? 'Pick file1'),
+              );
+            },
+          ),
+          TextField(
+            onChanged: (value) {
+              videoId = value;
+            },
+          ),
+          const Gap(100),
+          Consumer(
+            builder: (context, ref, _) {
+              return TextButton(
+                onPressed: () async {
+                  if (file1Path != null &&
+                      file2Path != null &&
+                      videoId != null) {
+                    final parsedSubs1 =
+                        await SubtitlesParser.parseYoutubeTimedText(
+                            File(file1Path!).readAsStringSync());
+                    final parsedSubs2 =
+                        await SubtitlesParser.parseYoutubeTimedText(
+                            File(file2Path!).readAsStringSync());
+                    (await ref.read(
+                            userUploadedCaptionsCacheManagerProvider.future))
+                        .cacheCaptions(
+                      CachedCaptions(
+                        info: CachedCaptionsInfo(
+                          videoId: videoId!,
+                          language: Language.german,
+                          type: CaptionsType.userUploaded,
+                        ),
+                        subtitles: parsedSubs1,
+                      ),
+                    );
+                    (await ref.read(
+                            userUploadedCaptionsCacheManagerProvider.future))
+                        .cacheCaptions(
+                      CachedCaptions(
+                        info: CachedCaptionsInfo(
+                          videoId: videoId!,
+                          language: Language.english,
+                          type: CaptionsType.userUploaded,
+                        ),
+                        subtitles: parsedSubs2,
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: const Text('proceed'),
+              );
+            },
+          )
         ],
       ),
     );

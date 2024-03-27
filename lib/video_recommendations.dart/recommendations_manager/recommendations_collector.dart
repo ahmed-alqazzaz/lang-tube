@@ -5,7 +5,7 @@ import '../utils/language_filter.dart';
 import '../utils/subtitles_readability_calculator.dart';
 import '../utils/subtitles_speed_calculator.dart';
 import '../../models/miscellaneous/cefr.dart';
-import '../../providers/captions_scraper_provider.dart';
+import '../../providers/captions_scraper/captions_scraper_provider.dart';
 import '../utils/ranker.dart';
 import 'package:languages/languages.dart';
 import 'package:youtube_scraper/youtube_scraper.dart';

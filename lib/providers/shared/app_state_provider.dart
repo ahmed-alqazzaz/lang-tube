@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/app_states/app_state.dart';
-import '../models/app_states/homepage_state.dart';
-import '../models/app_states/video_player_state.dart';
+import '../../models/app_states/app_state.dart';
+import '../../models/app_states/homepage_state.dart';
+import '../../models/app_states/video_player_state.dart';
 
 final appStateProvider = AsyncNotifierProvider<AppStateNotifier, AppState>(
   () => AppStateNotifier(),

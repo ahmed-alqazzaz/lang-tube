@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lang_tube/models/miscellaneous/lang_config.dart';
-import 'package:lang_tube/providers/captions_cache_dir_provider.dart';
-import 'package:lang_tube/providers/language_config_provider.dart';
-import 'package:lang_tube/providers/captions_scraper_provider.dart';
-import 'package:lang_tube/providers/user_agent_provider.dart';
+import 'package:lang_tube/providers/captions_cache/captions_cache_dir_provider.dart';
+import 'package:lang_tube/providers/shared/language_config_provider.dart';
+import 'package:lang_tube/providers/captions_scraper/captions_scraper_provider.dart';
+import 'package:lang_tube/providers/shared/user_agent_provider.dart';
 import 'package:user_agent/user_agent.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
