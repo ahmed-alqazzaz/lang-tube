@@ -1,6 +1,8 @@
 import 'package:floor/floor.dart';
 import 'package:flutter/material.dart';
-import '../../../models/subtitles/captions_type.dart';
+
+import 'package:lang_tube/models/subtitles/captions_type.dart';
+
 import '../database/database.dart';
 import 'video.dart';
 
@@ -25,7 +27,7 @@ import 'video.dart';
     ),
   ],
 )
-final class DatabaseSubtitlesInfo {
+class DatabaseSubtitlesInfo {
   @PrimaryKey(autoGenerate: true)
   final int? infoId;
 
@@ -40,27 +42,6 @@ final class DatabaseSubtitlesInfo {
     required this.captionsType,
     this.createdAt,
   });
-
-  DatabaseSubtitlesInfo copyWith({
-    int? infoId,
-    String? videoId,
-    String? language,
-    CaptionsType? captionsType,
-    DateTime? createdAt,
-  }) {
-    return DatabaseSubtitlesInfo(
-      infoId: infoId ?? this.infoId,
-      videoId: videoId ?? this.videoId,
-      language: language ?? this.language,
-      captionsType: captionsType ?? this.captionsType,
-      createdAt: createdAt ?? this.createdAt,
-    );
-  }
-
-  @override
-  String toString() {
-    return 'SubtitlesInfo(infoId: $infoId, videoId: $videoId, language: $language, captionsType: $captionsType, createdAt: $createdAt)';
-  }
 
   @override
   bool operator ==(covariant DatabaseSubtitlesInfo other) {

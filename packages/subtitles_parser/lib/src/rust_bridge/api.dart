@@ -15,6 +15,7 @@ final dylib = Platform.isIOS
     ? DynamicLibrary.process()
     : Platform.isMacOS
         ? DynamicLibrary.executable()
-        : DynamicLibrary.open(_dylibPath);
+        : DynamicLibrary.open(
+            'C:\\Users\\acer\\workspace1\\langtube\\packages\\subtitles_parser\\rust\\target\\debug\\subtitles_parser.dll');
 
 final rustApi = SubtitlesParserImpl(dylib);

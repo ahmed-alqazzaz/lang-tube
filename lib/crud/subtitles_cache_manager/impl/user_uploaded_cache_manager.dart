@@ -1,3 +1,5 @@
+import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
+
 import '../../../models/subtitles/captions_type.dart';
 import '../utils/db_info_matcher.dart';
 
@@ -14,21 +16,19 @@ final class UserUploadedCaptionsCacheManager {
       _cacheManager.cacheCaptions(subtitles);
 
   Future<List<CachedCaptions>> retrieveSubtitles(
-          {String? videoId, String? language}) =>
+          {required String videoId, Language? language}) =>
       _cacheManager
           .retrieveSubtitles(
-            filter: (dbInfo) => dbInfo.matches(
-              videoId: videoId,
-              language: language,
-              type: CaptionsType.userUploaded,
-            ),
+            videoId: videoId,
+            filter: (dbInfo) =>
+                dbInfo.captionsType == CaptionsType.userUploaded,
           )
           .toList();
 
-  Future<void> clearCaptions({String? videoId, String? language}) =>
+  Future<void> clearCaptions({required String videoId, String? language}) =>
       _cacheManager.clearCaptions(
+        videoId: videoId,
         filter: (dbInfo) => dbInfo.matches(
-          videoId: videoId,
           language: language,
           type: CaptionsType.userUploaded,
         ),

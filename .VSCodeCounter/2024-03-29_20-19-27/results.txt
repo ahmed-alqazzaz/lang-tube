@@ -1,0 +1,52 @@
+Date : 2024-03-29 20:19:27
+Directory : c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager
+Total : 21 files,  1152 codes, 25 comments, 218 blanks, all 1395 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Dart     |         21 |      1,152 |         25 |        218 |      1,395 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                              | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                 |         21 |      1,152 |         25 |        218 |      1,395 |
+| . (Files)                                                                                                         |          1 |         23 |          0 |          6 |         29 |
+| dao                                                                                                               |          3 |        131 |          2 |         30 |        163 |
+| database                                                                                                          |          2 |        421 |         16 |         70 |        507 |
+| entity                                                                                                            |          6 |        260 |          4 |         53 |        317 |
+| impl                                                                                                              |          4 |        262 |          1 |         39 |        302 |
+| type_converters                                                                                                   |          2 |         25 |          0 |          9 |         34 |
+| utils                                                                                                             |          3 |         30 |          2 |         11 |         43 |
++-------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                          | language | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\cache_manager.dart                             | Dart     |         23 |          0 |          6 |         29 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\dao\subtitles_dao.dart                         | Dart     |         55 |          1 |         13 |         69 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\dao\subtitles_source_dao.dart                  | Dart     |         58 |          1 |         12 |         71 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\dao\video_dao.dart                             | Dart     |         18 |          0 |          5 |         23 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\database\database.dart                         | Dart     |         51 |          2 |          8 |         61 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\database\database.g.dart                       | Dart     |        370 |         14 |         62 |        446 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\entity\info_source_combo.dart                  | Dart     |         66 |          1 |         10 |         77 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\entity\info_subtitles_combo.dart               | Dart     |         45 |          0 |          7 |         52 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\entity\subtitles.dart                          | Dart     |         26 |          1 |          7 |         34 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\entity\subtitles_info.dart                     | Dart     |         56 |          0 |          8 |         64 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\entity\subtitles_source.dart                   | Dart     |         26 |          1 |          7 |         34 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\entity\video.dart                              | Dart     |         41 |          1 |         14 |         56 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\impl\cache_manager_impl.dart                   | Dart     |         87 |          0 |          9 |         96 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\impl\mutxed_cache_manager.dart                 | Dart     |         74 |          0 |         12 |         86 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\impl\user_uploaded_cache_manager.dart          | Dart     |         30 |          1 |          8 |         39 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\impl\youtube_cache_manager.dart                | Dart     |         71 |          0 |         10 |         81 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\type_converters\captions_type_stringifier.dart | Dart     |         18 |          0 |          6 |         24 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\type_converters\datetime_stringifier.dart      | Dart     |          7 |          0 |          3 |         10 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\utils\cache_manager_decorator.dart             | Dart     |         10 |          0 |          2 |         12 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\utils\db_info_matcher.dart                     | Dart     |         11 |          0 |          5 |         16 |
+| c:\Users\acer\workspace1\langtube\lib\crud\subtitles_cache_manager\utils\model_mapper.dart                        | Dart     |          9 |          2 |          4 |         15 |
+| Total                                                                                                             |          |      1,152 |         25 |        218 |      1,395 |
++-------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

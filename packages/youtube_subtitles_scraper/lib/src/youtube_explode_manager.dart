@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:unique_key_mutex/unique_key_mutex.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';

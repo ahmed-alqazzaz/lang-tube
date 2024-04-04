@@ -8,17 +8,16 @@ import '../database/database.dart';
 import 'subtitles_info.dart';
 
 @immutable
-@Entity(
-  tableName: SubtitlesDatabase.subtitlesSourceTable,
-  foreignKeys: [
-    ForeignKey(
-      childColumns: [SubtitlesDatabase.infoIdColumn],
-      parentColumns: [SubtitlesDatabase.infoIdColumn],
-      entity: DatabaseSubtitlesInfo,
-    ),
-  ],
-)
-final class DatebaseSubtitlesSource {
+@Entity(tableName: SubtitlesDatabase.subtitlesSourceTable, foreignKeys: [
+  ForeignKey(
+    childColumns: [SubtitlesDatabase.infoIdColumn],
+    parentColumns: [SubtitlesDatabase.infoIdColumn],
+    entity: DatabaseSubtitlesInfo,
+  ),
+], indices: [
+  Index(value: [SubtitlesDatabase.infoIdColumn], unique: true)
+])
+class DatabaseSubtitlesSource {
   @PrimaryKey(autoGenerate: true)
   final int? id;
 
@@ -28,56 +27,6 @@ final class DatebaseSubtitlesSource {
   @ColumnInfo(name: SubtitlesDatabase.subtitlesSourceColumn)
   final String subtitlesSource;
 
-  const DatebaseSubtitlesSource(
+  const DatabaseSubtitlesSource(
       {this.id, required this.infoId, required this.subtitlesSource});
-
-  DatebaseSubtitlesSource copyWith({
-    int? id,
-    int? infoId,
-    String? subtitlesSource,
-  }) {
-    return DatebaseSubtitlesSource(
-      id: id ?? this.id,
-      infoId: infoId ?? this.infoId,
-      subtitlesSource: subtitlesSource ?? this.subtitlesSource,
-    );
-  }
-
-  @override
-  String toString() =>
-      'SubtitlesSource(id: $id, infoId: $infoId, subtitlesSource: $subtitlesSource)';
-
-  @override
-  bool operator ==(covariant DatebaseSubtitlesSource other) {
-    if (identical(this, other)) return true;
-
-    return other.id == id &&
-        other.infoId == infoId &&
-        other.subtitlesSource == subtitlesSource;
-  }
-
-  @override
-  int get hashCode => id.hashCode ^ infoId.hashCode ^ subtitlesSource.hashCode;
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'infoId': infoId,
-      'subtitlesSource': subtitlesSource,
-    };
-  }
-
-  factory DatebaseSubtitlesSource.fromMap(Map<String, dynamic> map) {
-    return DatebaseSubtitlesSource(
-      id: map['id'] != null ? map['id'] as int : null,
-      infoId: map['infoId'] as int,
-      subtitlesSource: map['subtitlesSource'] as String,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory DatebaseSubtitlesSource.fromJson(String source) =>
-      DatebaseSubtitlesSource.fromMap(
-          json.decode(source) as Map<String, dynamic>);
 }

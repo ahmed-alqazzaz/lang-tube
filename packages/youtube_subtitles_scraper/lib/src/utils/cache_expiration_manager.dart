@@ -6,7 +6,6 @@ extension CacheExpirationManager on CacheManager {
   Future<void> clearExpiredSources(
       {FutureOr<void> Function(CaptionsInfo)? onSourcesDeleted}) async {
     final sources = await retrieveSources();
-
     for (var source in sources.unique) {
       if (source.isExpired == true) {
         clearSources(videoId: source.info.videoId).whenComplete(

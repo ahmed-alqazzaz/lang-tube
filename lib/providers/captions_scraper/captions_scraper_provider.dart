@@ -19,10 +19,14 @@ void main() async {
   print('acquiring scraper');
 
   await Future.delayed(const Duration(seconds: 1));
+
+  final langNotifier = container.read(languageConfigProvider.notifier);
+
+  await langNotifier.build();
+  await langNotifier.setTargetLanguage(Language.german);
+  await langNotifier.setTargetLanguage(Language.german);
+  await langNotifier.setTranslationLanguage(Language.english);
   final scraper = await container.read(captionsScraperProvider.future);
-  container.read(languageConfigProvider.notifier)
-    ..setTargetLanguage(Language.english)
-    ..setTranslationLanguage(Language.german);
   final x = Stopwatch()..start();
   print('acquired scraper');
   await scraper.fetchSubtitlesBundle(
@@ -143,7 +147,6 @@ final class CaptionsScraper {
 
     final youtubeCachedCaption =
         await _youtubeCacheManager.retrieveSubtitles(videoId: youtubeVideoId);
-    printRed(youtubeCachedCaption.toList().toString());
     final youtubeCachedCaptions = youtubeCachedCaption
         .where((captions) => languages.contains(captions.info.language));
     if (youtubeCachedCaptions.isNotEmpty) {

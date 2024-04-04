@@ -28,35 +28,38 @@ class MutexedCacheManager implements CaptionsCacheManagerImpl {
   }
 
   @override
-  Stream<CachedCaptions> retrieveSubtitles({InfoFilter? filter}) async* {
+  Stream<CachedCaptions> retrieveSubtitles(
+      {required String videoId, InfoFilter? filter}) async* {
     await _mutex.acquire();
-    yield* _cacheManager.retrieveSubtitles(filter: filter).doOnFinished(
-          _mutex.release,
-        );
+    yield* _cacheManager
+        .retrieveSubtitles(videoId: videoId, filter: filter)
+        .doOnFinished(_mutex.release);
   }
 
   @override
-  Stream<CachedSourceCaptions> retrieveSources({InfoFilter? filter}) async* {
+  Stream<CachedSourceCaptions> retrieveSources(
+      {String? videoId, InfoFilter? filter}) async* {
     await _mutex.acquire();
-    yield* _cacheManager.retrieveSources(filter: filter).doOnFinished(
-          _mutex.release,
-        );
+    yield* _cacheManager
+        .retrieveSources(videoId: videoId, filter: filter)
+        .doOnFinished(_mutex.release);
   }
 
   @override
-  Future<void> clearCaptions({InfoFilter? filter}) async {
+  Future<void> clearCaptions(
+      {required String videoId, InfoFilter? filter}) async {
     await _mutex.acquire();
-    return _cacheManager.clearCaptions(filter: filter).whenComplete(
-          _mutex.release,
-        );
+    return _cacheManager
+        .clearCaptions(videoId: videoId, filter: filter)
+        .whenComplete(_mutex.release);
   }
 
   @override
-  Future<void> clearSources({InfoFilter? filter}) async {
+  Future<void> clearSources({String? videoId, InfoFilter? filter}) async {
     await _mutex.acquire();
-    return _cacheManager.clearSources(filter: filter).whenComplete(
-          _mutex.release,
-        );
+    return _cacheManager
+        .clearSources(videoId: videoId, filter: filter)
+        .whenComplete(_mutex.release);
   }
 
   @override
@@ -69,14 +72,14 @@ class MutexedCacheManager implements CaptionsCacheManagerImpl {
 extension _StreamExtension<T> on Stream<T> {
   Stream<T> doOnFinished(void Function() callback) {
     bool isCalled = false;
-    void _callback() {
+    void callback0() {
       if (isCalled) return;
       isCalled = true;
       callback();
     }
 
-    return doOnDone(_callback).doOnCancel(_callback).doOnError((p0, p1) {
-      _callback();
+    return doOnDone(callback0).doOnCancel(callback0).doOnError((p0, p1) {
+      callback0();
     });
   }
 }

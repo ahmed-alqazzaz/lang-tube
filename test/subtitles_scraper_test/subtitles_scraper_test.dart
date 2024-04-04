@@ -27,7 +27,14 @@ void main() {
     langConfigProvider.setTranslationLanguage(Language.german);
     final captionsScraper =
         await container.read(captionsScraperProvider.future);
-
+    Stopwatch stopwatch = Stopwatch()..start();
+    await captionsScraper.fetchSubtitlesBundle(
+      youtubeVideoId: '8fEEbKJoNbU',
+      onProgressUpdated: (p0) {
+        print('1: $p0');
+      },
+    );
+    print('finnished within: ${stopwatch.elapsedMilliseconds}');
     // Perform your tests on captionsScraperProvider
     // For example, if captionsScraperProvider has a method called `scrape`, you could do:
     // final result = await captionsScraperProvider.scrape('some_video_id');

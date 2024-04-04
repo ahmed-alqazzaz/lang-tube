@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:floor/floor.dart';
+import 'package:lang_tube/crud/subtitles_cache_manager/entity/info_source_combo.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
 import '../dao/subtitles_dao.dart';
-import '../dao/subtitles_info_dao.dart';
 import '../dao/subtitles_source_dao.dart';
 import '../dao/video_dao.dart';
+import '../entity/info_subtitles_combo.dart';
 import '../entity/subtitles.dart';
 import '../entity/subtitles_info.dart';
 import '../entity/subtitles_source.dart';
@@ -22,7 +23,11 @@ part 'database.g.dart'; // the generated code will be there
     DatabaseVideo,
     DatabaseSubtitlesInfo,
     DatabaseSubtitles,
-    DatebaseSubtitlesSource,
+    DatabaseSubtitlesSource,
+  ],
+  views: [
+    DatabaseSubtitlesAndInfoCombo,
+    DatabaseSubtitlesSourceInfoCombo,
   ],
 )
 abstract class SubtitlesDatabase extends FloorDatabase {
@@ -31,8 +36,8 @@ abstract class SubtitlesDatabase extends FloorDatabase {
       await $FloorSubtitlesDatabase
           .databaseBuilder(storageDir + databaseName)
           .build();
+
   VideoDao get videoDao;
-  SubtitlesInfoDao get subtitlesInfoDao;
   SubtitlesDao get subtitlesDao;
   SubtitlesSourceDao get subtitlesSourceDao;
 
@@ -48,7 +53,7 @@ abstract class SubtitlesDatabase extends FloorDatabase {
   static const String videoIdColumn = 'videoId';
   static const String infoIdColumn = 'infoId';
   static const String subtitlesColumn = 'subtitles';
-  static const String subtitlesSourceColumn = 'subtitles_source';
+  static const String subtitlesSourceColumn = 'subtitlesSource';
   static const String languageColumn = 'language';
   static const String sourceCreatedAtColumn = 'createdAt';
   static const String captionsTypeColumn = 'captionsType';

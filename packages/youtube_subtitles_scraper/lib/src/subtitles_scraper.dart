@@ -4,7 +4,6 @@ import 'package:once/once.dart';
 import 'package:subtitles_parser/subtitles_parser.dart';
 import 'package:youtube_subtitles_scraper/src/utils/cache_expiration_manager.dart';
 import 'package:youtube_subtitles_scraper/src/utils/language_filter.dart';
-import 'package:youtube_subtitles_scraper/src/utils/sources_count_manager.dart';
 import 'package:youtube_subtitles_scraper/src/youtube_explode_manager.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
@@ -20,9 +19,7 @@ final class YoutubeSubtitlesScraper {
         _cacheManager = cacheManager {
     Once.runDaily(
       "YoutubeScraperMaintainanceKey",
-      callback: () => cacheManager
-        ..clearExpiredSources()
-        ..limitSourcesCount(),
+      callback: cacheManager.clearExpiredSources,
     );
   }
 
