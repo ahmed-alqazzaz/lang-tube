@@ -2,8 +2,10 @@ import 'dart:async';
 import 'package:aligned_bottom_sheet/aligned_bottom_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colourful_print/colourful_print.dart';
+import 'package:dynamic_text/dynamic_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:size_observer/size_observer.dart';
 import 'package:subtitles_player/subtitles_player.dart';
@@ -100,8 +102,13 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
               itemCount: subtitles.length,
               itemBuilder: (context, index) {
                 if (index >= subtitles.length || index < 0) return Container();
+                if (subtitles.reversed.toList()[index].mainSubtitles.length >
+                    1) {
+                  printRed('logic error');
+                }
                 final subtitle =
-                    subtitles.reversed.toList()[index].mainSubtitle!;
+                    subtitles.reversed.toList()[index].mainSubtitles.first;
+
                 return GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTapUp: (details) {
@@ -166,7 +173,6 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
   }
 
   Widget headerBuilder() {
-    final subtitlesStream = ref.read(subtitlesPlayerProvider.notifier).stream;
     return Container(
       color: MainSubtitlesPlayer.headerBackgroundColor,
       padding: EdgeInsets.symmetric(
@@ -178,18 +184,17 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            StreamBuilder<Subtitle?>(
-              stream:
-                  ref.read(subtitlesPlayerProvider.notifier).stream.asyncMap(
-                        (value) => value.currentSubtitles.mainSubtitle,
-                      ),
-              builder: (context, snapshot) {
-                // DynamicText(
-                //   listenableText:
-                // )
-                if (!snapshot.hasData) return Container();
+            Consumer(
+              builder: (context, ref, _) {
+                final mainSubtitles = ref.watch(
+                  subtitlesPlayerProvider
+                      .select((value) => value.currentSubtitles.mainSubtitles),
+                );
+
                 return SubtitleBox(
-                  words: snapshot.data!.words,
+                  words: mainSubtitles
+                      .expand((subtitle) => subtitle.words)
+                      .toList(),
                   textFontSize: MainSubtitlesPlayer.headerTextFontSize,
                   onTapUp: _onTap,
                   defaultTextColor: Colors.white,
@@ -202,17 +207,16 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
               builder: (context, ref, _) {
                 final translatedSubtitle = ref.watch(
                   subtitlesPlayerProvider.select(
-                    (value) => value.currentSubtitles.translatedSubtitle,
+                    (value) => value.currentSubtitles.translatedSubtitles,
                   ),
                 );
-                if (translatedSubtitle != null) {
-                  return SubtitleBox(
-                    words: translatedSubtitle.words,
-                    textFontSize: MainSubtitlesPlayer.headerTextFontSize,
-                    defaultTextColor: Colors.amber.shade600,
-                  );
-                }
-                return Container();
+                return SubtitleBox(
+                  words: translatedSubtitle
+                      .expand((subtitle) => subtitle.words)
+                      .toList(),
+                  textFontSize: MainSubtitlesPlayer.headerTextFontSize,
+                  defaultTextColor: Colors.amber.shade600,
+                );
               },
             ),
           ],
@@ -241,6 +245,7 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     final shouldAbsorbPointers = ref.watch(actionsMenuActivityProvider);
     // normally listen is triggered before rebuild
     // causing scroll to have no impact

@@ -45,13 +45,14 @@ class _MiniSubtitlesPlayerState extends ConsumerState<MiniSubtitlesPlayer> {
   Widget build(BuildContext context) {
     final subtitlesPlayerValue = ref.watch(subtitlesPlayerProvider);
     final isMultiLine =
-        subtitlesPlayerValue.currentSubtitles.translatedSubtitle != null;
+        subtitlesPlayerValue.currentSubtitles.translatedSubtitles.isNotEmpty;
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         SubtitleBox(
-          words:
-              subtitlesPlayerValue.currentSubtitles.mainSubtitle?.words ?? [],
+          words: subtitlesPlayerValue.currentSubtitles.mainSubtitles
+              .expand((subtitle) => subtitle.words)
+              .toList(),
           onTapUp: _onTap,
           textFontSize: MiniSubtitlesPlayer.textFontSize,
           defaultTextColor: MiniSubtitlesPlayer.defaultTextColor,
@@ -60,8 +61,9 @@ class _MiniSubtitlesPlayerState extends ConsumerState<MiniSubtitlesPlayer> {
         ),
         if (isMultiLine)
           SubtitleBox(
-            words:
-                subtitlesPlayerValue.currentSubtitles.translatedSubtitle!.words,
+            words: subtitlesPlayerValue.currentSubtitles.translatedSubtitles
+                .expand((subtitle) => subtitle.words)
+                .toList(),
             onTapUp: _onTap,
             textFontSize: MiniSubtitlesPlayer.textFontSize,
             defaultTextColor: Colors.amber.shade600,

@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:collection/collection.dart';
 import 'package:colourful_print/colourful_print.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,12 +23,6 @@ final subtitlesPlayerProvider =
     final translatedSubtitles = selectedSubtitlesBundle
         ?.translatedSubtitles.subtitles
         .map((e) => e.toSubtitle());
-    if (mainSubtitles != null) {
-      printRed('player started');
-    }
-    if (mainSubtitles?.isNotEmpty != true) {
-      printPurple('no subs');
-    }
     return MultiSubtitlesPlayer(
       mainSubtitles: mainSubtitles?.toList() ?? [],
       translatedSubtitles: (subtitlesConfig?.showTranslations == true
@@ -61,33 +56,40 @@ class MultiSubtitlesPlayer extends StateNotifier<SubtitlesPlayerValue> {
               for (int i = 0;
                   i < max(mainSubtitles.length, translatedSubtitles.length);
                   i++)
-                ConsumableCaption(
-                  mainSubtitle: mainSubtitles.elementAtOrNull(i),
-                  translatedSubtitle: translatedSubtitles.elementAtOrNull(i),
+                ConsumableCaptions(
+                  mainSubtitles: [mainSubtitles.elementAtOrNull(i)]
+                      .whereNotNull()
+                      .toList(),
+                  translatedSubtitles: [translatedSubtitles.elementAtOrNull(i)]
+                      .whereNotNull()
+                      .toList(),
                 )
             ],
-            currentSubtitles: const ConsumableCaption(),
+            currentSubtitles: const ConsumableCaptions(),
             index:
                 mainSubtitles.getClosestIndexByDuration(playbackPosition.value),
           ),
         ) {
     _mainSubtitlesPlayer.addListener(
-      (subtitle) {
+      (subtitles) {
         state = state.copyWith(
           currentSubtitles:
-              state.currentSubtitles.copyWith(mainSubtitle: subtitle),
-          index: subtitle != null ? mainSubtitles.indexOf(subtitle) : null,
+              state.currentSubtitles.copyWith(mainSubtitles: subtitles),
+          index: subtitles.isNotEmpty
+              ? mainSubtitles.indexOf(subtitles.last)
+              : null,
         );
       },
       fireImmediately: true,
     );
     _translatedSubtitlesPlayer.addListener(
-      (subtitle) {
+      (subtitles) {
         state = state.copyWith(
           currentSubtitles:
-              state.currentSubtitles.copyWith(translatedSubtitle: subtitle),
-          index:
-              subtitle != null ? translatedSubtitles.indexOf(subtitle) : null,
+              state.currentSubtitles.copyWith(translatedSubtitle: subtitles),
+          index: subtitles.isNotEmpty
+              ? translatedSubtitles.indexOf(subtitles.last)
+              : null,
         );
       },
       fireImmediately: true,

@@ -149,7 +149,7 @@ final class CaptionsScraper {
     if (youtubeCachedCaptions.isNotEmpty) {
       return [...youtubeCachedCaptions, ...await userUploadedCaptions];
     }
-    printRed('scraping');
+
     final scrapedSubtitles = await _rawScraper.scrapeSubtitles(
       youtubeVideoId: youtubeVideoId,
       mainLanguages: _targetLanguages,
@@ -157,8 +157,7 @@ final class CaptionsScraper {
           target == _ScrapeTarget.target ? null : _translatedLanguage,
       onProgressUpdated: onProgressUpdated,
     );
-    printRed('scraped subs ${scrapedSubtitles.length}');
-    await Future.wait(scrapedSubtitles.map(_youtubeCacheManager.cacheCaptions));
+    Future.wait(scrapedSubtitles.map(_youtubeCacheManager.cacheCaptions));
     if (scrapedSubtitles.isEmpty) return [];
     return [...scrapedSubtitles, ...await userUploadedCaptions];
   }
