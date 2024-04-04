@@ -15,6 +15,7 @@ import '../../models/subtitles/subtitles_player_value.dart';
 import '../components/subtitle_box.dart';
 import '../providers/actions_menu_activity_provider.dart';
 import '../providers/subtitles_download_progress_provider.dart';
+import '../providers/subtitles_network_stream_provider.dart';
 import '../providers/subtitles_player_provider.dart';
 import '../providers/youtube_controller_provider.dart';
 
@@ -173,6 +174,7 @@ class _MainSubtitlesPlayerState extends ConsumerState<MainSubtitlesPlayer>
   }
 
   Widget headerBuilder() {
+    printRed('error ${ref.watch(subtitlesNetworkStreamProvider).error}');
     return Container(
       color: MainSubtitlesPlayer.headerBackgroundColor,
       padding: EdgeInsets.symmetric(
