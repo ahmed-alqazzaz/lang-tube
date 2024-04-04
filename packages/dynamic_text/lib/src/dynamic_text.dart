@@ -77,9 +77,11 @@ class _DynamicTextState extends State<DynamicText> {
         child: StreamBuilder<String>(
           stream: widget.listenableText,
           builder: (context, snapshot) {
+            widget.listenableText;
             return Text(
               snapshot.data ?? "",
               style: widget.style,
+              textAlign: TextAlign.center,
             );
           },
         ),

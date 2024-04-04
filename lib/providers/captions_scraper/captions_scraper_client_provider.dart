@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youtube_subtitles_scraper/youtube_subtitles_scraper.dart';
 
-import '../shared/user_agent_provider.dart';
+import '../user_agent_provider.dart';
 
 final captionsScraperApiClientProvider =
     FutureProvider<SubtitlesScraperApiClient>(

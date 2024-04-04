@@ -7,7 +7,7 @@ import 'package:word_listenable_webview/word_listenable_webview.dart';
 import '../explanation_modal/explanation_modal.dart';
 import 'package:string_validator/string_validator.dart';
 
-import '../providers/shared/user_agent_provider.dart';
+import '../providers/user_agent_provider.dart';
 import 'browser_appbar.dart';
 
 class BrowserWebview extends ConsumerStatefulWidget {

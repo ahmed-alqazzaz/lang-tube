@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:subtitles_player/subtitles_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -8,12 +9,12 @@ import '../utils/raw_loop_notifier.dart';
 import 'subtitles_player_provider.dart';
 import 'youtube_controller_provider.dart';
 
-typedef CurrentSubtitleGetter = Subtitle? Function();
+typedef CurrentSubtitleGetter = List<Subtitle> Function();
 
 final subtitleLoopProvider = StateNotifierProvider((ref) {
   return SubtitleLoopNotifier(
     currentSubtitleGetter: () =>
-        ref.read(subtitlesPlayerProvider).currentSubtitles.mainSubtitle,
+        ref.read(subtitlesPlayerProvider).currentSubtitles.mainSubtitles,
     youtubePlayerController: ref.read(youtubeControllerProvider)!,
     loopCount: 1,
   );
@@ -36,16 +37,17 @@ final class SubtitleLoopNotifier extends StateNotifier<Loop?> {
   final YoutubePlayerController _youtubePlayerController;
   final int _loopCount;
 
-  final Subtitle? Function() _getCurrentSubtitle;
-  Subtitle? _previousSubtitle;
+  final List<Subtitle> Function() _getCurrentSubtitle;
+  List<Subtitle>? _previousSubtitle;
 
   void _subtitleLoopListener() {
     final currentSubtitle = _getCurrentSubtitle();
-    if (currentSubtitle != null &&
-        _previousSubtitle != currentSubtitle &&
+    if (currentSubtitle.isNotEmpty &&
+        !listEquals(_previousSubtitle, currentSubtitle) &&
         _loopNotifier.state != RawLoopState.active &&
         _loopNotifier.state != RawLoopState.paused) {
-      final loop = Loop(start: currentSubtitle.start, end: currentSubtitle.end);
+      final loop = Loop(
+          start: currentSubtitle.first.start, end: currentSubtitle.last.end);
       final youtubePlayerPosition = _youtubePlayerController.value.position;
 
       if (state != loop) {

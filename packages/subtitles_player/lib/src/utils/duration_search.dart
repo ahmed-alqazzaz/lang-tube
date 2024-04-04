@@ -39,9 +39,4 @@ extension DurationSearch on List<Subtitle> {
     }
     return null;
   }
-
-  Subtitle? getSubtitleByDuration(Duration duration) {
-    final index = getIndexByDuration(duration);
-    return index != null ? this[index] : null;
-  }
 }

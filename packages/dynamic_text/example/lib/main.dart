@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dynamic_text/dynamic_text.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/subjects.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,7 +48,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final ValueNotifier<String> _insertionController = ValueNotifier("");
+  final BehaviorSubject<String> _insertionController = BehaviorSubject()
+    ..add("hello");
 
   @override
   void initState() {
@@ -61,12 +63,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Text;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          DynamicText(listenableText: _insertionController),
+          DynamicText(listenableText: _insertionController.stream),
         ],
       ),
     );

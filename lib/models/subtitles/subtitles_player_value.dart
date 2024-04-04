@@ -7,8 +7,8 @@ import 'consumable_caption.dart';
 @immutable
 final class SubtitlesPlayerValue {
   final int index;
-  final ConsumableCaption currentSubtitles;
-  final List<ConsumableCaption> subtitles;
+  final ConsumableCaptions currentSubtitles;
+  final List<ConsumableCaptions> subtitles;
 
   const SubtitlesPlayerValue({
     required this.currentSubtitles,
@@ -17,8 +17,8 @@ final class SubtitlesPlayerValue {
   });
 
   SubtitlesPlayerValue copyWith({
-    ConsumableCaption? currentSubtitles,
-    List<ConsumableCaption>? subtitles,
+    ConsumableCaptions? currentSubtitles,
+    List<ConsumableCaptions>? subtitles,
     int? index,
   }) =>
       SubtitlesPlayerValue(
